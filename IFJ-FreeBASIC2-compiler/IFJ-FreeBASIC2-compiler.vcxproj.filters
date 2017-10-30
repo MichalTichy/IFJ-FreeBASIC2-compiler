@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Enums">
+      <UniqueIdentifier>{cbc178e8-7591-4912-a0a1-636ad3a6b7a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{06079819-62c3-41f8-aef2-a7c0756ef1fc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TokenType.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
