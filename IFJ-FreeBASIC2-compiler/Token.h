@@ -1,8 +1,10 @@
-#include <TokenType.h>
+#include "Scanner.h"
 
-struct Token {
-	TokenType type;
+typedef struct {
+	tStates state;
 	int intVal;
 	double doubleVal;
 	char *string;
-};
+} tToken;
+
+extern tToken Token;

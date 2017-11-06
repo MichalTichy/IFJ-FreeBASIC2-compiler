@@ -1,5 +1,27 @@
 typedef enum {
 
+	Start				// ** 0
+
+
+} tStates;
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+This Construction might be used or not
+
+typedef enum {
+
 	Type_Scope,				// ** Beginnig of main body
 	Type_ID,				// ** Identifier
 	Type_Dim,				// ** Declare value
@@ -44,17 +66,19 @@ typedef enum {
 	Type_LeftBracket,		// ** '('
 	Type_RightBracket,		// ** ')'
 
-	/* Functions */
+	// Functions 
 	Type_Lenght,			// ** Lenght of string
 	Type_SubStr,			// ** Substring from parameters
 	Type_Asc,				// ** ASCII value
 	Type_Chr,				// ** Char value
 
-	/** 
-	 *	TODO 
-	 *  And, Continue, Exit, False, Next, Not, Or, Shared,
-	 *  Static, True
-	 */
+	// 
+	//	TODO 
+	//  And, Continue, Exit, False, Next, Not, Or, Shared,
+	//  Static, True
+	// 
+
 
 } TokenType;
+*/
 
