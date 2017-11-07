@@ -1,7 +1,7 @@
-#include "Scanner.h"
+#include "TokenState.h"
 
 typedef struct {
-	tStates state;
+	TokenState state;
 	int intVal;
 	double doubleVal;
 	char *string;

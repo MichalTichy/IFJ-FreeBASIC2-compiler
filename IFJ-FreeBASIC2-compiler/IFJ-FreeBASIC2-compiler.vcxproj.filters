@@ -9,8 +9,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TokenType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
+    <ClInclude Include="TokenState.h" />
+    <ClInclude Include="Token.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Scanner.c" />
+    <ClCompile Include="Token.c" />
   </ItemGroup>
 </Project>

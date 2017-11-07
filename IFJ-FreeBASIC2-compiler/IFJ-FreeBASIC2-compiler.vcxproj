@@ -61,7 +61,12 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClInclude Include="TokenType.h" />
+    <ClInclude Include="Token.h" />
+    <ClInclude Include="TokenState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Scanner.c" />
+    <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

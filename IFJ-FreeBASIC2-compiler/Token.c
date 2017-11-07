@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "Token.h"
-#include "Scanner.h"
 
 static void initToken()
 {
