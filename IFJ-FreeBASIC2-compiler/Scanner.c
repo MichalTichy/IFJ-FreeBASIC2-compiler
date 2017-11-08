@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 #include "Token.h"
 
 
@@ -11,7 +11,7 @@ tToken Token;
 * Reserved words of IFJ17 language
 */
 
-const char *keyWords[lenghtOfKeyWords] =
+const char *KeyWords[lenghtOfKeyWords] =
 {
 	"as", "asc", "declare", "dim", "do", "double", "else", "end", "chr",
 	"function", "if", "input", "integer", "length", "loop", "print", "return",
@@ -22,9 +22,14 @@ const char *keyWords[lenghtOfKeyWords] =
  * Keywords of IFJ17 language
  */
 
-const char *reservedWords[lenghtOfReservedWords] =
+const char *ReservedWords[lenghtOfReservedWords] =
 {
 	"and", "boolean", "continue", "elseif", "exit", "false", "for", "next",
 	"not", "or", "shared", "static", "true"
 };
 
+tToken GetNextToken()
+{
+
+	return Token;
+}

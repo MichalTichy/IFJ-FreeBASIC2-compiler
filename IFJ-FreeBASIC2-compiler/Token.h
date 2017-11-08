@@ -1,10 +1,14 @@
-#include "TokenState.h"
+#include "TokenType.h"
+
+void InitToken();
+int InitString();
 
 typedef struct {
-	TokenState state;
+	TokenType type;
 	int intVal;
 	double doubleVal;
 	char *string;
+	int lenghtOFString;
 } tToken;
 
 extern tToken Token;

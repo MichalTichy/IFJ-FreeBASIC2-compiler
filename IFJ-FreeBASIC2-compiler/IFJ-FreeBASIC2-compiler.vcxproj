@@ -62,7 +62,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="Token.h" />
-    <ClInclude Include="TokenState.h" />
+    <ClInclude Include="TokenType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
