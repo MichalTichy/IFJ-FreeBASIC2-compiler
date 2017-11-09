@@ -1,10 +1,5 @@
 #include "TokenType.h"
 
-tToken* InitToken();
-int InitString(tToken *Token);
-int ReallocString(tToken *Token);
-void FreeToken(tToken *Token);
-
 typedef struct {
 	TokenType Type;
 	int IntVal;
@@ -13,3 +8,7 @@ typedef struct {
 	int Lenght;
 } tToken;
 
+tToken* InitToken(tToken Token);
+int InitString(tToken *Token);
+int ReallocString(tToken *Token);
+void FreeToken(tToken *Token);

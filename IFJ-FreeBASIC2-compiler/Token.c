@@ -2,9 +2,9 @@
 #include "Token.h"
 
 // Basic allocated lenght of string
-#define int LenghtOfString = 10;
+#define LenghtOfString 10
 
-tToken* InitToken()
+tToken* InitToken(tToken Token)
 {
 	tToken Token;
 
