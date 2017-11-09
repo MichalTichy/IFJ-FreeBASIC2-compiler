@@ -3,6 +3,7 @@ typedef enum {
 	T_ID,
 	T_ERR,
 	T_EOL,
+	T_EOF,
 	T_INT,
 	T_FLOAT,
 	T_STRING,
@@ -61,6 +62,5 @@ typedef enum {
 	T_STATIC,
 	T_TRUE
 
-	// EOF defined as  -1
 
 } TokenType;

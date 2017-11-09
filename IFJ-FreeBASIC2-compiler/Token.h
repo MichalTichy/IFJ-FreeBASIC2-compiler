@@ -1,9 +1,9 @@
 #include "TokenType.h"
 
-void InitToken();
-int InitString();
-int ReallocString();
-void FreeString();
+tToken* InitToken();
+int InitString(tToken *Token);
+int ReallocString(tToken *Token);
+void FreeToken(tToken *Token);
 
 typedef struct {
 	TokenType Type;
@@ -13,5 +13,3 @@ typedef struct {
 	int Lenght;
 } tToken;
 
-//Global variable between all files
-extern tToken Token;
