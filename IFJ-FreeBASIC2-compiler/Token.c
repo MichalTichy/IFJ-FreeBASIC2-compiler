@@ -8,7 +8,7 @@ void InitToken(tToken *Token)
 {
 	tToken Token;
 
-	if (Token->String = (char *)malloc(sizeof(tToken)) == NULL)
+	if (Token = (char *)malloc(sizeof(tToken)) == NULL)
 	{
 		return NULL;
 	}
