@@ -4,30 +4,30 @@
 // Basic allocated lenght of string
 #define LenghtOfString 10
 
-tToken* InitToken(tToken Token)
+void InitToken(tToken *Token)
 {
 	tToken Token;
 
-	if (Token.String = (char *)malloc(sizeof(tToken)) == NULL)
+	if (Token->String = (char *)malloc(sizeof(tToken)) == NULL)
 	{
 		return NULL;
 	}
 
-	Token.IntVal = 0;
-	Token.DoubleVal = 0.0;
-	Token.String = NULL;
-	Token.Lenght;
+	Token->IntVal = 0;
+	Token->DoubleVal = 0.0;
+	Token->String = NULL;
+	Token->Lenght;
 }
 
-int InitString(tToken *Token)
+void InitString(tToken *Token)
 {
 	if (Token->String = (char *)malloc(sizeof(char) * LenghtOfString) == NULL)
 	{
-		return -1;
+		Token->Type = T_ERR;
 	}
 }
 
-int ReallocString(tToken *Token)
+void ReallocString(tToken *Token)
 {
 	if (Token->String = (char *)realloc(sizeof(char) * LenghtOfString) == NULL)
 	{
@@ -35,7 +35,7 @@ int ReallocString(tToken *Token)
 		{
 			free(Token->String);
 		}
-		return -1;
+		Token->Type = T_ERR;
 	}	
 }
 
