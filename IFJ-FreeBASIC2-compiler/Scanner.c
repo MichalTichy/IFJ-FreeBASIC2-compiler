@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include "Scanner.h"
 #include "Token.c"
 
-//Language IFJ17 contains 35 keywords
+//Language IFJ17 contain 35 keywords
 #define LenghtOfKeyWords 35
 
 /**
@@ -22,15 +21,21 @@ char *KeyWords[LenghtOfKeyWords] =
  * Function to get next token from source file.
  */
 
-tToken GetNextToken(FILE *fp)
+tToken* GetNextToken(FILE *fp)
 {
-	tToken Token;
+	tToken *Token;
 	char c;			//Char obtained from getchar()
+
+	InitToken(Token);
+	if (Token == NULL)
+	{
+		return NULL;
+	}
 
 	while(1)
 	{
 		fgetc(fp);
 	}
-	return Token;
 
+	return Token;
 }

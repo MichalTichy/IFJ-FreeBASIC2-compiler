@@ -6,9 +6,7 @@
 
 void InitToken(tToken *Token)
 {
-	tToken Token;
-
-	if (Token = (char *)malloc(sizeof(tToken)) == NULL)
+	if (Token = (tToken *)malloc(sizeof(tToken)) == NULL)
 	{
 		return NULL;
 	}

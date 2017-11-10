@@ -11,7 +11,6 @@
   <ItemGroup>
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
-    <ClInclude Include="Scanner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
