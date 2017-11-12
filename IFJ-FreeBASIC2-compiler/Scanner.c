@@ -1,30 +1,30 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "Token.h"
 
-
-#define lenghtOfKeyWords 22
-#define lenghtOfReservedWords 13
-
-tToken Token;
+//Language IFJ17 contain 35 keywords
+#define LenghtOfKeyWords 35
 
 /**
-* Reserved words of IFJ17 language
+* Key words of IFJ17 language
 */
 
-const char *keyWords[lenghtOfKeyWords] =
+char *KeyWords[LenghtOfKeyWords] =
 {
 	"as", "asc", "declare", "dim", "do", "double", "else", "end", "chr",
 	"function", "if", "input", "integer", "length", "loop", "print", "return",
-	"scope", "string", "substr", "then", "while"
+	"scope", "string", "substr", "then", "while", "and", "boolean", "continue",
+	"elseif", "exit", "false", "for", "next", "not", "or", "shared", "static", "true"
 };
+
 
 /**
- * Keywords of IFJ17 language
+ * Function to get next token from source file.
  */
 
-const char *reservedWords[lenghtOfReservedWords] =
+tToken* GetNextToken()
 {
-	"and", "boolean", "continue", "elseif", "exit", "false", "for", "next",
-	"not", "or", "shared", "static", "true"
-};
+	tToken *Token;
 
+	return Token;
+}

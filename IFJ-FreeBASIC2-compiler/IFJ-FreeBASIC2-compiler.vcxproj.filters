@@ -9,8 +9,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TokenState.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="TokenType.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Basics.h" />
   </ItemGroup>
@@ -18,5 +18,6 @@
     <ClCompile Include="Scanner.c" />
     <ClCompile Include="Token.c" />
     <ClCompile Include="List.c" />
+    <ClCompile Include="Start.c" />
   </ItemGroup>
 </Project>

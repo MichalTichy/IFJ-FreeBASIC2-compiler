@@ -1,10 +1,16 @@
-#include "TokenState.h"
+#pragma once
+
+#include "TokenType.h"
 
 typedef struct {
-	TokenState state;
-	int intVal;
-	double doubleVal;
-	char *string;
+	TokenType Type;
+	int IntVal;
+	double DoubleVal;
+	char *String;
+	int Lenght;
 } tToken;
 
-extern tToken Token;
+void InitToken(tToken *Token);
+void InitString(tToken *Token);
+void ReallocString(tToken *Token);
+void FreeToken(tToken *Token);
