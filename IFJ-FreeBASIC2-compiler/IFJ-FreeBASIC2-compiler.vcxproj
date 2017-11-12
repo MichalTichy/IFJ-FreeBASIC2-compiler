@@ -61,11 +61,15 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClInclude Include="Basics.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="List.c" />
     <ClCompile Include="Scanner.c" />
+    <ClCompile Include="Start.c" />
     <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemDefinitionGroup />
