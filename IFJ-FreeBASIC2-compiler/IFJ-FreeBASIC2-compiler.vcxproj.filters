@@ -15,5 +15,6 @@
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
     <ClCompile Include="Token.c" />
+    <ClCompile Include="Start.c" />
   </ItemGroup>
 </Project>

@@ -1,3 +1,5 @@
+#pragma once
+
 typedef enum {
 
 	T_ID,
@@ -6,7 +8,6 @@ typedef enum {
 	T_EOF,
 	T_INT,
 	T_FLOAT,
-	T_STRING,
 	T_ADD,			// ** +
 	T_SUB,			// ** -
 	T_MULTIPLY,		// ** *
@@ -61,6 +62,5 @@ typedef enum {
 	T_SHARED,
 	T_STATIC,
 	T_TRUE
-
 
 } TokenType;

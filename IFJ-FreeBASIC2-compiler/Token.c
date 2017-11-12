@@ -1,33 +1,50 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "Token.h"
 
 // Basic allocated lenght of string
 #define LenghtOfString 10
 
+/**
+ * Function allocate and initialise token
+ * when malloc fail token is NULL.
+ */
+
 void InitToken(tToken *Token)
 {
-	if (Token = (tToken *)malloc(sizeof(tToken)) == NULL)
+	if ((Token = (tToken *) malloc(sizeof(tToken))) == NULL)
 	{
-		return NULL;
+		Token = NULL;
 	}
 
 	Token->IntVal = 0;
 	Token->DoubleVal = 0.0;
 	Token->String = NULL;
-	Token->Lenght;
+	Token->Lenght = 0;
 }
+
+/**
+* Function allocate string in token
+* when malloc fail type of token is set to T_ERR. 
+*/
 
 void InitString(tToken *Token)
 {
-	if (Token->String = (char *)malloc(sizeof(char) * LenghtOfString) == NULL)
+	if ((Token->String = (char *) malloc(sizeof(char) * LenghtOfString)) == NULL)
 	{
+		Token->String = NULL;
 		Token->Type = T_ERR;
 	}
 }
 
+/**
+* Function reallocate string in token when malloc fail type of token
+* is set to T_ERR and free string from memory.
+*/
+
 void ReallocString(tToken *Token)
 {
-	if (Token->String = (char *)realloc(sizeof(char) * LenghtOfString) == NULL)
+	if ((Token->String = (char *) realloc(Token->String, sizeof(char) * LenghtOfString)) == NULL)
 	{
 		if (Token->String != NULL)
 		{
@@ -37,6 +54,9 @@ void ReallocString(tToken *Token)
 	}	
 }
 
+/**
+* Function free token from memory.
+*/
 void FreeToken(tToken *Token)
 {
 	if (Token->String != NULL)

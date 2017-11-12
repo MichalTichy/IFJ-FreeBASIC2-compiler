@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
+    <ClCompile Include="Start.c" />
     <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemDefinitionGroup />

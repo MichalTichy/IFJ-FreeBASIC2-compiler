@@ -1,3 +1,5 @@
+#pragma once
+
 #include "TokenType.h"
 
 typedef struct {
