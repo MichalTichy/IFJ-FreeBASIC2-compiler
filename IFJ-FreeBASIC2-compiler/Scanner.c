@@ -30,7 +30,6 @@ void AddToString(int c, tToken *Token)
 	}
 
 	Token->Lenght = Token->Lenght + 1;
-	//Token->String[Token->Lenght] = Token->String[Token->Lenght - 1];
 	Token->String[Token->Lenght-1] = (char) c;
 }
 
@@ -141,67 +140,67 @@ tToken* GetNextToken()
 			{
 				Token->Type = T_EOF;
 			}
-			else if (c >= '0' && c <= '9') //Final
+			else if (c >= '0' && c <= '9') 
 			{
 				InitString(Token);
 				AddToString(c, Token);
 				state = S_Number;
 				break;
 			}
-			else if ((c >= 'a' && c <= 'z') || c == '_') //Final
+			else if ((c >= 'a' && c <= 'z') || c == '_') 
 			{
 				InitString(Token);
 				AddToString(c, Token);
 				state = S_ID;
 				break;
 			}
-			else if (c == '<') //Final
+			else if (c == '<') 
 			{
 				state = S_Less;
 				break;
 			}
-			else if (c == '>') //Final
+			else if (c == '>') 
 			{
 				state = S_Greater;
 				break;
 			}
-			else if (c == ';') //Final
+			else if (c == ';') 
 			{
 				Token->Type = T_SEMICOLON;
 				return Token;
 			}
-			else if (c == ',') //Final
+			else if (c == ',') 
 			{
 				Token->Type = T_COLON;
 				return Token;
 			}
-			else if (c == '+') //Final
+			else if (c == '+') 
 			{
 				Token->Type = T_ADD;
 				return Token;
 			}
-			else if (c == '-') //Final
+			else if (c == '-') 
 			{
 				Token->Type = T_SUB;
 				return Token;
 			}
-			else if (c == '*') //Final
+			else if (c == '*') 
 			{
 				Token->Type = T_MULTIPLY;
 				return Token;
 			}
-			else if (c == '/') //Final
+			else if (c == '/') 
 			{
 				Token->Type = T_INTDIVIDE;
 				return Token;
 			}
-			else if (c == '!') //Final
+			else if (c == '!') 
 			{
 				InitString(Token);
 				state = S_ExcString;
 				break;
 			}
-			else if (c == '.') //Final
+			else if (c == '.') 
 			{
 				InitString(Token);
 				state = S_Dot;

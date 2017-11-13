@@ -13,6 +13,7 @@
     <ClInclude Include="TokenType.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Basics.h" />
+    <ClInclude Include="Scanner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />

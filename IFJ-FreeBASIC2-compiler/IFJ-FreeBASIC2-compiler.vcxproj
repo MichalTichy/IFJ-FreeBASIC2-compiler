@@ -63,6 +63,7 @@
   <ItemGroup>
     <ClInclude Include="Basics.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="Scanner.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
