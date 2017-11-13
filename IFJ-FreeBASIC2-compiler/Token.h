@@ -4,7 +4,7 @@
 
 typedef struct {
 	TokenType Type;
-	int IntVal;
+	long int IntVal;
 	double DoubleVal;
 	char *String;
 	int Lenght;

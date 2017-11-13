@@ -3,7 +3,7 @@
 #include "Token.h"
 
 // Basic allocated lenght of string
-#define LenghtOfString 10
+#define LenghtOfString 11
 
 /**
  * Function allocate and initialise token
@@ -12,11 +12,6 @@
 
 void InitToken(tToken *Token)
 {
-	if ((Token = (tToken *) malloc(sizeof(tToken))) == NULL)
-	{
-		Token = NULL;
-	}
-
 	Token->IntVal = 0;
 	Token->DoubleVal = 0.0;
 	Token->String = NULL;
@@ -51,7 +46,7 @@ void ReallocString(tToken *Token)
 			free(Token->String);
 		}
 		Token->Type = T_ERR;
-	}	
+	}
 }
 
 /**
