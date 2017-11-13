@@ -12,15 +12,15 @@
 * Reserved words of IFJ17 language
 */
 
-char *ReservedWords [LenghtOfReservedWords]=
+char *ReservedWords[LenghtOfReservedWords] =
 {
 	"and", "boolean", "continue", "elseif", "exit", "false",
 	"for", "next", "not", "or", "shared", "static", "true"
 };
 
 /**
- * Operations with strings
- */
+* Operations with strings
+*/
 
 void AddToString(int c, tToken *Token)
 {
@@ -30,7 +30,7 @@ void AddToString(int c, tToken *Token)
 	}
 
 	Token->Lenght = Token->Lenght + 1;
-	Token->String[Token->Lenght-1] = (char) c;
+	Token->String[Token->Lenght - 1] = (char)c;
 }
 
 void RemoveString(tToken *Token)
@@ -59,7 +59,7 @@ TokenType CompareWithKeywords(char* string)
 {
 	TokenType Type;
 
-	if (!strcmp (string, "as")) Type = T_AS;
+	if (!strcmp(string, "as")) Type = T_AS;
 	else if (!strcmp(string, "asc")) Type = T_ASC;
 	else if (!strcmp(string, "declare")) Type = T_DECLARE;
 	else if (!strcmp(string, "dim")) Type = T_DIM;
@@ -93,20 +93,20 @@ TokenType CompareWithKeywords(char* string)
 			}
 		}
 	}
-	
+
 	return Type;
 }
 
 /**
- * Function to get next token from source file.
- */
+* Function to get next token from source file.
+*/
 
 tToken* GetNextToken()
 {
 	tToken *Token;
 	tState state = S_Start;
 	int c;
-	
+
 	//Malloc Token
 	if ((Token = (tToken *)malloc(sizeof(tToken))) == NULL)
 	{
@@ -114,17 +114,17 @@ tToken* GetNextToken()
 	}
 
 	InitToken(Token);
-	
+
 	c = tolower(getchar());
 
 	while (1)
 	{
 
-	switch (state)
-	{
+		switch (state)
+		{
 		case S_Start:
 		{
-			if (isblank(c))
+			if (c == ' ')
 			{
 				state = S_Start;
 				c = tolower(getchar());
@@ -132,88 +132,88 @@ tToken* GetNextToken()
 			}
 			else if (c == '\n')
 			{
-				state = S_Start;
-				c = tolower(getchar());
-				break;
+				Token->Type = T_EOL;
+				return Token;
 			}
 			else if (c == EOF)
 			{
 				Token->Type = T_EOF;
+				return Token;
 			}
-			else if (c >= '0' && c <= '9') 
+			else if (c >= '0' && c <= '9')
 			{
-				InitString(Token);
+				Token = InitString(Token);
 				AddToString(c, Token);
 				state = S_Number;
 				break;
 			}
-			else if ((c >= 'a' && c <= 'z') || c == '_') 
+			else if ((c >= 'a' && c <= 'z') || c == '_')
 			{
-				InitString(Token);
+				Token = InitString(Token);
 				AddToString(c, Token);
 				state = S_ID;
 				break;
 			}
-			else if (c == '<') 
+			else if (c == '=')
+			{
+				Token->Type = T_ASSIGN;
+				return Token;
+			}
+			else if (c == '<')
 			{
 				state = S_Less;
 				break;
 			}
-			else if (c == '>') 
+			else if (c == '>')
 			{
 				state = S_Greater;
 				break;
 			}
-			else if (c == ';') 
+			else if (c == ';')
 			{
 				Token->Type = T_SEMICOLON;
 				return Token;
 			}
-			else if (c == ',') 
+			else if (c == ',')
 			{
 				Token->Type = T_COLON;
 				return Token;
 			}
-			else if (c == '+') 
+			else if (c == '+')
 			{
 				Token->Type = T_ADD;
 				return Token;
 			}
-			else if (c == '-') 
+			else if (c == '-')
 			{
 				Token->Type = T_SUB;
 				return Token;
 			}
-			else if (c == '*') 
+			else if (c == '*')
 			{
 				Token->Type = T_MULTIPLY;
 				return Token;
 			}
-			else if (c == '/') 
+			else if (c == '/')
 			{
 				Token->Type = T_INTDIVIDE;
 				return Token;
 			}
-			else if (c == '!') 
+			else if (c == '!')
 			{
-				InitString(Token);
+				Token = InitString(Token);
+				c = tolower(getchar());
 				state = S_ExcString;
-				break;
-			}
-			else if (c == '.') 
-			{
-				InitString(Token);
-				state = S_Dot;
 				break;
 			}
 			else if (c == '(')
 			{
-				Token->Type = T_RIGHTBRACKET;
+				Token->Type = T_LEFTBRACKET;
 				return Token;
 			}
 			else if (c == ')')
 			{
-				Token->Type = T_LEFTBRACKET;
+				Token->Type = T_RIGHTBRACKET;
 				return Token;
 			}
 			else
@@ -241,8 +241,8 @@ tToken* GetNextToken()
 			else
 			{
 				ungetc(c, stdin);
-				Token->Type = S_Start;
-				break;
+				Token->Type = T_LESS;
+				return Token;
 			}
 		}
 
@@ -258,8 +258,8 @@ tToken* GetNextToken()
 			else
 			{
 				ungetc(c, stdin);
-				Token->Type = S_Start;
-				break;
+				Token->Type = T_LESS;
+				return Token;
 			}
 		}
 
@@ -267,15 +267,10 @@ tToken* GetNextToken()
 		{
 			c = tolower(getchar());
 
-			if (isblank(c))
-			{
-				Token->Type = T_INT;
-				return Token;
-			}
-			else if (c == '.')
+			if (c == '.')
 			{
 				AddToString(c, Token);
-				state = S_Double; 
+				state = S_Double;
 				break;
 			}
 			else if (c >= '0' && c <= '9')
@@ -295,11 +290,12 @@ tToken* GetNextToken()
 				state = S_ID;
 				break;
 			}
-			else 
+			else
 			{
 				ungetc(c, stdin);
-				state = S_Start;
-				break;
+				Token->Type = T_INTVALUE;
+				ConvertStringToInteger(Token);
+				return Token;
 			}
 		}
 
@@ -311,9 +307,11 @@ tToken* GetNextToken()
 			{
 				state = S_ID;
 				AddToString(c, Token);
+				break;
 			}
 			else
 			{
+				ungetc(c, stdin);
 				Token->Type = CompareWithKeywords(Token->String);
 				return Token;
 			}
@@ -321,15 +319,13 @@ tToken* GetNextToken()
 
 		case S_ExcString:
 		{
-			c = tolower(getchar());
-
 			if (c == '"')
 			{
 				c = tolower(getchar());
-				
 				while (c != '"' && c != EOF)
 				{
 					AddToString(c, Token);
+					c = tolower(getchar());
 				}
 
 				if (c == '"')
@@ -337,12 +333,6 @@ tToken* GetNextToken()
 					Token->Type = T_STRING;
 					return Token;
 				}
-				else if (c == EOF)
-				{
-					Token->Type = T_ERR;
-					RemoveString(Token);
-					return Token;
-				}
 			}
 			else
 			{
@@ -351,24 +341,6 @@ tToken* GetNextToken()
 				return Token;
 			}
 
-		}
-
-		case S_Dot:
-		{
-			c = tolower(getchar());
-
-			if (c >= '0' && c <= '9')
-			{
-				AddToString('0', Token);
-				AddToString(c, Token);
-				state = S_DotDouble;
-			}
-			else
-			{
-				RemoveString(Token);
-				Token->Type = T_ERR;
-				return Token;
-			}
 		}
 
 		case S_Double:
@@ -380,24 +352,21 @@ tToken* GetNextToken()
 				AddToString(c, Token);
 				break;
 			}
-			else if ((c >= '*' && c <= '/') || c == '\\' || isblank(c))
+			else if ((c >= '*' && c <= '/') || c == '\\' || isblank(c) || c == EOF)
 			{
+				ungetc(c, stdin);
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
 				RemoveString(Token);
 				return Token;
 			}
-		}
-		case S_DotDouble:
-		{
-			c = tolower(getchar());
-
-			if (c >= '0' && c <= '9')
+			else if ((c >= 'a' && c <= 'z') || c == '_')
 			{
+				state = S_ID;
 				AddToString(c, Token);
 				break;
 			}
-			else if ((c >= '*' && c <= '/') || c == '\\' || isblank(c))
+			else
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -468,7 +437,8 @@ tToken* GetNextToken()
 
 
 
+		}
 	}
-	}
-		
+
 }
+

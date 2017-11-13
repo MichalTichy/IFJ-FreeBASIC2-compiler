@@ -23,13 +23,14 @@ void InitToken(tToken *Token)
 * when malloc fail type of token is set to T_ERR. 
 */
 
-void InitString(tToken *Token)
+tToken* InitString(tToken *Token)
 {
 	if ((Token->String = (char *) malloc(sizeof(char) * LenghtOfString)) == NULL)
 	{
 		Token->String = NULL;
 		Token->Type = T_ERR;
 	}
+	return Token;
 }
 
 /**

@@ -1,9 +1,8 @@
-#pragma once
-
 typedef enum {
 
 	T_ID,
 	T_ERR,
+	T_EOL,
 	T_EOF,
 	T_INTVALUE,
 	T_DOUBLEVALUE,
@@ -18,8 +17,7 @@ typedef enum {
 	T_COLON,		// ** ,
 	T_LEFTBRACKET,	// ** (
 	T_RIGHTBRACKET,	// ** )
-	T_ASSING,		// ** =
-	T_EQUAL,		// ** ==
+	T_ASSIGN,		// ** =
 	T_NOTEQUAL,		// ** <>
 	T_LESS,			// ** <
 	T_GREATER,		// ** >
@@ -27,9 +25,9 @@ typedef enum {
 	T_LESSEROREQUAL,	// ** <=
 	T_BLOCKCOMMENT,	// ** /' ... '/
 	T_LINECOMMENT,	// ** '
-	
+
 	T_AS,			// ** KeyWords
-	T_ASC, 
+	T_ASC,
 	T_DECLARE,
 	T_DIM,
 	T_DO,

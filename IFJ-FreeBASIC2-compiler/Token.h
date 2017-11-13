@@ -1,5 +1,3 @@
-#pragma once
-
 #include "TokenType.h"
 
 typedef struct {
@@ -11,6 +9,6 @@ typedef struct {
 } tToken;
 
 void InitToken(tToken *Token);
-void InitString(tToken *Token);
+tToken* InitString(tToken *Token);
 void ReallocString(tToken *Token);
 void FreeToken(tToken *Token);

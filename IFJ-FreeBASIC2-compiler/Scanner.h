@@ -6,9 +6,7 @@ typedef enum {
 	S_Less,
 	S_Greater,
 	S_ExcString,
-	S_Dot,
 	S_Double,
-	S_DotDouble,
 	S_Exp,
 	S_ExpSign,
 
@@ -19,4 +17,4 @@ void RemoveString(tToken *Token);
 void ConvertStringToInteger(tToken *Token);
 void ConvertStringToDouble(tToken *Token);
 TokenType CompareWithKeywords(char* string);
-tToken* GetNextToken(); 
+tToken* GetNextToken();
