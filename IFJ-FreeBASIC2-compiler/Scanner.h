@@ -9,6 +9,8 @@ typedef enum {
 	S_Double,
 	S_Exp,
 	S_ExpSign,
+	S_Comment,
+	S_BlockcommentOrDivide
 
 }tState;
 

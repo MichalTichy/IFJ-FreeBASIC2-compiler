@@ -106,6 +106,7 @@ tToken* GetNextToken()
 	tToken *Token;
 	tState state = S_Start;
 	int c;
+	int AfterDot = 0;
 
 	//Malloc Token
 	if ((Token = (tToken *)malloc(sizeof(tToken))) == NULL)
@@ -196,6 +197,11 @@ tToken* GetNextToken()
 			}
 			else if (c == '/')
 			{
+				state = S_BlockcommentOrDivide;
+				break;
+			}
+			else if (c == '\\')
+			{
 				Token->Type = T_INTDIVIDE;
 				return Token;
 			}
@@ -215,6 +221,11 @@ tToken* GetNextToken()
 			{
 				Token->Type = T_RIGHTBRACKET;
 				return Token;
+			}
+			else if (c == '\'')
+			{
+				state = S_Comment;
+				break;
 			}
 			else
 			{
@@ -270,6 +281,7 @@ tToken* GetNextToken()
 			if (c == '.')
 			{
 				AddToString(c, Token);
+				AfterDot = 1;
 				state = S_Double;
 				break;
 			}
@@ -279,16 +291,11 @@ tToken* GetNextToken()
 				state = S_Number;
 				break;
 			}
-			else if (c == 'e')
-			{
-				AddToString(c, Token);
-				state = S_Exp;
-				break;
-			}
 			else if ((c >= 'a' && c <= 'z') || c == '_')
 			{
-				state = S_ID;
-				break;
+				Token->Type = T_ERR;
+				RemoveString(Token);
+				return Token;
 			}
 			else
 			{
@@ -350,26 +357,28 @@ tToken* GetNextToken()
 			if (c >= '0' && c <= '9')
 			{
 				AddToString(c, Token);
+				AfterDot = 0;
 				break;
 			}
-			else if ((c >= '*' && c <= '/') || c == '\\' || isblank(c) || c == EOF)
+			else if (c == 'e')
 			{
-				ungetc(c, stdin);
-				Token->Type = T_DOUBLEVALUE;
-				ConvertStringToDouble(Token);
-				RemoveString(Token);
-				return Token;
-			}
-			else if ((c >= 'a' && c <= 'z') || c == '_')
-			{
-				state = S_ID;
+				state = S_Exp;
+				AfterDot = 0;
 				AddToString(c, Token);
 				break;
 			}
-			else
+			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
+				c == '\n' || c == EOF) && AfterDot == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
+				RemoveString(Token);
+				ungetc(c, stdin);
+				return Token;
+			}
+			else
+			{
+				Token->Type = T_ERR;
 				RemoveString(Token);
 				return Token;
 			}
@@ -379,17 +388,19 @@ tToken* GetNextToken()
 		{
 			c = tolower(getchar());
 
-			if (c == '+' || c == '-')
+			if ((c == '+' || c == '-') && AfterDot == 0)
 			{
 				state = S_ExpSign;
 				AddToString(c, Token);
+				break;
 			}
-			else if (c >= 0 && c <= 9)
+			else if (c >= '0' && c <= '9')
 			{
 				AddToString(c, Token);
 				break;
 			}
-			else if ((c >= '*' && c <= '/') || c == '\\')
+			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
+				c == '\n' || c == EOF) && AfterDot == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -397,27 +408,25 @@ tToken* GetNextToken()
 				ungetc(c, stdin);
 				return Token;
 			}
-			else if (isblank(c))
+			else
 			{
-				Token->Type = T_DOUBLEVALUE;
-				ConvertStringToDouble(Token);
+				Token->Type = T_ERR;
 				RemoveString(Token);
-				ungetc(c, stdin);
 				return Token;
 			}
-
 		}
 
 		case S_ExpSign:
 		{
 			c = tolower(getchar());
 
-			if (c >= 0 && c <= 9)
+			if (c >= '0' && c <= '9')
 			{
 				AddToString(c, Token);
 				break;
 			}
-			else if ((c >= '*' && c <= '/') || c == '\\')
+			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
+				c == '\n' || c == EOF) && AfterDot == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -425,20 +434,87 @@ tToken* GetNextToken()
 				ungetc(c, stdin);
 				return Token;
 			}
-			else if (isblank(c))
+			else
 			{
-				Token->Type = T_DOUBLEVALUE;
-				ConvertStringToDouble(Token);
+				Token->Type = T_ERR;
 				RemoveString(Token);
-				ungetc(c, stdin);
 				return Token;
 			}
 		}
 
+		case S_Comment:
+		{
+			c = tolower(getchar());
 
+			while (c != '\n' && c != EOF)
+			{
+				c = getchar();
+			}
 
+			if (c == '\n')
+			{
+				Token->Type = T_EOL;
+				return Token;
+			}
+			else
+			{
+				Token->Type = T_EOF;
+				return Token;
+			}
+		}
+
+		case S_BlockcommentOrDivide:
+		{
+			c = tolower(getchar());
+
+			if (c == '\'')
+			{
+				while (1)
+				{
+					c = getchar();
+
+					if (c == '\'')
+					{
+						c = getchar();
+
+						if (c == '/' && c != EOF)
+						{
+							state = S_Start;
+							c = tolower(getchar());
+							break;
+						}
+					}
+					else if (c == '/')
+					{
+						c = getchar();
+
+						if (c == '\'' || c == EOF)
+						{
+							Token->Type = T_ERR;
+							RemoveString(Token);
+							return Token;
+						}
+
+					}
+
+					if (c == EOF)
+					{
+						Token->Type = T_ERR;
+						RemoveString(Token);
+						return Token;
+					}
+				}
+			}
+			else
+			{
+				ungetc(c, stdin);
+				Token->Type = T_DIVIDE;
+				return Token;
+			}
+
+			break;
+		}
 		}
 	}
 
 }
-
