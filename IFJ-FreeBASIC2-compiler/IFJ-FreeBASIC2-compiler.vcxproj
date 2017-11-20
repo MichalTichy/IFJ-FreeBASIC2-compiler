@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClInclude Include="Basics.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="precedens.h" />
     <ClInclude Include="Scanner.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
@@ -80,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="List.c" />
+    <ClCompile Include="Parser.c" />
     <ClCompile Include="Scanner.c">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClCompile>

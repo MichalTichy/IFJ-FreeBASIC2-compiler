@@ -1,0 +1,4 @@
+Scope 'Hlavni telo programu
+Dim a As Integer
+a=3
+End Scope
