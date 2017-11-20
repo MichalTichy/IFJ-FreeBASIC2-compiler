@@ -26,5 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSamples\iterativeFactorial.txt" />
+    <Text Include="TestSamples\stringTests.txt" />
   </ItemGroup>
 </Project>
