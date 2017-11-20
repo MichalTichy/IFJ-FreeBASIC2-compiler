@@ -14,11 +14,17 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Basics.h" />
     <ClInclude Include="Scanner.h" />
+    <ClInclude Include="precedens.h" />
+    <ClInclude Include="Tests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
     <ClCompile Include="Token.c" />
     <ClCompile Include="List.c" />
     <ClCompile Include="Start.c" />
+    <ClCompile Include="Tests.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TestSamples\iterativeFactorial.txt" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include "Token.h"
 #include "Scanner.h"
 
 //Language IFJ17 contain 35 keywords

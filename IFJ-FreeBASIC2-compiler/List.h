@@ -1,4 +1,5 @@
-﻿typedef struct tDLElem {                 /* prvek dvousměrně vázaného seznamu */
+﻿#include "Basics.h"
+typedef struct tDLElem {                 /* prvek dvousměrně vázaného seznamu */
 	void* data;                                            /* užitečná data */
 	struct tDLElem *lptr;          /* ukazatel na předchozí prvek seznamu */
 	struct tDLElem *rptr;        /* ukazatel na následující prvek seznamu */

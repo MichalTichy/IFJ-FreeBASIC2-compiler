@@ -1,5 +1,5 @@
 ﻿#include "List.h"
-#include "Basics.h"
+
 void DLInitList(tDLList *L) {
 	/*
 	** Provede inicializaci seznamu L před jeho prvním použitím (tzn. žádná
@@ -38,14 +38,14 @@ void DLInsertFirst(tDLList *L, void* val) {
 	/*
 	** Vloží nový prvek na začátek seznamu L.
 	** V případě, že není dostatek paměti pro nový prvek při operaci malloc,
-	** volá funkci DLError().
+	** volá funkci //TODO ERROR HANDLING.
 	**/
 
 	tDLElemPtr newElement = malloc(sizeof(struct tDLElem));
 
 	if (newElement == NULL)
 	{
-		DLError();
+		//TODO ERROR HANDLING;
 		return;
 	}
 
@@ -65,14 +65,14 @@ void DLInsertLast(tDLList *L, void* val) {
 	/*
 	** Vloží nový prvek na konec seznamu L (symetrická operace k DLInsertFirst).
 	** V případě, že není dostatek paměti pro nový prvek při operaci malloc,
-	** volá funkci DLError().
+	** volá funkci //TODO ERROR HANDLING.
 	**/
 
 	tDLElemPtr newElement = malloc(sizeof(struct tDLElem));
 
 	if (newElement == NULL)
 	{
-		DLError();
+		//TODO ERROR HANDLING;
 		return;
 	}
 
@@ -209,7 +209,7 @@ void DLPostInsert(tDLList *L, void* val) {
 	** Vloží prvek za aktivní prvek seznamu L.
 	** Pokud nebyl seznam L aktivní, nic se neděje.
 	** V případě, že není dostatek paměti pro nový prvek při operaci malloc,
-	** volá funkci DLError().
+	** volá funkci //TODO ERROR HANDLING.
 	**/
 
 	if (L->Act == NULL)
@@ -217,7 +217,7 @@ void DLPostInsert(tDLList *L, void* val) {
 
 	tDLElemPtr newElement = malloc(sizeof(struct tDLElem));
 	if (newElement == NULL)
-		DLError();
+		//TODO ERROR HANDLING;
 
 	newElement->data = val;
 	newElement->lptr = L->Act;
@@ -237,7 +237,7 @@ void DLPreInsert(tDLList *L, void* val) {
 	** Vloží prvek před aktivní prvek seznamu L.
 	** Pokud nebyl seznam L aktivní, nic se neděje.
 	** V případě, že není dostatek paměti pro nový prvek při operaci malloc,
-	** volá funkci DLError().
+	** volá funkci //TODO ERROR HANDLING.
 	**/
 
 	if (L->Act == NULL)
@@ -245,7 +245,7 @@ void DLPreInsert(tDLList *L, void* val) {
 
 	tDLElemPtr newElement = malloc(sizeof(struct tDLElem));
 	if (newElement == NULL)
-		DLError();
+		//TODO ERROR HANDLING;
 
 	newElement->data = val;
 	newElement->rptr = L->Act;

@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "Token.h"
 
 // Basic allocated lenght of string
