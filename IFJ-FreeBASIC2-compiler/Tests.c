@@ -1,14 +1,28 @@
 ﻿#include "Tests.h"
 char* currentTestName;
 void RunTests() {
-	PassedTestExample();
-	FailedTestExample();
-
+	ExampleTests();
+	printf("REAL TESTS");
+	
 
 	ClearSTDIN();
 	printf("Press ENTER key to Continue\n");
 	getchar();
 }
+
+void ExampleTests()
+{
+	printf("EXAMPLE TESTS");
+	printf("\n");
+	PassedTestExample();
+	FailedTestExample();
+
+	printf("\n");
+	printf("\n");
+	printf("\n");
+}
+
+
 
 //this test will fail
 void FailedTestExample() {
@@ -42,6 +56,8 @@ void PassedTestExample() {
 	}
 
 }
+
+
 
 void LoadFileToSTDIN(char* fileName)
 {

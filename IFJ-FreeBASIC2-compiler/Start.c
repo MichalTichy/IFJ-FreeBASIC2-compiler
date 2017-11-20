@@ -11,8 +11,6 @@ int main()
 #endif
 
 #if !DEBUG
-	LoadFileToSTDIN("TestSamples\\iterativeFactorial.txt");
-	tToken* token = GetNextToken();
 	return 0;
 #endif
 

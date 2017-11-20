@@ -2,3 +2,5 @@
 #include "Basics.h"
 
 void RunTests();
+
+void ExampleTests();
