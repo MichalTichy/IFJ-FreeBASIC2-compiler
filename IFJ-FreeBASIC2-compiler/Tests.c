@@ -2,8 +2,9 @@
 char* currentTestName;
 void RunTests() {
 	ExampleTests();
-	printf("REAL TESTS");
+	printf("REAL TESTS\n");
 	IterativeFactorial();
+	BasicProgram();
 
 	ClearSTDIN();
 	printf("Press ENTER key to Continue\n");
@@ -180,6 +181,119 @@ void IterativeFactorial()
 		Fail("Expected token STRINGVALUE : 25");
 		return;
 	}*/
+
+	Pass();
+}
+void BasicProgram()
+{
+	currentTestName = "Basic program";
+	LoadFileToSTDIN("../../../TestSamples/basic.txt");
+	tToken* token;
+
+	token = GetNextToken();
+	if (token->Type!=T_SCOPE)
+	{
+		Fail("Expected scope as token 1");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_EOL)
+	{
+		Fail("Expected EOL as token 2");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_DIM)
+	{
+		Fail("Expected DIM as token 3");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_ID)
+	{
+		Fail("Expected ID as token 4");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_AS)
+	{
+		Fail("Expected AS as token 5");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_INTEGER)
+	{
+		Fail("Expected INTEGER as token 6");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_EOL)
+	{
+		Fail("Expected EOL as token 7");
+		return;
+	}
+	
+	token = GetNextToken();
+	if (token->Type!=T_ID)
+	{
+		Fail("Expected ID as token 8");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_ASSIGN)
+	{
+		Fail("Expected ASSIGN as token 9");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_INTVALUE && token->IntVal==3)
+	{
+		Fail("Expected INTVALUE with value 3 as token 10");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_EOL)
+	{
+		Fail("Expected EOL as token 11");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_END)
+	{
+		Fail("Expected END as token 12");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_SCOPE)
+	{
+		Fail("Expected SCOPE as token 13");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_EOL)
+	{
+		Fail("Expected EOL as token 14");
+		return;
+	}
+
+	token = GetNextToken();
+	if (token->Type!=T_EOF)
+	{
+		Fail("Expected EOL as token 15");
+		return;
+	}
 
 	Pass();
 }

@@ -65,11 +65,12 @@
     <SourcesToCopyRemotelyOverride>@(SourcesToCopyRemotely)</SourcesToCopyRemotelyOverride>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
-    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
+    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
   </PropertyGroup>
   <ItemGroup>
     <ClInclude Include="Basics.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="precedens.h" />
     <ClInclude Include="Scanner.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
@@ -80,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="List.c" />
+    <ClCompile Include="Parser.c" />
     <ClCompile Include="Scanner.c">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClCompile>
@@ -88,6 +90,11 @@
     <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="TestSamples\basic.txt">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
+      <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
+    </Text>
     <Text Include="TestSamples\iterativeFactorial.txt">
       <DeploymentContent>true</DeploymentContent>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

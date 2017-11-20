@@ -4,7 +4,7 @@
 #include "precedens.h"
 
 //--STACK
-TStack_t * StackInit(TStack_t * stack);
+TStack_t *StackInit(TStack_t * stack);
 void StackDestroy(TStack_t * stack);
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 typedef struct
@@ -15,7 +15,7 @@ typedef struct
 
 } TStackItem_t;
 
-typedef struct
+typedef struct stack
 {
 	TStackItem_t * items;
 	int maxSize;
@@ -45,7 +45,7 @@ typedef struct
 //--ConstantTable
 #define CONSTANT_TABLE_SIZE 128
 
-ConstantTable_t * ConstantTableInit(ConstantTable_t *);
+ConstantTable_t * ConstantTableInit();
 void ConstantTableDestroy(ConstantTable_t *);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -74,6 +74,7 @@ typedef union
 
 //-- symbolTable
 #define SYMBOL_TABLE_ARRAY_SIZE 256
+
 
 SymbolTable_t * SymbolTableInit(void);
 BTreeNode_t * SymbolTableInsert(SymbolTable_t * symbolTable, ConstantTable_t * constantTable, SymbolTableData_t symbolTableData);
@@ -106,6 +107,25 @@ typedef struct
 	unsigned int arrayIndex;
 	unsigned int assignedVarCount;
 }SymbolTable_t;
+
+//-- symbolTableArray
+int GL_SYMBOLTABLE_COUNT_MAX;
+SymbolTable_t ** SymbolTable_ArrayInit()
+SymbolTable_t ** SymbolTable_ArrayRealloc();
+void SymbolTable_Array_destroy;
+
+
+
+//--3AK list
+
+
+typedef struct
+{
+	instructionType instructionType;
+	unsigned int src1;
+	unsigned int src2;
+	unsigned int src3;
+};
 
 #endif // !ADT
 
