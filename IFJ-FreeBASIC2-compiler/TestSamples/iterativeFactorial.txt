@@ -1,6 +1,4 @@
-/' Program 1: Vypocet faktorialu (iterativne) '/
-/' Vcetne ukazky case-insensitive vlastnosti jazyka IFJ17 '/
-scope 'Hlavni telo programu
+scope
 Dim a As Integer
 DIM vysl AS INTEGER
 PrinT !"Zadejte cislo pro vypocet faktorialu";

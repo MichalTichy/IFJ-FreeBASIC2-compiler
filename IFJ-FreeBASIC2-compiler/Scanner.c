@@ -100,7 +100,7 @@ tToken* GetNextToken()
 {
 	tToken *Token;
 	tState state = S_Start;
-	int c;
+	char c;
 	int AfterDot = 0;
 
 	//Malloc Token
