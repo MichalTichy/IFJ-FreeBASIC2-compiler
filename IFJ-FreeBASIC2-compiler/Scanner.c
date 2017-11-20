@@ -13,6 +13,10 @@ char *ReservedWords[LenghtOfReservedWords] =
 	"for", "next", "not", "or", "shared", "static", "true"
 };
 
+
+// Used for realloc
+int LenghtOfString = 10;
+
 /**
 * Operations with strings
 */
@@ -21,10 +25,12 @@ void AddToString(int c, tToken *Token)
 {
 	if (Token->Lenght % 10 == 0)
 	{
-		ReallocString(Token);
+		LenghtOfString += 10;
+		ReallocString(Token, LenghtOfString);
 	}
 
 	Token->Lenght = Token->Lenght + 1;
+	Token->String[Token->Lenght] = '\0';
 	Token->String[Token->Lenght - 1] = (char)c;
 }
 
@@ -154,14 +160,14 @@ tToken* GetNextToken()
 			}
 			else if (c >= '0' && c <= '9')
 			{
-				Token = InitString(Token);
+				Token = InitString(Token, LenghtOfString);
 				AddToString(c, Token);
 				state = S_Number;
 				break;
 			}
 			else if ((c >= 'a' && c <= 'z') || c == '_')
 			{
-				Token = InitString(Token);
+				Token = InitString(Token, LenghtOfString);
 				AddToString(c, Token);
 				state = S_ID;
 				break;
@@ -218,7 +224,7 @@ tToken* GetNextToken()
 			}
 			else if (c == '!')
 			{
-				Token = InitString(Token);
+				Token = InitString(Token, LenghtOfString);
 				c = tolower(getchar());
 				state = S_ExcString;
 				break;
@@ -339,16 +345,16 @@ tToken* GetNextToken()
 		{
 			if (c == '"')
 			{
-				c = tolower(getchar());
+				c = getchar();
 				while (c != '"' && c != EOF)
 				{
 					AddToString(c, Token);
-					c = tolower(getchar());
+					c = getchar();
 				}
 
 				if (c == '"')
 				{
-					Token->Type = T_STRING;
+					Token->Type = T_STRINGVALUE;
 					return Token;
 				}
 			}
