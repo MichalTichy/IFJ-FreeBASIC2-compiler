@@ -11,17 +11,175 @@ void RunTests() {
 }
 
 #pragma region Lexical
-//this test will fail
+
 void IterativeFactorial()
 {
 	currentTestName = "Iterative factorial";
 	LoadFileToSTDIN("../../../TestSamples/iterativeFactorial.txt");
-	tToken* token = GetNextToken();
-	if (token->Type!=T_SCOPE)
+	tToken* token;
+
+	if (Exp_SCOPE())
 	{
-		Fail("Expected token SCOPE");
+		Fail("Expected token SCOPE : 1");
 		return;
 	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 2");
+		return;
+	}
+
+	if (Exp_DIM())
+	{
+		Fail("Expected token DIM : 3");
+		return;
+	}
+
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 4");
+		return;
+	}
+
+	if (Exp_AS())
+	{
+		Fail("Expected token AS : 5");
+		return;
+	}
+
+	if (Exp_INTEGER())
+	{
+		Fail("Expected token INTEGER : 6");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 7");
+		return;
+	}
+
+	if (Exp_DIM())
+	{
+		Fail("Expected token DIM : 8");
+		return;
+	}
+
+	if (Exp_ID("vysl"))
+	{
+		Fail("Expected token ID : 9");
+		return;
+	}
+
+	if (Exp_AS())
+	{
+		Fail("Expected token AS : 10");
+		return;
+	}
+
+	if (Exp_INTEGER())
+	{
+		Fail("Expected token INTEGER : 11");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 12");
+		return;
+	}
+
+	if (Exp_PRINT())
+	{
+		Fail("Expected token PRINT : 13");
+		return;
+	}
+
+	if (Exp_STRINGVALUE("Zadejte cislo pro vypocet faktorialu"))
+	{
+		Fail("Expected token STRING : 14");
+		return;
+	}
+
+	if (Exp_SEMICOLON())
+	{
+		Fail("Expected token SEMICOLON : 15");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 16");
+		return;
+	}
+
+	if (Exp_INPUT())
+	{
+		Fail("Expected token INPUT : 17");
+		return;
+	}
+
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 18");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 16");
+		return;
+	}
+
+	if (Exp_IF())
+	{
+		Fail("Expected token IF : 17");
+		return;
+	}
+
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 19");
+		return;
+	}
+
+	if (Exp_LESS())
+	{
+		Fail("Expected token LESS : 20");
+		return;
+	}
+
+	if (Exp_INTVALUE(0))
+	{
+		Fail("Expected token INTVALUE : 21");
+		return;
+	}
+
+	if (Exp_THEN())
+	{
+		Fail("Expected token THEN : 22");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 23");
+		return;
+	}
+
+	if (Exp_PRINT())
+	{
+		Fail("Expected token PRINT : 24");
+		return;
+	}
+
+	/* //NOT WORKING
+	if (Exp_STRINGVALUE("\nFaktorial nelze spocitat\n"))
+	{
+		Fail("Expected token STRINGVALUE : 25");
+		return;
+	}*/
 
 	Pass();
 }
@@ -96,6 +254,182 @@ void Pass() {
 	printf("PASSED %s\n", currentTestName);
 }
 #pragma endregion
+
+#pragma region EXPECT
+
+int Exp_SCOPE()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_SCOPE)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_EOL()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_EOL)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_DIM()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_DIM)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_AS()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_AS)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_INTEGER()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_INTEGER)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_PRINT()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_PRINT)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_SEMICOLON()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_SEMICOLON)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_INPUT()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_INPUT)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_IF()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_IF)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_THEN()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_THEN)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_LESS()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_LESS)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_ID(char* expectedString)
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_ID || strcmp(expectedString, token->String))
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+
+int Exp_STRINGVALUE(char* expectedString)
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_STRINGVALUE || strcmp(expectedString, token->String))
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_INTVALUE(int expected)
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_INTVALUE || expected != token->IntVal)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+
+
+#pragma endregion
+
 
 
 
