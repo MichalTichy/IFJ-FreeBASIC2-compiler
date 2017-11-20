@@ -131,6 +131,22 @@ tToken* GetNextToken()
 				Token->Type = T_EOL;
 				return Token;
 			}
+			else if (c == '\r')
+			{
+				c = getchar();
+
+				if (c == '\n')
+				{
+					Token->Type = T_EOL;
+					return Token;
+				}
+				else
+				{
+					ungetc(c, stdout);
+					Token->Type = T_EOL;
+					return Token;					
+				}
+			}
 			else if (c == EOF)
 			{
 				Token->Type = T_EOF;

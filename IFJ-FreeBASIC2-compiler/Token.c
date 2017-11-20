@@ -1,7 +1,7 @@
 #include "Token.h"
 
 // Basic allocated lenght of string
-#define LenghtOfString 11
+#define LenghtOfString 10
 
 /**
  * Function allocate and initialise token
@@ -23,7 +23,7 @@ void InitToken(tToken *Token)
 
 tToken* InitString(tToken *Token)
 {
-	if ((Token->String = (char *) malloc(sizeof(char) * LenghtOfString)) == NULL)
+	if ((Token->String = (char *) malloc(sizeof(char) * LenghtOfString + 1)) == NULL)
 	{
 		Token->String = NULL;
 		Token->Type = T_ERR;
