@@ -1,5 +1,9 @@
 #pragma once
-#include "Basics.h"
-#include "Scanner.h"
+#ifndef PARSER
+#define PARSER
+ERR_CODE Parse();
+ConstantTable_t * Gl_constant_table;
 
-void Parse();
+
+
+#endif // !PARSER
