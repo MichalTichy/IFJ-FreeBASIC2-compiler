@@ -16,6 +16,9 @@
     <ClInclude Include="Scanner.h" />
     <ClInclude Include="precedens.h" />
     <ClInclude Include="Tests.h" />
+    <ClInclude Include="ADT.h"/>
+    <ClInclude Include="errors.h"/>
+    <ClInclude Include="parser.h"/>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
@@ -23,6 +26,8 @@
     <ClCompile Include="List.c" />
     <ClCompile Include="Start.c" />
     <ClCompile Include="Tests.c" />
+    <ClInclude Include="ADT.c"/>
+    <ClInclude Include="parser.c"/>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSamples\iterativeFactorial.txt" />

@@ -1,0 +1,21 @@
+#pragma once
+#ifndef ERRORS
+#define ERRORS
+
+typedef enum ERR_CODE
+{
+	INPU_ERR = 50,
+	ANAL_ERR = 51,
+	SEMA_ERR = 52,
+	INTE_ERR_BAD_OP = 53,
+	INTE_ERR_BAD_VAR = 54,
+	INTE_ERR_BAD_FRAME = 55,
+	INTE_ERR_NO_VAL = 56,
+	INTE_ERR_ZERO_DIV = 57,
+	INTE_ERR_BAD_STRING = 58,
+	INTERNAL_ERR = 60,
+
+	OK_ERR = true
+} ERR_CODE;
+
+#endif // !ERRORS
