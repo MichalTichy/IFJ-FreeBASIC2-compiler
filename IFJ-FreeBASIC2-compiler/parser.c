@@ -1,33 +1,56 @@
-#include "Parser.h"
+#include "parser.h"
+tToken* token;
+
 void Parse() {
-
-}
-tNode* IsNumber(tToken* token) {
-	return IsInteger(token);
+	Next();
 }
 
-tNode* IsInteger(tToken* token) {
-	if (token->Type==T_INTVALUE && token->IntVal!=NULL)
+void Next() {
+	token = GetNextToken();
+}
+void Back() {
+	ReturnToken();
+}
+
+tNode* ProcessInteger() {
+	if (token->Type == T_INTVALUE)
 	{
-		return InitNode(token);
+		return InitIntegerNode(token->IntVal);
 	}
 	return NULL;
 }
 
-tNode* InitNode(tToken* token) {
-	switch (token->Type)
-	{
-	case Integer:
-		return InitIntegerNode(token->IntVal);
-	default:
-		break;
-	}
+tNode* ProcessNumber() {
+	return ProcessInteger();
 }
+
 
 tNode* InitIntegerNode(int value) {
 	tNode* node = malloc(sizeof(struct Node));
-	node->type = Integer;
-	node->tData.integer = malloc(sizeof(struct NodeInteger));
-	node->tData.integer = value;
+	node->type = integer;
+	node->tData.integer->value = value;
 	return node;
+}
+
+tNode* InitVarDeclarationNode() {
+	tNode* node = malloc(sizeof(struct Node));
+	node->type = varDeclaration;
+	return node;
+}
+
+
+tNode* ProcessVarDeclaration() {
+	if (token->Type == T_DIM)
+	{
+		tNode* assigment = InitVarDeclarationNode();
+		Next();
+		if (token->Type == T_ID)
+		{
+
+		}
+		else
+		{
+			Back();
+		}
+	}
 }
