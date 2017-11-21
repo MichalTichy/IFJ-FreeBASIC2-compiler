@@ -7,7 +7,6 @@ typedef enum {
 	T_INTVALUE,
 	T_DOUBLEVALUE,
 	T_STRINGVALUE,
-	T_INT,
 	T_ADD,			// ** +
 	T_SUB,			// ** -
 	T_MULTIPLY,		// ** *

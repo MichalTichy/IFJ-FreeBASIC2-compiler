@@ -20,6 +20,8 @@
     <ClInclude Include="errors.h" />
     <ClInclude Include="ADT.h" />
     <ClInclude Include="ManagedMalloc.h" />
+    <ClInclude Include="TestExpectToken.h" />
+    <ClInclude Include="TestScanner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
@@ -30,10 +32,14 @@
     <ClCompile Include="Parser.c" />
     <ClCompile Include="ADT.c" />
     <ClCompile Include="ManagedMalloc.c" />
+    <ClCompile Include="TestExpectToken.c" />
+    <ClCompile Include="TestScanner.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSamples\iterativeFactorial.txt" />
     <Text Include="TestSamples\stringTests.txt" />
     <Text Include="TestSamples\basic.txt" />
+    <Text Include="TestSamples\ScannerTests\INTVAL.txt" />
+    <Text Include="TestSamples\ScannerTests\DoubleValue.txt" />
   </ItemGroup>
 </Project>

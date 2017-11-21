@@ -65,7 +65,7 @@
     <SourcesToCopyRemotelyOverride>@(SourcesToCopyRemotely)</SourcesToCopyRemotelyOverride>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
-    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
+    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(ProjectDir)/TestSamples/ScannerTests/INTVAL.txt;$(ProjectDir)/TestSamples/ScannerTests/DoubleValue.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
   </PropertyGroup>
   <ItemGroup>
     <ClInclude Include="ADT.h" />
@@ -78,7 +78,9 @@
     <ClInclude Include="Scanner.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="TestExpectToken.h" />
     <ClInclude Include="Tests.h" />
+    <ClInclude Include="TestScanner.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
@@ -91,7 +93,9 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClCompile>
     <ClCompile Include="Start.c" />
+    <ClCompile Include="TestExpectToken.c" />
     <ClCompile Include="Tests.c" />
+    <ClCompile Include="TestScanner.c" />
     <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +108,16 @@
       <DeploymentContent>true</DeploymentContent>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <RemoteFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(RemoteOutDir)iterativeFactorial.txt</RemoteFile>
+      <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
+      <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
+    </Text>
+    <Text Include="TestSamples\ScannerTests\DoubleValue.txt">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
+      <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
+    </Text>
+    <Text Include="TestSamples\ScannerTests\INTVAL.txt">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
       <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
     </Text>

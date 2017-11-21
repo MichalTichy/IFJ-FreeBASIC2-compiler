@@ -363,7 +363,7 @@ tToken* LoadToken()
 			else
 			{
 				ungetc(c, stdin);
-				Token->Type = T_LESS;
+				Token->Type = T_GREATER;
 				return Token;
 			}
 		}

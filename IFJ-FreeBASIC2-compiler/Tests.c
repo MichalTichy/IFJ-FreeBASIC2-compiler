@@ -1,10 +1,15 @@
 ﻿#include "Tests.h"
-char* currentTestName;
+//char* currentTestName;
 void RunTests() {
 	ExampleTests();
 	printf("REAL TESTS\n");
+	printf("--------------\n");
+	printf("******* Scanner tests *******\n\n");
+	IntegerValue();
+	DoubleValue();
 	IterativeFactorial();
 	BasicProgram();
+	printf("--------------\n");
 	ReturnTokenTest();
 
 	ClearSTDIN();
@@ -19,7 +24,6 @@ void IterativeFactorial()
 	ResetScanner();
 	currentTestName = "Iterative factorial";
 	LoadFileToSTDIN("../../../TestSamples/iterativeFactorial.txt");
-	tToken* token;
 
 	if (Exp_SCOPE())
 	{
@@ -451,98 +455,98 @@ void BasicProgram()
 	LoadFileToSTDIN("../../../TestSamples/basic.txt");
 	tToken* token;
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected scope as token 1");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_EOL)
 	{
 		Fail("Expected EOL as token 2");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_DIM)
 	{
 		Fail("Expected DIM as token 3");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_ID)
 	{
 		Fail("Expected ID as token 4");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_AS)
 	{
 		Fail("Expected AS as token 5");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_INTEGER)
 	{
 		Fail("Expected INTEGER as token 6");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_EOL)
 	{
 		Fail("Expected EOL as token 7");
 		return;
 	}
 	
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_ID)
 	{
 		Fail("Expected ID as token 8");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_ASSIGN)
 	{
 		Fail("Expected ASSIGN as token 9");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_INTVALUE && token->IntVal==3)
 	{
 		Fail("Expected INTVALUE with value 3 as token 10");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_EOL)
 	{
 		Fail("Expected EOL as token 11");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_END)
 	{
 		Fail("Expected END as token 12");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected SCOPE as token 13");
 		return;
 	}
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_EOF)
 	{
 		Fail("Expected EOF as token 14");
@@ -559,14 +563,14 @@ void ReturnTokenTest()
 	LoadFileToSTDIN("../../../TestSamples/basic.txt");
 	tToken* token;
 
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected scope as token 1");
 		return;
 	}
 	ReturnToken();
-	token = GetNextToken();
+	token = LoadToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected scope as token 1");
@@ -645,301 +649,6 @@ void Fail(char* message) {
 void Pass() {
 	printf("PASSED %s\n", currentTestName);
 }
-#pragma endregion
-
-#pragma region EXPECT
-
-int Exp_SCOPE()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_SCOPE)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_EOL()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_EOL)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_EOF()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_EOF)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_END()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_END)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_DIM()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_DIM)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_AS()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_AS)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_INTEGER()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_INTEGER)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_PRINT()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_PRINT)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_SEMICOLON()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_SEMICOLON)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_INPUT()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_INPUT)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_IF()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_IF)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_ELSE()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_ELSE)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_THEN()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_THEN)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_LESS()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_LESS)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_GREATER()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_LESS)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_SUB()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_SUB)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_MULTIPLY()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_MULTIPLY)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_ASSIGN()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_ASSIGN)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_DO()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_DO)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_WHILE()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_WHILE)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_LOOP()
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_LOOP)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_ID(char* expectedString)
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_ID || strcmp(expectedString, token->String))
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-
-int Exp_STRINGVALUE(char* expectedString)
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_STRINGVALUE || strcmp(expectedString, token->String))
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-int Exp_INTVALUE(int expected)
-{
-	tToken *token;
-	token = GetNextToken();
-	if (token->Type != T_INTVALUE || expected != token->IntVal)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
-
-
-
 #pragma endregion
 
 
