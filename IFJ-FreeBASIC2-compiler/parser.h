@@ -1,9 +1,21 @@
-#pragma once
-#ifndef PARSER
-#define PARSER
-ERR_CODE Parse();
-ConstantTable_t * Gl_constant_table;
+#include "Basics.h"
+#include "Scanner.h"
 
 
+typedef struct NodeInteger
+{
+	int value;
+} tNodeInteger;
 
-#endif // !PARSER
+typedef struct Node
+{
+	NodeType type;
+	union Data
+	{
+		tNodeInteger* integer;
+	} tData;
+}tNode;
+
+typedef enum {
+	Integer
+} NodeType;
