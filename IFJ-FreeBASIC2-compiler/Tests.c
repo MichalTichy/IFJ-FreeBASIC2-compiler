@@ -177,13 +177,271 @@ void IterativeFactorial()
 		return;
 	}
 
-	/* //NOT WORKING
 	if (Exp_STRINGVALUE("\nFaktorial nelze spocitat\n"))
 	{
 		Fail("Expected token STRINGVALUE : 25");
 		return;
-	}*/
+	}
 
+	if (Exp_SEMICOLON())
+	{
+		Fail("Expected token SEMICOLON : 26");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 27");
+		return;
+	}
+
+	if (Exp_ELSE())
+	{
+		Fail("Expected token ELSE : 28");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 29");
+		return;
+	}
+
+	if (Exp_ID("vysl"))
+	{
+		Fail("Expected token ID : 30");
+		return;
+	}
+
+	if (Exp_ASSIGN())
+	{
+		Fail("Expected token ASSIGN : 31");
+		return;
+	}
+
+	if (Exp_INTVALUE(1))
+	{
+		Fail("Expected token INTVALUE : 32");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 33");
+		return;
+	}
+
+	if (Exp_DO())
+	{
+		Fail("Expected token EOL : 34");
+		return;
+	}
+
+	if (Exp_WHILE())
+	{
+		Fail("Expected token WHILE : 35");
+		return;
+	}
+
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 36");
+		return;
+	}
+
+	if (Exp_GREATER())
+	{
+		Fail("Expected token GREATER : 38");
+		return;
+	}
+
+	if (Exp_INTVALUE(0))
+	{
+		Fail("Expected token INTVALUE : 39");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 40");
+		return;
+	}
+
+	if (Exp_ID("vysl"))
+	{
+		Fail("Expected token ID : 41");
+		return;
+	}
+	
+	if (Exp_ASSIGN())
+	{
+		Fail("Expected token ASSIGN : 42");
+		return;
+	}
+	
+	if (Exp_ID("vysl"))
+	{
+		Fail("Expected token ID : 43");
+		return;
+	}
+
+	if (Exp_MULTIPLY())
+	{
+		Fail("Expected token MULTIPLY : 44");
+		return;
+	}
+
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 45");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 46");
+		return;
+	}
+
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 47");
+		return;
+	}
+
+	if (Exp_ASSIGN())
+	{
+		Fail("Expected token ASSIGN : 48");
+		return;
+	}
+
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 49");
+		return;
+	}
+
+	if (Exp_SUB())
+	{
+		Fail("Expected token SUB : 50");
+		return;
+	}
+
+	if (Exp_INTVALUE(1))
+	{
+		Fail("Expected token INTVALUE : 51");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 52");
+		return;
+	}
+
+	if (Exp_LOOP())
+	{
+		Fail("Expected token EOL : 53");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 54");
+		return;
+	}
+
+	if (Exp_PRINT())
+	{
+		Fail("Expected token PRINT : 55");
+		return;
+	}
+
+	if (Exp_STRINGVALUE("\nVysledek je:"))
+	{
+		Fail("Expected token STRINGVALUE : 55");
+		return;
+	}
+
+	if (Exp_SEMICOLON())
+	{
+		Fail("Expected token SEMICOLON : 56");
+		return;
+	}
+
+	if (Exp_ID("vysl"))
+	{
+		Fail("Expected token STRINGVALUE : 57");
+		return;
+	}
+
+	if (Exp_SEMICOLON())
+	{
+		Fail("Expected token SEMICOLON : 58");
+		return;
+	}
+
+	if (Exp_STRINGVALUE("\n"))
+	{
+		Fail("Expected token STRINGVALUE : 59");
+		return;
+	}
+
+	if (Exp_SEMICOLON())
+	{
+		Fail("Expected token SEMICOLON : 60");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 61");
+		return;
+	}
+
+	if (Exp_END())
+	{
+		Fail("Expected token END : 62");
+		return;
+	}
+
+	if (Exp_IF())
+	{
+		Fail("Expected token IF : 63");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 64");
+		return;
+	}
+
+	if (Exp_END())
+	{
+		Fail("Expected token END : 65");
+		return;
+	}
+
+	if (Exp_SCOPE())
+	{
+		Fail("Expected token SCOPE : 66");
+		return;
+	}
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 67");
+		return;
+	}
+
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : 68");
+		return;
+	}
+
+	ClearSTDIN();
 	Pass();
 }
 void BasicProgram()
@@ -415,6 +673,30 @@ int Exp_EOL()
 	return 0;
 }
 
+int Exp_EOF()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_EOF)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_END()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_END)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
 int Exp_DIM()
 {
 	tToken *token;
@@ -499,6 +781,18 @@ int Exp_IF()
 	return 0;
 }
 
+int Exp_ELSE()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_ELSE)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
 int Exp_THEN()
 {
 	tToken *token;
@@ -516,6 +810,90 @@ int Exp_LESS()
 	tToken *token;
 	token = GetNextToken();
 	if (token->Type != T_LESS)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_GREATER()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_LESS)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_SUB()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_SUB)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_MULTIPLY()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_MULTIPLY)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_ASSIGN()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_ASSIGN)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_DO()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_DO)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_WHILE()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_WHILE)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+
+int Exp_LOOP()
+{
+	tToken *token;
+	token = GetNextToken();
+	if (token->Type != T_LOOP)
 	{
 		return -1;
 	}
