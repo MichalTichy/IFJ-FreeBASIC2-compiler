@@ -5,6 +5,7 @@ void RunTests() {
 	printf("REAL TESTS\n");
 	IterativeFactorial();
 	BasicProgram();
+	ReturnTokenTest();
 
 	ClearSTDIN();
 	printf("Press ENTER key to Continue\n");
@@ -15,6 +16,7 @@ void RunTests() {
 
 void IterativeFactorial()
 {
+	ResetScanner();
 	currentTestName = "Iterative factorial";
 	LoadFileToSTDIN("../../../TestSamples/iterativeFactorial.txt");
 	tToken* token;
@@ -186,6 +188,7 @@ void IterativeFactorial()
 }
 void BasicProgram()
 {
+	ResetScanner();
 	currentTestName = "Basic program";
 	LoadFileToSTDIN("../../../TestSamples/basic.txt");
 	tToken* token;
@@ -282,16 +285,33 @@ void BasicProgram()
 	}
 
 	token = GetNextToken();
-	if (token->Type!=T_EOL)
+	if (token->Type!=T_EOF)
 	{
-		Fail("Expected EOL as token 14");
+		Fail("Expected EOF as token 14");
 		return;
 	}
 
+	Pass();
+}
+
+void ReturnTokenTest()
+{
+	ResetScanner();
+	currentTestName = "Return token test";
+	LoadFileToSTDIN("../../../TestSamples/basic.txt");
+	tToken* token;
+
 	token = GetNextToken();
-	if (token->Type!=T_EOF)
+	if (token->Type!=T_SCOPE)
 	{
-		Fail("Expected EOL as token 15");
+		Fail("Expected scope as token 1");
+		return;
+	}
+	ReturnToken();
+	token = GetNextToken();
+	if (token->Type!=T_SCOPE)
+	{
+		Fail("Expected scope as token 1");
 		return;
 	}
 

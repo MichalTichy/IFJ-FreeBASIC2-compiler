@@ -2,16 +2,16 @@
 void Parse() {
 
 }
-
-bool IsNumber(tToken* token) {
-	return isInteger(token);
+tNode* IsNumber(tToken* token) {
+	return IsInteger(token);
 }
 
-bool isInteger(tToken* token) {
+tNode* IsInteger(tToken* token) {
 	if (token->Type==T_INTVALUE && token->IntVal!=NULL)
 	{
-		return InitNode(token->Type);
+		return InitNode(token);
 	}
+	return NULL;
 }
 
 tNode* InitNode(tToken* token) {

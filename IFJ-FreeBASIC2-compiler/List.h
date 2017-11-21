@@ -1,4 +1,5 @@
 ﻿#include "Basics.h"
+#include "Token.h"
 typedef struct tDLElem {                 /* prvek dvousměrně vázaného seznamu */
 	void* data;                                            /* užitečná data */
 	struct tDLElem *lptr;          /* ukazatel na předchozí prvek seznamu */
@@ -24,6 +25,8 @@ void DLPreDelete(tDLList *);
 void DLPostInsert(tDLList *, void*);
 void DLPreInsert(tDLList *, void*);
 void DLActualize(tDLList *, void*);
-void DLSucc(tDLList *);
+void DLNext(tDLList *);
 void DLPred(tDLList *);
-int DLActive(tDLList *);
+bool DLActive(tDLList *);
+bool DLIsEmpty(tDLList *);
+bool DLIsActiveItemLast(tDLList *L);

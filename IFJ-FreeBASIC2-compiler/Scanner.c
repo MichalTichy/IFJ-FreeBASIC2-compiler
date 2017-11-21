@@ -16,6 +16,41 @@ char *ReservedWords[LenghtOfReservedWords] =
 
 // Used for realloc
 int LenghtOfString = 10;
+tDLList* TokenList = NULL;
+
+void ResetScanner() {
+	TokenList = NULL;
+}
+void ReturnToken() {
+	DLPred(TokenList);
+}
+tToken* GetNextToken() {
+	if (TokenList==NULL)
+	{
+		TokenList = malloc(sizeof(tDLList));
+		DLInitList(TokenList);
+	}
+
+	if (DLIsEmpty(TokenList))
+	{
+		DLInsertFirst(TokenList, LoadToken());
+		DLFirst(TokenList);
+	}
+	else if (!DLActive(TokenList)) {
+		DLFirst(TokenList);
+	}
+	else if (DLIsActiveItemLast(TokenList))
+	{
+		DLInsertLast(TokenList, LoadToken());
+		DLLast(TokenList);
+	}
+	else
+	{
+		DLNext(TokenList);
+	}
+
+	return TokenList->Act->data;
+}
 
 /**
 * Operations with strings
@@ -98,11 +133,12 @@ TokenType CompareWithKeywords(char* string)
 	return Type;
 }
 
+
+
 /**
 * Function to get next token from source file.
 */
-
-tToken* GetNextToken()
+tToken* LoadToken()
 {
 	tToken *Token;
 	tState state = S_Start;
