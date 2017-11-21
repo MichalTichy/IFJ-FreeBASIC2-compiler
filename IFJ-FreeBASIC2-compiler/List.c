@@ -80,7 +80,7 @@ void DLInsertLast(tDLList *L, void* val) {
 	newElement->lptr = L->Last;
 	newElement->rptr = NULL;
 
-	if (L->Last == NULL)
+	if (L->Last == NULL) 
 		L->First = newElement;
 	else
 		L->Last->lptr = newElement;
@@ -270,7 +270,7 @@ void DLActualize(tDLList *L, void* val) {
 	L->Act->data = val;
 }
 
-void DLSucc(tDLList *L) {
+void DLNext(tDLList *L) {
 	/*
 	** Posune aktivitu na následující prvek seznamu L.
 	** Není-li seznam aktivní, nedělá nic.
@@ -296,10 +296,22 @@ void DLPred(tDLList *L) {
 	L->Act = L->Act->lptr;
 }
 
-int DLActive(tDLList *L) {
+bool DLActive(tDLList *L) {
 	/*
 	** Je-li seznam L aktivní, vrací nenulovou hodnotu, jinak vrací 0.
 	** Funkci je vhodné implementovat jedním příkazem return.
 	**/
 	return L->Act != NULL;
+}
+
+bool DLIsEmpty(tDLList *L) {
+	/*
+	** Je-li seznam L aktivní, vrací nenulovou hodnotu, jinak vrací 0.
+	** Funkci je vhodné implementovat jedním příkazem return.
+	**/
+	return L->First == NULL;
+}
+
+bool DLIsActiveItemLast(tDLList *L) {
+	return L->Last == L->Act;
 }

@@ -68,7 +68,9 @@
     <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
   </PropertyGroup>
   <ItemGroup>
+    <ClInclude Include="ADT.h" />
     <ClInclude Include="Basics.h" />
+    <ClInclude Include="errors.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="precedens.h" />
@@ -80,6 +82,7 @@
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ADT.c" />
     <ClCompile Include="List.c" />
     <ClCompile Include="Parser.c" />
     <ClCompile Include="Scanner.c">
