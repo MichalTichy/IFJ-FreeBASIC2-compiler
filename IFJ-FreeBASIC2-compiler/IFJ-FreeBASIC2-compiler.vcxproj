@@ -72,6 +72,7 @@
     <ClInclude Include="Basics.h" />
     <ClInclude Include="errors.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="ManagedMalloc.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="precedens.h" />
     <ClInclude Include="Scanner.h">
@@ -84,6 +85,7 @@
   <ItemGroup>
     <ClCompile Include="ADT.c" />
     <ClCompile Include="List.c" />
+    <ClCompile Include="ManagedMalloc.c" />
     <ClCompile Include="Parser.c" />
     <ClCompile Include="Scanner.c">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
