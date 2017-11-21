@@ -2,8 +2,15 @@
 #include "Scanner.h"
 
 typedef enum  {
+	TYPE_Integer,
+	TYPE_Double,
+	TYPE_String
+} ScalarType;
+
+typedef enum  {
 	integer,
-	varDeclaration
+	varDeclaration,
+	expression
 }NodeType;
 
 typedef struct NodeInteger
@@ -20,7 +27,7 @@ typedef struct NodeExpression
 typedef struct NodeVariableDeclaration
 {
 	//todo pointer to ID
-	//todo TYPE DEFINITION
+	ScalarType varType;
 	tNodeExpression* Expression;
 
 } tNodeVariableDeclaration;
@@ -33,6 +40,7 @@ typedef struct Node
 	{
 		struct NodeVariableDeclaration variable_declaration;
 		struct NodeInteger* integer;
+		struct NodeExpression* expression;
 	} tData;
 }tNode;
 
@@ -41,6 +49,8 @@ void Parse();
 void Next();
 
 void Back();
+
+void BackMultipleTimes(int steps);
 
 tNode * ProcessNumber();
 
@@ -51,3 +61,5 @@ tNode * InitIntegerNode(int value);
 tNode * InitVarDeclarationNode();
 
 tNode * ProcessVarDeclaration();
+
+ScalarType TokenTypeToScalarType(TokenType tokenType);

@@ -12,6 +12,13 @@ void Back() {
 	ReturnToken();
 }
 
+void BackMultipleTimes(int steps) {
+	for (int i = 0; i < steps; ++i)
+	{
+		Back();
+	}
+}
+
 tNode* ProcessInteger() {
 	if (token->Type == T_INTVALUE)
 	{
@@ -39,18 +46,73 @@ tNode* InitVarDeclarationNode() {
 }
 
 
+bool IsTokenScalarType()
+{
+	return token->Type == T_INTEGER || token->Type == T_DOUBLE || token->Type == T_STRING;
+}
+
+tNode* ProcessExpression()
+{
+	//TODO
+}
+
 tNode* ProcessVarDeclaration() {
+	int takenTokens = 0;
+	bool failed = false;
+	tNode* assigment = NULL;
 	if (token->Type == T_DIM)
 	{
-		tNode* assigment = InitVarDeclarationNode();
+		assigment = InitVarDeclarationNode();
 		Next();
+		takenTokens++;
 		if (token->Type == T_ID)
 		{
-
-		}
-		else
-		{
-			Back();
+			//todo add to symtable
+			Next();
+			takenTokens++;
+			if (token->Type==T_AS)
+			{
+				Next();
+				takenTokens++;
+				if (IsTokenScalarType())
+				{
+					assigment->tData.variable_declaration.varType = TokenTypeToScalarType(token->Type);
+					Next();
+					takenTokens++;
+					if (token->Type==T_ASSIGN)
+					{
+						Next();
+						takenTokens++;
+						tNode* expression = ProcessExpression();
+						if (expression!=NULL)
+						{
+							assigment->tData.variable_declaration.Expression = expression->tData.expression;
+							return assigment;
+						}
+					}
+					else
+					{
+						Back();
+						takenTokens--;
+						return assigment;
+					}
+				}
+			}
 		}
 	}
+
+	BackMultipleTimes(takenTokens);
+	free(assigment);
+	return NULL;
+}
+
+ScalarType TokenTypeToScalarType(TokenType tokenType)
+{
+	switch (tokenType)
+	{
+		case T_INTEGER:return TYPE_Integer;
+		case T_DOUBLE:return TYPE_Double;
+		case T_STRING:return TYPE_String;
+		default: return NULL; //TODO ERROR
+	} 
 }
