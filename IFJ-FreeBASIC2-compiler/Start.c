@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "Basics.h"
-#include "errors.h"
+
 #define DEBUG 1
 
 #if DEBUG 
