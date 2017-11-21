@@ -3,9 +3,70 @@
 
 #include "precedens.h"
 
+typedef struct BTreeNode_t BTreeNode_t;
+typedef struct SymbolTableData_t SymbolTableData_t;
+
+//--BinaryTree
+
+
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+struct BTreeNode_t
+{
+	BTreeNode_t *parentPtr;
+	BTreeNode_t *leftPtr;
+	BTreeNode_t *rightPtr;
+	struct SymbolTableData_t *data;
+};
+
+//-- symbolTable
+#define SYMBOL_TABLE_ARRAY_SIZE 256
+
+
+struct SymbolTable_t * SymbolTableInit(void);
+BTreeNode_t * SymbolTableInsert(struct SymbolTable_t * symbolTable, struct ConstantTable_t * constantTable, struct SymbolTableData_t symbolTableData);
+BTreeNode_t * SymbolTableSearch(struct SymbolTable_t * symbolTable, struct ConstantTable_t * constantTable);
+void SymbolTableDestroy(struct SymbolTable_t *);
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+typedef enum 
+{
+	placeholder3,
+	placeholder4,
+
+}SymbolTableType_t;
+
+
+
+struct SymbolTableData_t
+{
+	char * namePtr;
+	unsigned int symTableArrayIndex;
+	SymbolTableType_t type;
+	struct ConstOrSymbT_dataType *value;
+	unsigned int constTableIndex;
+	unsigned int stackIndex;
+	int loaded;
+};
+
+typedef struct SymbolTable_t SymbolTable_t;
+
+struct SymbolTable_t
+{
+	BTreeNode_t * root;
+	char * IdArray;
+	unsigned int allocatedLenght;
+	unsigned int arrayIndex;
+	unsigned int assignedVarCount;
+};
+
+
+
+
 //--STACK
-TStack_t *StackInit(TStack_t * stack);
-void StackDestroy(TStack_t * stack);
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 typedef struct
 {
@@ -15,43 +76,28 @@ typedef struct
 
 } TStackItem_t;
 
-typedef struct stack
+typedef struct TStack_t
 {
 	TStackItem_t * items;
 	int maxSize;
 	int actualSize;
 } TStack_t;
 
-
-
-//--BinaryTree
-
-
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-typedef struct 
-{
-	BTreeNode_t *parentPtr;
-	BTreeNode_t *leftPtr;
-	BTreeNode_t *rightPtr;
-	SymbolTableData_t data;
-}BTreeNode_t;
-
-
-
+TStack_t *StackInit(TStack_t * stack);
+void StackDestroy(TStack_t * stack);
 
 
 
 //--ConstantTable
 #define CONSTANT_TABLE_SIZE 128
 
-ConstantTable_t * ConstantTableInit();
-void ConstantTableDestroy(ConstantTable_t *);
+struct ConstantTable_t * ConstantTableInit();
+void ConstantTableDestroy(struct ConstantTable_t *);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 typedef struct
 {
-	ConstOrSymbT_dataType value;
+	struct ConstOrSymbT_dataType *value;
 	SymbolTableType_t type;
 }ConstTableItem_t;
 
@@ -72,47 +118,12 @@ typedef union
 }ConstOrSymbT_dataType;
 
 
-//-- symbolTable
-#define SYMBOL_TABLE_ARRAY_SIZE 256
-
-
-SymbolTable_t * SymbolTableInit(void);
-BTreeNode_t * SymbolTableInsert(SymbolTable_t * symbolTable, ConstantTable_t * constantTable, SymbolTableData_t symbolTableData);
-BTreeNode_t * SymbolTableSearch(SymbolTable_t * symbolTable, ConstantTable_t * constantTable);
-void SymbolTableDestroy(SymbolTable_t *);
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-typedef enum 
-{
-	void * placeholder,
-	void * placeholder2,
-
-}SymbolTableType_t;
-
-typedef struct
-{
-	char * namePtr;
-	unsigned int symTableArrayIndex;
-	SymbolTableType_t type;
-	ConstOrSymbT_dataType value;
-	unsigned int constTableIndex;
-	unsigned int stackIndex;
-	int loaded;
-}SymbolTableData_t;
-
-typedef struct
-{
-	BTreeNode_t * root;
-	char * IdArray;
-	unsigned int allocatedLenght;
-	unsigned int arrayIndex;
-	unsigned int assignedVarCount;
-}SymbolTable_t;
 
 //-- symbolTableArray
 int GL_SYMBOLTABLE_COUNT_MAX;
-SymbolTable_t ** SymbolTable_ArrayInit()
+SymbolTable_t ** SymbolTable_ArrayInit();
 SymbolTable_t ** SymbolTable_ArrayRealloc();
-void SymbolTable_Array_destroy;
+void SymbolTable_Array_destroy();
 
 
 
@@ -121,7 +132,7 @@ void SymbolTable_Array_destroy;
 
 typedef struct
 {
-	instructionType instructionType;
+	//instructionType instructionType;
 	unsigned int src1;
 	unsigned int src2;
 	unsigned int src3;
