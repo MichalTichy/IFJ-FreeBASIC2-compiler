@@ -98,6 +98,60 @@ TokenType CompareWithKeywords(char* string)
 	return Type;
 }
 
+int CheckEOL(char c)
+{
+	if (c == '\n')
+	{
+		return 1;
+	}
+	else if (c == '\r')
+	{
+		c = getchar();
+
+		if (c != '\n')
+		{
+			ungetc(c, stdin);
+		}
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int CheckIfEscapeSeuquenceIsValid(int c, tToken *Token)
+{
+	c = getchar();
+
+	if (c != '\"' && c != 'n' && c != 't' && c != '\\')
+	{
+		return 1;
+	}
+	else
+	{
+		if (c == '\"')
+		{
+			AddToString('\"', Token);
+		}
+		else if (c == 'n')
+		{
+			AddToString('\n', Token);
+		}
+		else if (c == 't', Token)
+		{
+			AddToString('\t', Token);
+		}
+		else if (c == '\\')
+		{
+			AddToString('\\', Token);
+		}
+
+			return 0;
+	}
+}
+
+
 /**
 * Function to get next token from source file.
 */
@@ -132,26 +186,10 @@ tToken* GetNextToken()
 				c = tolower(getchar());
 				break;
 			}
-			else if (c == '\n')
+			else if (CheckEOL(c) == 1)
 			{
 				Token->Type = T_EOL;
 				return Token;
-			}
-			else if (c == '\r')
-			{
-				c = getchar();
-
-				if (c == '\n')
-				{
-					Token->Type = T_EOL;
-					return Token;
-				}
-				else
-				{
-					ungetc(c, stdout);
-					Token->Type = T_EOL;
-					return Token;					
-				}
 			}
 			else if (c == EOF)
 			{
@@ -345,11 +383,35 @@ tToken* GetNextToken()
 		{
 			if (c == '"')
 			{
-				c = getchar();
-				while (c != '"' && c != EOF)
+				
+				while (c != EOF)
 				{
-					AddToString(c, Token);
 					c = getchar();
+
+					if (CheckEOL(c) == 1)
+					{
+						RemoveString(Token);
+						Token->Type = T_ERR;
+						return Token;
+					}
+					else if (c == '\\')
+					{
+						if (CheckIfEscapeSeuquenceIsValid(c, Token) == 1)
+						{
+							RemoveString(Token);
+							Token->Type = T_ERR;
+							return Token;
+						}
+					}
+					else if (c == '"')
+					{
+						break;
+					}
+					else
+					{
+						AddToString(c, Token);
+					}
+					
 				}
 
 				if (c == '"')
