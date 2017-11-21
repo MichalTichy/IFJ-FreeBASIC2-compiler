@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "Token.h"
+#include "List.h"
 
 typedef enum {
 
@@ -26,3 +26,6 @@ void ConvertStringToInteger(tToken *Token);
 void ConvertStringToDouble(tToken *Token);
 TokenType CompareWithKeywords(char* string);
 tToken* GetNextToken();
+tToken* LoadToken();
+void ReturnToken();
+void ResetScanner();
