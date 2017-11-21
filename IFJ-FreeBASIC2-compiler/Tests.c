@@ -451,98 +451,98 @@ void BasicProgram()
 	LoadFileToSTDIN("../../../TestSamples/basic.txt");
 	tToken* token;
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected scope as token 1");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_EOL)
 	{
 		Fail("Expected EOL as token 2");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_DIM)
 	{
 		Fail("Expected DIM as token 3");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_ID)
 	{
 		Fail("Expected ID as token 4");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_AS)
 	{
 		Fail("Expected AS as token 5");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_INTEGER)
 	{
 		Fail("Expected INTEGER as token 6");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_EOL)
 	{
 		Fail("Expected EOL as token 7");
 		return;
 	}
 	
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_ID)
 	{
 		Fail("Expected ID as token 8");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_ASSIGN)
 	{
 		Fail("Expected ASSIGN as token 9");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_INTVALUE && token->IntVal==3)
 	{
 		Fail("Expected INTVALUE with value 3 as token 10");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_EOL)
 	{
 		Fail("Expected EOL as token 11");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_END)
 	{
 		Fail("Expected END as token 12");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected SCOPE as token 13");
 		return;
 	}
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_EOF)
 	{
 		Fail("Expected EOF as token 14");
@@ -559,14 +559,14 @@ void ReturnTokenTest()
 	LoadFileToSTDIN("../../../TestSamples/basic.txt");
 	tToken* token;
 
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected scope as token 1");
 		return;
 	}
 	ReturnToken();
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type!=T_SCOPE)
 	{
 		Fail("Expected scope as token 1");
@@ -652,7 +652,7 @@ void Pass() {
 int Exp_SCOPE()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_SCOPE)
 	{
 		return -1;
@@ -664,7 +664,7 @@ int Exp_SCOPE()
 int Exp_EOL()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_EOL)
 	{
 		return -1;
@@ -676,7 +676,7 @@ int Exp_EOL()
 int Exp_EOF()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_EOF)
 	{
 		return -1;
@@ -688,7 +688,7 @@ int Exp_EOF()
 int Exp_END()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_END)
 	{
 		return -1;
@@ -700,7 +700,7 @@ int Exp_END()
 int Exp_DIM()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_DIM)
 	{
 		return -1;
@@ -712,7 +712,7 @@ int Exp_DIM()
 int Exp_AS()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_AS)
 	{
 		return -1;
@@ -724,7 +724,7 @@ int Exp_AS()
 int Exp_INTEGER()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_INTEGER)
 	{
 		return -1;
@@ -736,7 +736,7 @@ int Exp_INTEGER()
 int Exp_PRINT()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_PRINT)
 	{
 		return -1;
@@ -748,7 +748,7 @@ int Exp_PRINT()
 int Exp_SEMICOLON()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_SEMICOLON)
 	{
 		return -1;
@@ -760,7 +760,7 @@ int Exp_SEMICOLON()
 int Exp_INPUT()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_INPUT)
 	{
 		return -1;
@@ -772,7 +772,7 @@ int Exp_INPUT()
 int Exp_IF()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_IF)
 	{
 		return -1;
@@ -784,7 +784,7 @@ int Exp_IF()
 int Exp_ELSE()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_ELSE)
 	{
 		return -1;
@@ -796,7 +796,7 @@ int Exp_ELSE()
 int Exp_THEN()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_THEN)
 	{
 		return -1;
@@ -808,7 +808,7 @@ int Exp_THEN()
 int Exp_LESS()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_LESS)
 	{
 		return -1;
@@ -820,7 +820,7 @@ int Exp_LESS()
 int Exp_GREATER()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_LESS)
 	{
 		return -1;
@@ -832,7 +832,7 @@ int Exp_GREATER()
 int Exp_SUB()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_SUB)
 	{
 		return -1;
@@ -844,7 +844,7 @@ int Exp_SUB()
 int Exp_MULTIPLY()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_MULTIPLY)
 	{
 		return -1;
@@ -856,7 +856,7 @@ int Exp_MULTIPLY()
 int Exp_ASSIGN()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_ASSIGN)
 	{
 		return -1;
@@ -868,7 +868,7 @@ int Exp_ASSIGN()
 int Exp_DO()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_DO)
 	{
 		return -1;
@@ -880,7 +880,7 @@ int Exp_DO()
 int Exp_WHILE()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_WHILE)
 	{
 		return -1;
@@ -892,7 +892,7 @@ int Exp_WHILE()
 int Exp_LOOP()
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_LOOP)
 	{
 		return -1;
@@ -904,7 +904,7 @@ int Exp_LOOP()
 int Exp_ID(char* expectedString)
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_ID || strcmp(expectedString, token->String))
 	{
 		return -1;
@@ -917,7 +917,7 @@ int Exp_ID(char* expectedString)
 int Exp_STRINGVALUE(char* expectedString)
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_STRINGVALUE || strcmp(expectedString, token->String))
 	{
 		return -1;
@@ -929,7 +929,7 @@ int Exp_STRINGVALUE(char* expectedString)
 int Exp_INTVALUE(int expected)
 {
 	tToken *token;
-	token = LoadToken();
+	token = GetNextToken();
 	if (token->Type != T_INTVALUE || expected != token->IntVal)
 	{
 		return -1;

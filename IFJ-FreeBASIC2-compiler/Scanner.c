@@ -22,10 +22,15 @@ void ResetScanner() {
 	TokenList = NULL;
 }
 void ReturnToken() {
+	if (TokenList == NULL)
+	{
+		TokenList = malloc(sizeof(tDLList));
+		DLInitList(TokenList);
+	}
 	DLPred(TokenList);
 }
 tToken* GetNextToken() {
-	if (TokenList==NULL)
+	if (TokenList == NULL)
 	{
 		TokenList = malloc(sizeof(tDLList));
 		DLInitList(TokenList);
