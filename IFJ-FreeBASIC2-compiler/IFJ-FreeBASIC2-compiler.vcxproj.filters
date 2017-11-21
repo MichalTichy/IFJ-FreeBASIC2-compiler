@@ -16,8 +16,6 @@
     <ClInclude Include="Scanner.h" />
     <ClInclude Include="precedens.h" />
     <ClInclude Include="Tests.h" />
-    <ClInclude Include="ADT.h"/>
-    <ClInclude Include="errors.h"/>
     <ClInclude Include="Parser.h" />
   </ItemGroup>
   <ItemGroup>
