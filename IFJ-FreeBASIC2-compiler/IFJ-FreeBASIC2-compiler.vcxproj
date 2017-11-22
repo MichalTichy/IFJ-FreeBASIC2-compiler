@@ -78,6 +78,7 @@
     <ClInclude Include="Scanner.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="SymTable.h" />
     <ClInclude Include="TestExpectToken.h" />
     <ClInclude Include="Tests.h" />
     <ClInclude Include="TestScanner.h" />
@@ -93,6 +94,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClCompile>
     <ClCompile Include="Start.c" />
+    <ClCompile Include="SymTable.c" />
     <ClCompile Include="TestExpectToken.c" />
     <ClCompile Include="Tests.c" />
     <ClCompile Include="TestScanner.c" />
