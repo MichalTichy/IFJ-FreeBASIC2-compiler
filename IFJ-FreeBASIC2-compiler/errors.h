@@ -2,6 +2,7 @@
 #ifndef ERRORS
 #define ERRORS
 
+
 typedef enum ERR_CODE
 {
 	LEX_ERR = 1,
@@ -11,7 +12,7 @@ typedef enum ERR_CODE
 	SEMANT_ERR_OTHER = 6,
 	INTERNAL_ERR = 99,
 
-	OK_ERR = true
+	//OK_ERR = true   !Opravit -- spatne
 } ERR_CODE;
 
 #endif // !ERRORS
