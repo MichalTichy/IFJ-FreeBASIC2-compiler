@@ -27,15 +27,45 @@ tNode* ProcessInteger() {
 	return NULL;
 }
 
+tNode* ProcessDouble() {
+	if (token->Type == T_DOUBLEVALUE)
+	{
+		return InitDoubleNode(token->DoubleVal);
+	}
+	return NULL;
+}
+tNode* ProcessString() {
+	if (token->Type == T_STRINGVALUE)
+	{
+		return IniStringNode(token->String,token->Lenght);
+	}
+	return NULL;
+}
+
 tNode* ProcessNumber() {
-	return ProcessInteger();
+	return ProcessInteger() || ProcessDouble();
 }
 
 
-tNode* InitIntegerNode(int value) {
+tNode* InitIntegerNode(long int value) {
 	tNode* node = malloc(sizeof(struct Node));
-	node->type = integer;
-	node->tData.integer->value = value;
+	node->type = integerVal;
+	node->tData.intValue->value = value;
+	return node;
+}
+
+tNode* InitDoubleNode(double value) {
+	tNode* node = malloc(sizeof(struct Node));
+	node->type = doubleVal;
+	node->tData.doubleValue->value = value;
+	return node;
+}
+
+tNode* IniStringNode(char* value, int lenght) {
+	tNode* node = malloc(sizeof(struct Node));
+	node->type =stringVal;
+	node->tData.stringValue->value = value;
+	node->tData.stringValue->lenght = lenght;
 	return node;
 }
 

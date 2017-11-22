@@ -8,15 +8,28 @@ typedef enum  {
 } ScalarType;
 
 typedef enum  {
-	integer,
+	integerVal,
+	doubleVal,
+	stringVal,
 	varDeclaration,
 	expression
 }NodeType;
 
 typedef struct NodeInteger
 {
-	int value;
+	long int value;
 } tNodeInteger;
+
+typedef struct NodeDouble
+{
+	double value;
+} tNodeDouble;
+
+typedef struct NodeString
+{
+	char* value;
+	int lenght;
+} tNodeString;
 
 typedef struct NodeExpression
 {
@@ -39,7 +52,9 @@ typedef struct Node
 	union Data
 	{
 		struct NodeVariableDeclaration variable_declaration;
-		struct NodeInteger* integer;
+		struct NodeInteger* intValue;
+		struct NodeDouble* doubleValue;
+		struct NodeString* stringValue;
 		struct NodeExpression* expression;
 	} tData;
 }tNode;
@@ -53,10 +68,15 @@ void Back();
 void BackMultipleTimes(int steps);
 
 tNode * ProcessNumber();
+tNode* ProcessDouble();
 
 tNode * ProcessInteger();
 
-tNode * InitIntegerNode(int value);
+tNode * InitIntegerNode(long int value);
+
+tNode* InitDoubleNode(double value);
+
+tNode* IniStringNode(char* value, int lenght);
 
 tNode * InitVarDeclarationNode();
 
