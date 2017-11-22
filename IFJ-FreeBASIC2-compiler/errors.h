@@ -1,7 +1,7 @@
 #pragma once
 #ifndef ERRORS
 #define ERRORS
-
+#include "Basics.h"
 
 typedef enum ERR_CODE
 {
@@ -12,7 +12,7 @@ typedef enum ERR_CODE
 	SEMANT_ERR_OTHER = 6,
 	INTERNAL_ERR = 99,
 
-	//OK_ERR = true   !Opravit -- spatne
+	OK_ERR = true   
 } ERR_CODE;
 
 #endif // !ERRORS
