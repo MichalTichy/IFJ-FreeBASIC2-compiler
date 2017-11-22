@@ -160,7 +160,7 @@ int CheckEOL(char c)
 	}
 }
 
-int CheckIfEscapeSeuquenceIsValid(int c, tToken *Token)
+int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 {
 	c = getchar();
 
@@ -178,16 +178,16 @@ int CheckIfEscapeSeuquenceIsValid(int c, tToken *Token)
 		{
 			AddToString('\n', Token);
 		}
-		else if (c == 't', Token)
-		{
-			AddToString('\t', Token);
-		}
 		else if (c == '\\')
 		{
 			AddToString('\\', Token);
 		}
-
-			return 0;
+		else if (c == 't', Token)
+		{
+			AddToString('\t', Token);
+		}
+		
+		return 0;
 	}
 }
 
@@ -385,17 +385,18 @@ tToken* LoadToken()
 				state = S_Number;
 				break;
 			}
-			else if ((c >= 'a' && c <= 'z') || c == '_')
-			{
-				Token->Type = T_ERR;
-				RemoveString(Token);
-				return Token;
-			}
-			else
+			else if ((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
+				CheckEOL(c) == 1 || c == EOF)
 			{
 				ungetc(c, stdin);
 				Token->Type = T_INTVALUE;
 				ConvertStringToInteger(Token);
+				return Token;
+			}
+			else
+			{
+				Token->Type = T_ERR;
+				RemoveString(Token);
 				return Token;
 			}
 		}
@@ -481,12 +482,12 @@ tToken* LoadToken()
 			else if (c == 'e')
 			{
 				state = S_Exp;
-				AfterDot = 0;
+				//AfterDot = 0;
 				AddToString(c, Token);
 				break;
 			}
 			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				c == '\n' || c == EOF) && AfterDot == 0)
+				CheckEOL(c) == 1 || c == EOF) && AfterDot == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -506,19 +507,21 @@ tToken* LoadToken()
 		{
 			c = tolower(getchar());
 
-			if ((c == '+' || c == '-') && AfterDot == 0)
+			if ((c == '+' || c == '-') && AfterDot == 1)
 			{
+				AfterDot = 0;
 				state = S_ExpSign;
 				AddToString(c, Token);
 				break;
 			}
 			else if (c >= '0' && c <= '9')
 			{
+				AfterDot = 0;
 				AddToString(c, Token);
 				break;
 			}
 			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				c == '\n' || c == EOF) && AfterDot == 0)
+				CheckEOL(c) == 1 || c == EOF) && AfterDot == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -540,11 +543,12 @@ tToken* LoadToken()
 
 			if (c >= '0' && c <= '9')
 			{
+				AfterDot = 1;
 				AddToString(c, Token);
 				break;
 			}
 			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				c == '\n' || c == EOF) && AfterDot == 0)
+				c == '\n' || c == EOF) && AfterDot == 1)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);

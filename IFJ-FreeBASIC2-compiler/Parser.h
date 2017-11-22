@@ -8,21 +8,45 @@ typedef enum  {
 } ScalarType;
 
 typedef enum  {
-	integer,
+	integerVal,
+	doubleVal,
+	stringVal,
 	varDeclaration,
-	expression
+	varAssigment,
+	expression,
+	scope,
+	statement,
+	ifCondition,
+	elseIfCondition
 }NodeType;
 
 typedef struct NodeInteger
 {
-	int value;
+	long int value;
 } tNodeInteger;
+
+typedef struct NodeDouble
+{
+	double value;
+} tNodeDouble;
+
+typedef struct NodeString
+{
+	char* value;
+	int lenght;
+} tNodeString;
 
 typedef struct NodeExpression
 {
 	//todo 
 
 } tNodeExpression;
+
+typedef struct NodeScope
+{
+	//todo statements
+
+} tNodeScope;
 
 typedef struct NodeVariableDeclaration
 {
@@ -32,6 +56,51 @@ typedef struct NodeVariableDeclaration
 
 } tNodeVariableDeclaration;
 
+typedef struct NodeVariableAssigment
+{
+	//todo pointer to ID
+	ScalarType varType;
+	tNodeExpression* Expression;
+
+} tNodeVariableAssigment;
+
+
+
+
+typedef struct NodeStatement
+{
+	NodeType type;
+	union StatementNode
+	{
+		struct NodeVariableDeclaration variable_declaration;
+		struct NodeVariableAssigment variable_assigment;
+		//todo procedure call
+		//todo compound statements
+	} tStatementNode;
+	struct NodeStatement* Next;
+
+} tNodeStatement;
+
+
+typedef struct NodeIfStatement
+{
+	tNodeExpression* Condition;
+
+	tNodeStatement* Pass;
+	struct NodeElseIfStatement* elseIf;
+	tNodeStatement* Fail;
+
+
+} tNodeIfStatement;
+
+typedef struct NodeElseIfStatement
+{
+	tNodeExpression* Condition;
+	tNodeStatement* Pass;
+	struct NodeElseIfStatement* Next;
+	tNodeIfStatement* parent;
+
+} tNodeElseIfStatement;
 
 typedef struct Node
 {
@@ -39,8 +108,14 @@ typedef struct Node
 	union Data
 	{
 		struct NodeVariableDeclaration variable_declaration;
-		struct NodeInteger* integer;
+		struct NodeVariableAssigment variable_assigment;
+		struct NodeInteger* intValue;
+		struct NodeDouble* doubleValue;
+		struct NodeString* stringValue;
 		struct NodeExpression* expression;
+		struct NodeStatement* statement;
+		struct NodeIfStatement* ifStatement;
+		struct NodeElseIfStatement* elseIfStatement;
 	} tData;
 }tNode;
 
@@ -53,13 +128,19 @@ void Back();
 void BackMultipleTimes(int steps);
 
 tNode * ProcessNumber();
+tNode* ProcessDouble();
 
 tNode * ProcessInteger();
 
-tNode * InitIntegerNode(int value);
+tNode * InitIntegerNode(long int value);
+
+tNode* InitDoubleNode(double value);
+
+tNode* IniStringNode(char* value, int lenght);
 
 tNode * InitVarDeclarationNode();
 
 tNode * ProcessVarDeclaration();
 
 ScalarType TokenTypeToScalarType(TokenType tokenType);
+tNode* ProcessStatement();

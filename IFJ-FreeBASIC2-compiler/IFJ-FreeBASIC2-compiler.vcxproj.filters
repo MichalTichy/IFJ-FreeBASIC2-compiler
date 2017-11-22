@@ -43,5 +43,6 @@
     <Text Include="TestSamples\basic.txt" />
     <Text Include="TestSamples\ScannerTests\INTVAL.txt" />
     <Text Include="TestSamples\ScannerTests\DoubleValue.txt" />
+    <Text Include="TestSamples\ScannerTests\StringValue.txt" />
   </ItemGroup>
 </Project>
