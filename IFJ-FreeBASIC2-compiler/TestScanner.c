@@ -25,12 +25,12 @@ void IntegerValue()
 	}
 	if (Exp_INTVALUE(35689744))
 	{
-		Fail("Expected token INTVAL : 2");
+		Fail("Expected token INTVAL : 5");
 		return;
 	}
-	if (Exp_EOF())
+	if (Exp_ERR())
 	{
-		Fail("Expected token EOF : 6");
+		Fail("Expected token ERR : 6");
 		return;
 	}
 
@@ -81,10 +81,54 @@ void DoubleValue()
 	}
 	if (Exp_EOF())
 	{
-		Fail("Expected token EOF : 7");
+		Fail("Expected token EOF : 8");
 		return;
 	}
 
+	Pass();
+}
+
+void StringValue()
+{
+	ResetScanner();
+	currentTestName = "String value";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/StringValue.txt");
+
+	if (Exp_STRINGVALUE("AhOj"))
+	{
+		Fail("Expected token STRINGVALUE : 1");
+		return;
+	}
+		if (Exp_STRINGVALUE("\n"))
+	{
+		Fail("Expected token STRINGVALUE : 2");
+		return;
+	}
+	if (Exp_STRINGVALUE("\t"))
+	{
+		Fail("Expected token STRINGVALUE : 3");
+		return;
+	}
+	if (Exp_STRINGVALUE("\\"))
+	{
+		Fail("Expected token STRINGVLUE : 4");
+		return;
+	}
+	if (Exp_STRINGVALUE("3a"))
+	{
+		Fail("Expected token STRINGVALUE : 5");
+		return;
+	}
+	if (Exp_STRINGVALUE("a !"))
+	{
+		Fail("Expected token STRINGVALUE : 6");
+		return;
+	}
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 7");
+		return;
+	}
 
 	Pass();
 }

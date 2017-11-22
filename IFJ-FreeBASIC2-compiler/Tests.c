@@ -7,6 +7,7 @@ void RunTests() {
 	printf("******* Scanner tests *******\n\n");
 	IntegerValue();
 	DoubleValue();
+	StringValue();
 	IterativeFactorial();
 	BasicProgram();
 	printf("--------------\n");
