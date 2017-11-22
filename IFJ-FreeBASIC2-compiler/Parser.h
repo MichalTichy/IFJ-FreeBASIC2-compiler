@@ -42,12 +42,6 @@ typedef struct NodeExpression
 
 } tNodeExpression;
 
-typedef struct NodeScope
-{
-	//todo statements
-
-} tNodeScope;
-
 typedef struct NodeVariableDeclaration
 {
 	//todo pointer to ID
@@ -102,6 +96,12 @@ typedef struct NodeElseIfStatement
 
 } tNodeElseIfStatement;
 
+typedef struct NodeScope
+{
+	tNodeStatement* Statement;
+
+} tNodeScope;
+
 typedef struct Node
 {
 	NodeType type;
@@ -116,6 +116,7 @@ typedef struct Node
 		struct NodeStatement* statement;
 		struct NodeIfStatement* ifStatement;
 		struct NodeElseIfStatement* elseIfStatement;
+		struct NodeScope* scope;
 	} tData;
 }tNode;
 

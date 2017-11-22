@@ -222,18 +222,21 @@ tNode* ProcessScope() {
 			Next();
 			takenTokens++;
 
-			if (token->Type==T_END)
+			tNode* statement = ProcessStatement();
+			if (statement!=NULL)
+			{
+				scope->tData.scope->Statement = statement->tData.statement;
+				Next();
+				takenTokens++;
+			}
+			else if (token->Type == T_END)
 			{
 				Next();
 				takenTokens++;
-				if (token->Type==T_SCOPE)
+				if (token->Type == T_SCOPE)
 				{
 					return scope;
 				}
-			}
-			else
-			{
-				//TODO process statements
 			}
 
 
