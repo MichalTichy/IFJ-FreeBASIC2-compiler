@@ -13,7 +13,11 @@ typedef enum  {
 	stringVal,
 	varDeclaration,
 	varAssigment,
-	expression
+	expression,
+	scope,
+	statement,
+	ifCondition,
+	elseIfCondition
 }NodeType;
 
 typedef struct NodeInteger
@@ -38,6 +42,12 @@ typedef struct NodeExpression
 
 } tNodeExpression;
 
+typedef struct NodeScope
+{
+	//todo statements
+
+} tNodeScope;
+
 typedef struct NodeVariableDeclaration
 {
 	//todo pointer to ID
@@ -55,6 +65,43 @@ typedef struct NodeVariableAssigment
 } tNodeVariableAssigment;
 
 
+
+
+typedef struct NodeStatement
+{
+	NodeType type;
+	union StatementNode
+	{
+		struct NodeVariableDeclaration variable_declaration;
+		struct NodeVariableAssigment variable_assigment;
+		//todo procedure call
+		//todo compound statements
+	} tStatementNode;
+	struct NodeStatement* Next;
+
+} tNodeStatement;
+
+
+typedef struct NodeIfStatement
+{
+	tNodeExpression* Condition;
+
+	tNodeStatement* Pass;
+	struct NodeElseIfStatement* elseIf;
+	tNodeStatement* Fail;
+
+
+} tNodeIfStatement;
+
+typedef struct NodeElseIfStatement
+{
+	tNodeExpression* Condition;
+	tNodeStatement* Pass;
+	struct NodeElseIfStatement* Next;
+	tNodeIfStatement* parent;
+
+} tNodeElseIfStatement;
+
 typedef struct Node
 {
 	NodeType type;
@@ -66,6 +113,9 @@ typedef struct Node
 		struct NodeDouble* doubleValue;
 		struct NodeString* stringValue;
 		struct NodeExpression* expression;
+		struct NodeStatement* statement;
+		struct NodeIfStatement* ifStatement;
+		struct NodeElseIfStatement* elseIfStatement;
 	} tData;
 }tNode;
 
@@ -93,3 +143,4 @@ tNode * InitVarDeclarationNode();
 tNode * ProcessVarDeclaration();
 
 ScalarType TokenTypeToScalarType(TokenType tokenType);
+tNode* ProcessStatement();
