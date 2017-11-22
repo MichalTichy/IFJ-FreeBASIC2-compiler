@@ -106,6 +106,14 @@ tNode* InitIfStatementNode() {
 	return node;
 }
 
+
+tNode* InitWhileNode()
+{
+	tNode* node = malloc(sizeof(struct Node));
+	node->type = whileBlock;
+	return node;
+}
+
 tNodeElseIfStatement* InitElseIfStatementNode(tNodeIfStatement* parent) {
 	tNodeElseIfStatement* node = malloc(sizeof(struct NodeElseIfStatement));
 	node->parent= parent;
@@ -215,31 +223,23 @@ tNode* ProcessScope() {
 	{
 		Next();
 		takenTokens++;
-		if (token->Type==T_EOL)
+		tNode* scope = InitScopeNode();
+
+		tNode* statement = ProcessStatement();
+		if (statement != NULL)
 		{
-			tNode* scope = InitScopeNode();
-			
+			scope->tData.scope->Statement = statement->tData.statement;
 			Next();
 			takenTokens++;
-
-			tNode* statement = ProcessStatement();
-			if (statement!=NULL)
+		}
+		else if (token->Type == T_END)
+		{
+			Next();
+			takenTokens++;
+			if (token->Type == T_SCOPE)
 			{
-				scope->tData.scope->Statement = statement->tData.statement;
-				Next();
-				takenTokens++;
+				return scope;
 			}
-			else if (token->Type == T_END)
-			{
-				Next();
-				takenTokens++;
-				if (token->Type == T_SCOPE)
-				{
-					return scope;
-				}
-			}
-
-
 		}
 	}
 
@@ -361,16 +361,45 @@ tNode* ProcessIfStatement() {
 	return NULL;
 }
 
-tNode* ProcessForStatement() {
-	//TODO
-}
-
-tNode* ProcessDoStatement() {
-	//TODO
-}
-
 tNode* ProcessWhileStatement() {
-	//TODO
+	int takenTokens = 0;
+	if (token->Type==T_DO)
+	{
+		Next();
+		takenTokens++;
+		if (token->Type == T_WHILE)
+		{
+			tNode* whileNode = InitWhileNode();
+			Next();
+			takenTokens++;
+
+			tNode* expression = ProcessExpression();
+			if (expression!=NULL)
+			{
+				whileNode->tData.whileBlock->Condition = expression->tData.expression;
+				Next();
+				takenTokens++;
+
+				tNode* Statement = ProcessStatement();
+				if (Statement!=NULL)
+				{
+					whileNode->tData.whileBlock->Statement = Statement->tData.statement;
+					
+					Next();
+					takenTokens++;
+					if (token->Type==T_LOOP)
+					{
+						return whileNode;
+					}
+				}
+			}
+		}
+		
+	}
+
+
+	BackMultipleTimes(takenTokens);
+	return NULL;
 }
 
 tNode* ProcessCompoundStatement() {
@@ -389,18 +418,6 @@ tNode* ProcessCompoundStatement() {
 		return ifStatement;
 	else
 		free(ifStatement);
-
-	tNode* forStatement = ProcessForStatement();
-	if (forStatement !=NULL)
-		return forStatement;
-	else
-		free(forStatement);
-
-	tNode* doStatement = ProcessDoStatement();
-	if (doStatement !=NULL)
-		return doStatement;
-	else
-		free(doStatement);
 
 	tNode* whileStatement = ProcessWhileStatement();
 	if (whileStatement !=NULL)

@@ -17,7 +17,8 @@ typedef enum  {
 	scope,
 	statement,
 	ifCondition,
-	elseIfCondition
+	elseIfCondition,
+	whileBlock
 }NodeType;
 
 typedef struct NodeInteger
@@ -102,6 +103,14 @@ typedef struct NodeScope
 
 } tNodeScope;
 
+typedef struct NodeBlock
+{
+
+	tNodeExpression* Condition;
+	tNodeStatement* Statement;
+
+} tNodeBlock;
+
 typedef struct Node
 {
 	NodeType type;
@@ -117,6 +126,7 @@ typedef struct Node
 		struct NodeIfStatement* ifStatement;
 		struct NodeElseIfStatement* elseIfStatement;
 		struct NodeScope* scope;
+		struct NodeBlock* whileBlock;
 	} tData;
 }tNode;
 
