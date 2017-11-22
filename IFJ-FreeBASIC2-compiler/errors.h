@@ -12,7 +12,7 @@ typedef enum ERR_CODE
 	SEMANT_ERR_OTHER = 6,
 	INTERNAL_ERR = 99,
 
-	OK_ERR = true   
+	OK_ERR = 0   
 } ERR_CODE;
 
 #endif // !ERRORS
