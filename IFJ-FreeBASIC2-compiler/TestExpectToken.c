@@ -16,7 +16,7 @@ int Exp_ERR()
 {
 	tToken *token;
 	token = LoadToken();
-	if (token->Type != T_EOF)
+	if (token->Type != T_ERR)
 	{
 		return -1;
 	}
