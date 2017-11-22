@@ -42,6 +42,12 @@ tNode* ProcessString() {
 	return NULL;
 }
 
+
+
+tNode* ProcessScalar() {
+	return ProcessNumber() || ProcessString();
+}
+
 tNode* ProcessNumber() {
 	return ProcessInteger() || ProcessDouble();
 }
@@ -76,6 +82,13 @@ tNode* InitVarDeclarationNode() {
 }
 
 
+tNode* InitVarAssigmentNode() {
+	tNode* node = malloc(sizeof(struct Node));
+	node->type = varAssigment;
+	return node;
+}
+
+
 bool IsTokenScalarType()
 {
 	return token->Type == T_INTEGER || token->Type == T_DOUBLE || token->Type == T_STRING;
@@ -88,11 +101,10 @@ tNode* ProcessExpression()
 
 tNode* ProcessVarDeclaration() {
 	int takenTokens = 0;
-	bool failed = false;
-	tNode* assigment = NULL;
+	tNode* declaration = NULL;
 	if (token->Type == T_DIM)
 	{
-		assigment = InitVarDeclarationNode();
+		declaration = InitVarDeclarationNode();
 		Next();
 		takenTokens++;
 		if (token->Type == T_ID)
@@ -106,7 +118,7 @@ tNode* ProcessVarDeclaration() {
 				takenTokens++;
 				if (IsTokenScalarType())
 				{
-					assigment->tData.variable_declaration.varType = TokenTypeToScalarType(token->Type);
+					declaration->tData.variable_declaration.varType = TokenTypeToScalarType(token->Type);
 					Next();
 					takenTokens++;
 					if (token->Type==T_ASSIGN)
@@ -116,17 +128,44 @@ tNode* ProcessVarDeclaration() {
 						tNode* expression = ProcessExpression();
 						if (expression!=NULL)
 						{
-							assigment->tData.variable_declaration.Expression = expression->tData.expression;
-							return assigment;
+							declaration->tData.variable_declaration.Expression = expression->tData.expression;
+							return declaration;
 						}
 					}
 					else
 					{
 						Back();
 						takenTokens--;
-						return assigment;
+						return declaration;
 					}
 				}
+			}
+		}
+	}
+
+	BackMultipleTimes(takenTokens);
+	free(declaration);
+	return NULL;
+}
+
+tNode* ProcessAssigment() {
+	int takenTokens = 0;
+	tNode* assigment = NULL;
+	if (token->Type == T_ID)
+	{
+		//tood pointer var
+		assigment = InitVarAssigmentNode();
+		Next();
+		takenTokens++;
+		if (token->Type==T_ASSIGN)
+		{
+			Next();
+			takenTokens++;
+			tNodeExpression* expression = ProcessExpression()->tData.expression;
+			if (expression!=NULL)
+			{
+				assigment->tData.variable_assigment.Expression = expression;
+				return assigment;
 			}
 		}
 	}

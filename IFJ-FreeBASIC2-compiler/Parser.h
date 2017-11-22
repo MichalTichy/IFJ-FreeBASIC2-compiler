@@ -12,6 +12,7 @@ typedef enum  {
 	doubleVal,
 	stringVal,
 	varDeclaration,
+	varAssigment,
 	expression
 }NodeType;
 
@@ -45,6 +46,14 @@ typedef struct NodeVariableDeclaration
 
 } tNodeVariableDeclaration;
 
+typedef struct NodeVariableAssigment
+{
+	//todo pointer to ID
+	ScalarType varType;
+	tNodeExpression* Expression;
+
+} tNodeVariableAssigment;
+
 
 typedef struct Node
 {
@@ -52,6 +61,7 @@ typedef struct Node
 	union Data
 	{
 		struct NodeVariableDeclaration variable_declaration;
+		struct NodeVariableAssigment variable_assigment;
 		struct NodeInteger* intValue;
 		struct NodeDouble* doubleValue;
 		struct NodeString* stringValue;
