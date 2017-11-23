@@ -245,9 +245,9 @@ void Comment()
 		Fail("Expected token EOL : 10");
 		return;
 	}
-	if (Exp_ERR())
+	if (Exp_NOT())
 	{
-		Fail("Expected token ERR : 11");
+		Fail("Expected token NOT : 11");
 		return;
 	}
 	if (Exp_ERR())
