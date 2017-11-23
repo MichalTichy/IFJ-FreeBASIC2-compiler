@@ -23,6 +23,7 @@
     <ClInclude Include="TestExpectToken.h" />
     <ClInclude Include="TestScanner.h" />
     <ClInclude Include="SymTable.h" />
+    <ClInclude Include="TestStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
@@ -36,6 +37,7 @@
     <ClCompile Include="TestExpectToken.c" />
     <ClCompile Include="TestScanner.c" />
     <ClCompile Include="SymTable.c" />
+    <ClCompile Include="TestStack.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSamples\iterativeFactorial.txt" />

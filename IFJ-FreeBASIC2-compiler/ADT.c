@@ -38,23 +38,24 @@ void StackPush(TStack_t * stack, void * ptr)
 	if ((stack->actualSize) < (stack->maxSize))
 	{
 		(stack->items)[stack->actualSize] = ptr;
-		stack->items = (stack->items) + 1;
+		(stack->actualSize)++;
 	}
-	else			// replace with mrealloc when avalible
+	else
 	{
-		void ** newVoidArr = mmalloc(sizeof(void*) * ((stack->maxSize + 128)));
+		void ** newVoidArr = mmalloc(sizeof(void*) * ((stack->maxSize + DEFAULT_STACK_SIZE)));
 		if ((newVoidArr) == NULL)
 		{
 			mfreeall();
 			ERR_CODE code = INTERNAL_ERR;
 			exit(code);
 		}
+		stack->maxSize += DEFAULT_STACK_SIZE;
 		memcpy(newVoidArr, stack->items, sizeof(void*) * (stack->maxSize));
 		mfree(stack->items);
 		stack->items = newVoidArr;
 
 		(stack->items)[stack->actualSize] = ptr;
-		stack->items = (stack->items) + 1;
+		(stack->actualSize)++;
 	}
 }
 
@@ -63,10 +64,14 @@ void* StackTopPop(TStack_t * stack)
 	if (stack == NULL)
 		return NULL;
 
-	if (stack->actualSize != 0)
+	if (stack->actualSize == 0)
+	{
+		return NULL;
+	}
+	else
 		(stack->actualSize)--;
 
-	return (stack->items)[stack->actualSize];
+	return ((stack->items)[stack->actualSize]);
 }
 
 void StackDestroy(TStack_t * stack)

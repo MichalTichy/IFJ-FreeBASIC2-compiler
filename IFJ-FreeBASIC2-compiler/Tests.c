@@ -12,6 +12,12 @@ void RunTests() {
 	BasicProgram();
 	printf("--------------\n");
 	ReturnTokenTest();
+	printf("******* Stack tests *******\n\n");
+	StackAllTests();
+	printf("--------------\n");
+
+	
+	
 
 	ClearSTDIN();
 	printf("Press ENTER key to Continue\n");

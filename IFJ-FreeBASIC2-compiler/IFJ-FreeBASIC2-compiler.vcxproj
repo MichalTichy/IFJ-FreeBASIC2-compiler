@@ -82,6 +82,7 @@
     <ClInclude Include="TestExpectToken.h" />
     <ClInclude Include="Tests.h" />
     <ClInclude Include="TestScanner.h" />
+    <ClInclude Include="TestStack.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
@@ -98,6 +99,7 @@
     <ClCompile Include="TestExpectToken.c" />
     <ClCompile Include="Tests.c" />
     <ClCompile Include="TestScanner.c" />
+    <ClCompile Include="TestStack.c" />
     <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemGroup>
