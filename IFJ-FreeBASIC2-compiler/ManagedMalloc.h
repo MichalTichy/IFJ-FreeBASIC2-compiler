@@ -3,7 +3,7 @@
 #define MMALLOC
 #include <stdlib.h>
 
-void * mmaloc(size_t size);
+void * mmalloc(size_t size);
 void mfree(void *);
 void mfreeall(void);
 

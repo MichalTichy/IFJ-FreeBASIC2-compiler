@@ -1,25 +1,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "errors.h"
+#include "ADT.h"
+#include "ManagedMalloc.h"
 #include "Symtable.h"
 
 
-void STInit(tSTable* table)
+void STInit(tSTItemPtr* tableptr)
 {
-	table->first = NULL;
+	*tableptr = NULL;
 }
 
-tSTItem* STSearch(tSTable* table, tToken* token)
+tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
 {
-	tSTItem* itemPtr = table->first;
+	tSTItemPtr itemPtr = *tableptr;
 	while (itemPtr != NULL)
 	{
-		if (strcmp(itemPtr->data->String, token->String) == 0)
+		if (strcmp((*tableptr)->data, token) == 0)
 		{
 			break;
 		}
-		else if (strcmp(itemPtr->data->String, token->String) < 0)		// Token is bigger
+		else if (strcmp((*tableptr)->data, token) < 0)		// Token is bigger
 		{
 			itemPtr = itemPtr->rptr;
 		}
@@ -31,16 +32,21 @@ tSTItem* STSearch(tSTable* table, tToken* token)
 	return itemPtr;
 }
 
-void STInsert(tSTable* table, tToken* token)
+void STInsert(tSTItemPtr* tableptr, char* token)
 {	
-	tSTItem** itemPtr = &(table->first);
+	if (tableptr == NULL)
+	{
+		return;
+	}
+	tSTItemPtr* itemPtr = tableptr;
+	tSTItemPtr saveFirst = *tableptr;
 	while (itemPtr != NULL)
 	{
-		if (strcmp((*itemPtr)->data->String, token->String) == 0)
+		if (strcmp((*itemPtr)->data, token) == 0)			// Token is here
 		{
 			break;
 		}
-		else if (strcmp((*itemPtr)->data->String, token->String) < 0)		// Token is bigger
+		else if (strcmp((*itemPtr)->data, token) < 0)		// Token is bigger
 		{
 			itemPtr = &((*itemPtr)->rptr);
 		}
@@ -49,7 +55,7 @@ void STInsert(tSTable* table, tToken* token)
 			itemPtr = &((*itemPtr)->lptr);
 		}
 	}
-	*itemPtr = malloc(sizeof(tSTItem));
+	*itemPtr = mmalloc(sizeof(struct tSTItem));
 	if ((*itemPtr) == NULL)
 	{
 		// dodelat error
@@ -60,13 +66,74 @@ void STInsert(tSTable* table, tToken* token)
 		(*itemPtr)->lptr = NULL;
 		(*itemPtr)->rptr = NULL;
 	}
+	*tableptr = saveFirst;
+
 }
 
-void STFree(tSTItem* table) // potreba zrusit datovy typ tSTable
+void STFree(tSTItemPtr* table)
 {
-	if (table == NULL)
-		return;
-	STFree(table->lptr);
-	STFree(table->rptr);
-	free(table);
+	TStack_t s;
+	StackInit(&s);						// init stack of pointers
+	do
+	{
+		if ((*table) == NULL)			// take node from stack
+		{
+			if (!StackIsEmpty(&s))
+			{
+				*table = StackTopPop(&s);
+			}
+		}
+		else							// move right to stack
+		{
+			if ((*table)->rptr != NULL)
+			{
+				StackPush(&s, (*table)->rptr);
+			}
+			tSTItemPtr auxPtr = *table;
+			*table = (*table)->lptr;		// go left
+			mfree(auxPtr);				// delete current node
+		}
+
+	} while (*table != NULL || (!StackIsEmpty(&s)));
 }
+
+void STMakeScope(tSTScopePtr * scope, tSTScopePtr parentScope)
+{
+	if (scope == NULL)
+		return;
+
+	*scope = mmalloc(sizeof(struct tSTScope));
+	(*scope)->symtable = NULL;
+	(*scope)->parentScope = parentScope;
+}
+
+tSTItemPtr STScopeSearch(tSTScopePtr* scope, char* key)
+{
+	if (scope == NULL)
+		return NULL;
+
+	tSTScopePtr currScopePtr = *scope;
+	tSTItemPtr item = NULL;
+	while (currScopePtr != NULL)
+	{
+		item = STSearch(&(currScopePtr->symtable), key);
+
+		if (item != NULL)
+			break;
+
+		currScopePtr = currScopePtr->parentScope;
+	}
+	return item;
+}
+
+void STScopeInsert(tSTScopePtr* scope, char* key)
+{
+	STInsert(&((*scope)->symtable), key);
+}
+
+void STDeleteTopScope(tSTScopePtr* scope)
+{
+	STFree((&(*scope)->symtable));
+	mfree(*scope);
+}
+

@@ -2,6 +2,7 @@
 #define ADT
 
 #include "precedens.h"
+#include <stdbool.h>
 
 typedef struct BTreeNode_t BTreeNode_t;
 typedef struct SymbolTableData_t SymbolTableData_t;
@@ -68,32 +69,30 @@ struct SymbolTable_t
 //--STACK
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-typedef struct
-{
-	precedensTableToken token;
-	BTreeNode_t *  bTreeNode;
-	unsigned int StackIndex;
-
-} TStackItem_t;
+#define DEFAULT_STACK_SIZE 128
 
 typedef struct TStack_t
 {
-	TStackItem_t * items;
-	int maxSize;
-	int actualSize;
+	void ** items;
+	unsigned int maxSize;
+	unsigned int actualSize;
 } TStack_t;
 
-TStack_t *StackInit(TStack_t * stack);
+void StackInit(TStack_t * stack);
+bool StackIsEmpty(TStack_t * stack);
+void* StackTopPop(TStack_t * stack);
+void StackPush(TStack_t * stack, void * ptr);
 void StackDestroy(TStack_t * stack);
 
 
 
 //--ConstantTable
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #define CONSTANT_TABLE_SIZE 128
 
 struct ConstantTable_t * ConstantTableInit();
 void ConstantTableDestroy(struct ConstantTable_t *);
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 typedef struct
 {
