@@ -527,15 +527,3 @@ int Exp_WHILE()
 	FreeToken(token);
 	return 0;
 }
-
-int Exp_RESERVEDWORD()
-{
-	tToken *token;
-	token = LoadToken();
-	if (token->Type != T_RESERVEDWORD)
-	{
-		return -1;
-	}
-	FreeToken(token);
-	return 0;
-}
