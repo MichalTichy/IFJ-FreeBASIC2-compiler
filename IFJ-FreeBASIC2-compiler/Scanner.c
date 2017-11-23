@@ -15,7 +15,7 @@ char *ReservedWords[LenghtOfReservedWords] =
 
 
 // Used for realloc
-int LenghtOfString = 10;
+long unsigned int LenghtOfString = 10;
 tDLList* TokenList = NULL;
 
 void ResetScanner() {
@@ -61,7 +61,7 @@ tToken* GetNextToken() {
 * Operations with strings
 */
 
-void AddToString(int c, tToken *Token)
+void AddToString(char c, tToken *Token)
 {
 	if (Token->Lenght % 10 == 0)
 	{
@@ -71,7 +71,7 @@ void AddToString(int c, tToken *Token)
 
 	Token->Lenght = Token->Lenght + 1;
 	Token->String[Token->Lenght] = '\0';
-	Token->String[Token->Lenght - 1] = (char)c;
+	Token->String[Token->Lenght - 1] = c;
 }
 
 void RemoveString(tToken *Token)
@@ -146,7 +146,7 @@ int CheckEOL(char c)
 	}
 	else if (c == '\r')
 	{
-		c = getchar();
+		c = (char) getchar();
 
 		if (c != '\n')
 		{
@@ -162,9 +162,51 @@ int CheckEOL(char c)
 
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 {
-	c = getchar();
+	AddToString('\\', Token);
+	c = (char) getchar();
 
-	if (c != '\"' && c != 'n' && c != 't' && c != '\\')
+	if (c >= '0' && c <= '1')
+	{
+		AddToString(c, Token);
+		c = (char) getchar();
+
+		if (c >= '0' && c <= '9')
+		{
+			AddToString(c, Token);
+			c = (char) getchar();
+
+			if (c >= '0' && c <= '9')
+			{
+				AddToString(c, Token);
+				return 0;
+			}
+
+		}
+
+		return 1;
+
+	}
+	else if (c == '2')
+	{
+		AddToString(c, Token);
+		c = (char) getchar();
+
+		if (c >= '0' && c <= '5')
+		{
+			AddToString(c, Token);
+			c = (char) getchar();
+
+			if (c >= '0' && c <= '5')
+			{
+				AddToString(c, Token);
+				return 0;
+			}
+		}
+
+		return 1;
+
+	}
+	else if (c != '\"' && c != 'n' && c != 't' && c != '\\')
 	{
 		return 1;
 	}
@@ -176,15 +218,15 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 		}
 		else if (c == 'n')
 		{
-			AddToString('\n', Token);
+			AddToString('n', Token);
 		}
 		else if (c == '\\')
 		{
 			AddToString('\\', Token);
 		}
-		else if (c == 't', Token)
+		else if (c == 't')
 		{
-			AddToString('\t', Token);
+			AddToString('t', Token);
 		}
 		
 		return 0;
@@ -201,6 +243,7 @@ tToken* LoadToken()
 	tState state = S_Start;
 	char c;
 	int AfterDot = 0;
+	int AfterExp = 0;
 
 	//Malloc Token
 	if ((Token = (tToken *)malloc(sizeof(tToken))) == NULL)
@@ -210,7 +253,7 @@ tToken* LoadToken()
 
 	InitToken(Token);
 
-	c = tolower(getchar());
+	c = (char) tolower((char) getchar());
 
 	while (1)
 	{
@@ -222,7 +265,7 @@ tToken* LoadToken()
 			if (c == ' ')
 			{
 				state = S_Start;
-				c = tolower(getchar());
+				c = (char) tolower((char) getchar());
 				break;
 			}
 			else if (CheckEOL(c) == 1)
@@ -302,7 +345,7 @@ tToken* LoadToken()
 			else if (c == '!')
 			{
 				Token = InitString(Token, LenghtOfString);
-				c = tolower(getchar());
+				c = (char) tolower((char) getchar());
 				state = S_ExcString;
 				break;
 			}
@@ -331,7 +374,7 @@ tToken* LoadToken()
 
 		case S_Less:
 		{
-			c = tolower(getchar());
+			c = (char) tolower((char) getchar());
 
 			if (c == '>')
 			{
@@ -353,7 +396,7 @@ tToken* LoadToken()
 
 		case S_Greater:
 		{
-			c = tolower(getchar());
+			c = (char) tolower((char) getchar());
 
 			if (c == '=')
 			{
@@ -370,7 +413,7 @@ tToken* LoadToken()
 
 		case S_Number:
 		{
-			c = tolower(getchar());
+			c = (char) tolower((char) getchar());
 
 			if (c == '.')
 			{
@@ -383,6 +426,13 @@ tToken* LoadToken()
 			{
 				AddToString(c, Token);
 				state = S_Number;
+				break;
+			}
+			else if (c == 'e')
+			{
+				AfterExp = 1;
+				state = S_Exp;
+				AddToString(c, Token);
 				break;
 			}
 			else if ((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
@@ -403,7 +453,7 @@ tToken* LoadToken()
 
 		case S_ID:
 		{
-			c = tolower(getchar());
+			c = (char) tolower(getchar());
 
 			if (isalpha(c) || isdigit(c) || c == '_')
 			{
@@ -426,7 +476,7 @@ tToken* LoadToken()
 				
 				while (c != EOF)
 				{
-					c = getchar();
+					c = (char) getchar();
 
 					if (CheckEOL(c) == 1)
 					{
@@ -471,18 +521,19 @@ tToken* LoadToken()
 
 		case S_Double:
 		{
-			c = tolower(getchar());
+			c = (char) tolower(getchar());
 
 			if (c >= '0' && c <= '9')
 			{
+				AfterDot = 0;
 				AddToString(c, Token);
 				AfterDot = 0;
 				break;
 			}
-			else if (c == 'e')
+			else if (c == 'e' && AfterDot == 0)
 			{
+				AfterExp = 1;
 				state = S_Exp;
-				//AfterDot = 0;
 				AddToString(c, Token);
 				break;
 			}
@@ -505,23 +556,22 @@ tToken* LoadToken()
 
 		case S_Exp:
 		{
-			c = tolower(getchar());
+			c = (char) tolower(getchar());
 
-			if ((c == '+' || c == '-') && AfterDot == 1)
+			if (c == '+' || c == '-')
 			{
-				AfterDot = 0;
 				state = S_ExpSign;
 				AddToString(c, Token);
 				break;
 			}
 			else if (c >= '0' && c <= '9')
 			{
-				AfterDot = 0;
+				AfterExp = 0;
 				AddToString(c, Token);
 				break;
 			}
 			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				CheckEOL(c) == 1 || c == EOF) && AfterDot == 0)
+				CheckEOL(c) == 1 || c == EOF) && AfterExp == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -539,16 +589,16 @@ tToken* LoadToken()
 
 		case S_ExpSign:
 		{
-			c = tolower(getchar());
+			c = (char) tolower(getchar());
 
 			if (c >= '0' && c <= '9')
 			{
-				AfterDot = 1;
+				AfterExp = 0;
 				AddToString(c, Token);
 				break;
 			}
 			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				c == '\n' || c == EOF) && AfterDot == 1)
+				c == '\n' || c == EOF) && AfterExp == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -566,11 +616,11 @@ tToken* LoadToken()
 
 		case S_Comment:
 		{
-			c = tolower(getchar());
+			c = (char) tolower(getchar());
 
 			while (c != '\n' && c != EOF)
 			{
-				c = getchar();
+				c = (char) getchar();
 			}
 
 			if (c == '\n')
@@ -587,28 +637,28 @@ tToken* LoadToken()
 
 		case S_BlockcommentOrDivide:
 		{
-			c = tolower(getchar());
+			c = (char) tolower(getchar());
 
 			if (c == '\'')
 			{
 				while (1)
 				{
-					c = getchar();
+					c = (char) getchar();
 
 					if (c == '\'')
 					{
-						c = getchar();
+						c = (char) getchar();
 
 						if (c == '/' && c != EOF)
 						{
 							state = S_Start;
-							c = tolower(getchar());
+							c = (char) tolower((char) getchar());
 							break;
 						}
 					}
 					else if (c == '/')
 					{
-						c = getchar();
+						c = (char) getchar();
 
 						if (c == '\'' || c == EOF)
 						{
