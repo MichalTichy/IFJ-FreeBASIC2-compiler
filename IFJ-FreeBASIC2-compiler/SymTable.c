@@ -4,6 +4,7 @@
 #include "ADT.h"
 #include "ManagedMalloc.h"
 #include "Symtable.h"
+#include "errors.h"
 
 
 void STInit(tSTItemPtr* tableptr)
@@ -58,7 +59,9 @@ void STInsert(tSTItemPtr* tableptr, char* token)
 	*itemPtr = mmalloc(sizeof(struct tSTItem));
 	if ((*itemPtr) == NULL)
 	{
-		// dodelat error
+		mfreeall();
+		ERR_CODE code = INTERNAL_ERR;
+		exit(code);
 	}
 	else
 	{
@@ -103,6 +106,12 @@ void STMakeScope(tSTScopePtr * scope, tSTScopePtr parentScope)
 		return;
 
 	*scope = mmalloc(sizeof(struct tSTScope));
+	if ((scope) == NULL)
+	{
+		mfreeall();
+		ERR_CODE code = INTERNAL_ERR;
+		exit(code);
+	}
 	(*scope)->symtable = NULL;
 	(*scope)->parentScope = parentScope;
 }
