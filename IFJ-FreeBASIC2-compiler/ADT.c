@@ -2,11 +2,19 @@
 #include "ManagedMalloc.h"
 #include <stdlib.h>
 #include <string.h>
+#include "errors.h"
 
 void StackInit(TStack_t * stack)
 {
-	mmalloc(sizeof(void*)*DEFAULT_STACK_SIZE);
-	stack->items = NULL;
+	void ** itemPtr = mmalloc(sizeof(void*)*DEFAULT_STACK_SIZE);
+	if ((itemPtr) == NULL)
+	{
+		mfreeall();
+		ERR_CODE code = INTERNAL_ERR;
+		exit(code);
+	}
+	stack->items = itemPtr;
+	*(stack->items) = NULL;
 	stack->actualSize = 0;
 	stack->maxSize = DEFAULT_STACK_SIZE;
 }
@@ -34,7 +42,13 @@ void StackPush(TStack_t * stack, void * ptr)
 	}
 	else			// replace with mrealloc when avalible
 	{
-		void ** newVoidArr = mmalloc(sizeof(void*) * ((stack->maxSize) + 128));
+		void ** newVoidArr = mmalloc(sizeof(void*) * ((stack->maxSize + 128)));
+		if ((newVoidArr) == NULL)
+		{
+			mfreeall();
+			ERR_CODE code = INTERNAL_ERR;
+			exit(code);
+		}
 		memcpy(newVoidArr, stack->items, sizeof(void*) * (stack->maxSize));
 		mfree(stack->items);
 		stack->items = newVoidArr;
