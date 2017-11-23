@@ -11,6 +11,6 @@ typedef struct {
 } tToken;
 
 void InitToken(tToken *Token);
-tToken* InitString(tToken *Token, int LenghtOfString);
-void ReallocString(tToken *Token, int LenghtOfString);
+tToken* InitString(tToken *Token, long unsigned int LenghtOfString);
+void ReallocString(tToken *Token, long unsigned int LenghtOfString);
 void FreeToken(tToken *Token);

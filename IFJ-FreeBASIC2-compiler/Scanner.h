@@ -20,7 +20,7 @@ typedef enum {
 
 }tState;
 
-void AddToString(int c, tToken *Token);
+void AddToString(char c, tToken *Token);
 void RemoveString(tToken *Token);
 void ConvertStringToInteger(tToken *Token);
 void ConvertStringToDouble(tToken *Token);
