@@ -46,9 +46,12 @@ typedef enum {
 	T_THEN,
 	T_WHILE,
 	T_ELSEIF, //bonus
+	T_AND,
+	T_OR,
+	T_NOT
 
 	 //vvvvv ReservedWords Bonus tasks
-/*	T_AND,
+	/*
 	T_BOOLEAN,
 	T_CONTINUE,
 	
@@ -56,8 +59,6 @@ typedef enum {
 	T_FALSE,
 	T_FOR,
 	T_NEXT,
-	T_NOT,
-	T_OR,
 	T_SHARED,
 	T_STATIC,
 	T_TRUE*/
