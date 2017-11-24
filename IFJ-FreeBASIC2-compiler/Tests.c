@@ -21,16 +21,10 @@ void RunTests() {
 	AllSymTableTests();
 	printf("--------------\n");
 
-
-	
-	
-
 	ClearSTDIN();
 	printf("Press ENTER key to Continue\n");
 	getchar();
 }
-
-#pragma region Lexical
 
 void ReturnTokenTest()
 {
@@ -55,10 +49,8 @@ void ReturnTokenTest()
 
 	Pass();
 }
-#pragma endregion
 
 
-#pragma region Examples
 
 void ExampleTests()
 {
@@ -104,9 +96,7 @@ void PassedTestExample() {
 	}
 
 }
-#pragma endregion
 
-#pragma region HELPERS
 void LoadFileToSTDIN(char* fileName)
 {
 	freopen(fileName, "r", stdin);
@@ -122,7 +112,7 @@ void Fail(char* message) {
 void Pass() {
 	printf("PASSED %s\n", currentTestName);
 }
-#pragma endregion
+
 
 
 

@@ -29,3 +29,4 @@ tToken* GetNextToken();
 tToken* LoadToken();
 void ReturnToken();
 void ResetScanner();
+int CheckEOL(char c);

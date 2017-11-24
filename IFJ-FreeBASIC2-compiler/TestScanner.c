@@ -1,5 +1,6 @@
 #include "TestScanner.h"
 #include "Tests.h"
+#
 
 char* currentTestName;
 
@@ -19,7 +20,7 @@ void ClearUntilEOL()
 {
 	int c = getchar();
 
-	while (CheckEOL(c) != 1)
+	while (CheckEOL((char) c) != 1)
 	{
 		c = getchar();
 	}
@@ -725,7 +726,6 @@ void BasicProgram()
 	ResetScanner();
 	currentTestName = "Basic program";
 	LoadFileToSTDIN("../../../TestSamples/basic.txt");
-	tToken* token;
 
 	if (Exp_SCOPE())
 	{

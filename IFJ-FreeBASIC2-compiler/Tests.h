@@ -8,6 +8,7 @@ void Fail(char* message);
 void Pass();
 void ExampleTests();
 void FailedTestExample();
+void PassedTestExample();
 
 void ReturnTokenTest();
 
