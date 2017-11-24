@@ -8,6 +8,8 @@ void ScannerTests()
 	IntegerValue();
 	DoubleValue();
 	StringValue();
+	Comment();
+	Identificator();
 	IterativeFactorial();
 	BasicProgram();
 }
@@ -15,11 +17,11 @@ void ScannerTests()
 
 void ClearUntilEOL()
 {
-	tToken* Token = LoadToken();
+	int c = getchar();
 
-	while (Token->Type != T_EOL)
+	while (CheckEOL(c) != 1)
 	{
-		Token = LoadToken();
+		c = getchar();
 	}
 }
 
@@ -197,6 +199,97 @@ void StringValue()
 	Pass();
 }
 
+void Comment()
+{
+	ResetScanner();
+	currentTestName = "Comments";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/comment.txt");
+
+	if (Exp_ID("nicedwdwdwagwgwahawhwhawh"))
+	{
+		Fail("Expected token ID : 1");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 2");
+		return;
+	}
+	if (Exp_IF())
+	{
+		Fail("Expected token IF : 3");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 4");
+		return;
+	}
+	if (Exp_ID("ok"))
+	{
+		Fail("Expected token ID : 5");
+		return;
+	}
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 6");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 9");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 10");
+		return;
+	}
+	if (Exp_NOT())
+	{
+		Fail("Expected token NOT : 11");
+		return;
+	}
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 12");
+		return;
+	}
+
+	Pass();
+}
+
+void Identificator()
+{
+	ResetScanner();
+	currentTestName = "Identificator";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/id.txt");
+
+	if (Exp_ID("pneumonoultramicroscopicsilicovolcanoconiosisahahahatestlenghtdwdslpodwagwfajglwbwfafw6464646"))
+	{
+		Fail("Expected token ID : 1");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 2");
+		return;
+	}
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 3");
+		return;
+	}
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 4");
+		return;
+	}
+
+
+
+	Pass();
+}
 void IterativeFactorial()
 {
 	ResetScanner();

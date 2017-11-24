@@ -6,5 +6,7 @@ void ScannerTests();
 void IntegerValue();
 void DoubleValue();
 void StringValue();
+void Comment();
+void Identificator();
 void IterativeFactorial();
 void BasicProgram();

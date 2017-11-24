@@ -1,16 +1,24 @@
 #include "Scanner.h"
 
 //Language IFJ17 contain 35 keywords
-#define LenghtOfReservedWords 13
+#define LenghtOfKeyWords 26
+#define LenghtOfReservedWords 9
 
 /**
 * Reserved words of IFJ17 language
 */
 
+char *KeyWords[LenghtOfKeyWords] = 
+{
+	"as", "asc", "declare", "dim", "do", "double", "else", "end", "chr",
+	"function", "if", "input", "integer", "length", "loop", "print", "return",
+	"scope", "string", "substr", "then", "while", "elseif", "and", "or", "not"
+};
+
 char *ReservedWords[LenghtOfReservedWords] =
 {
-	"and", "boolean", "continue", "elseif", "exit", "false",
-	"for", "next", "not", "or", "shared", "static", "true"
+	"boolean", "continue", "exit", "false", "for", "next",
+	"shared", "static", "true"
 };
 
 
@@ -99,39 +107,24 @@ void ConvertStringToDouble(tToken *Token)
 TokenType CompareWithKeywords(char* string)
 {
 	TokenType Type;
+	Type = T_ID;
 
-	if (!strcmp(string, "as")) Type = T_AS;
-	else if (!strcmp(string, "asc")) Type = T_ASC;
-	else if (!strcmp(string, "declare")) Type = T_DECLARE;
-	else if (!strcmp(string, "dim")) Type = T_DIM;
-	else if (!strcmp(string, "do")) Type = T_DO;
-	else if (!strcmp(string, "double")) Type = T_DOUBLE;
-	else if (!strcmp(string, "else")) Type = T_ELSE;
-	else if (!strcmp(string, "end")) Type = T_END;
-	else if (!strcmp(string, "chr")) Type = T_CHR;
-	else if (!strcmp(string, "function")) Type = T_FUNCTION;
-	else if (!strcmp(string, "if")) Type = T_IF;
-	else if (!strcmp(string, "input")) Type = T_INPUT;
-	else if (!strcmp(string, "integer")) Type = T_INTEGER;
-	else if (!strcmp(string, "lenght")) Type = T_LENGHT;
-	else if (!strcmp(string, "loop")) Type = T_LOOP;
-	else if (!strcmp(string, "print")) Type = T_PRINT;
-	else if (!strcmp(string, "return")) Type = T_RETURN;
-	else if (!strcmp(string, "scope")) Type = T_SCOPE;
-	else if (!strcmp(string, "string")) Type = T_STRING;
-	else if (!strcmp(string, "then")) Type = T_THEN;
-	else if (!strcmp(string, "while")) Type = T_WHILE;
-	else
+	for (int i = 0; i < LenghtOfKeyWords; i++)
 	{
-		for (int i = 0; i < LenghtOfReservedWords; i++)
+		if (!strcmp(string, KeyWords[i]))
 		{
-			Type = T_ID;
+			Type = i + 22;
+			return Type;
+		}
+	}
 
-			if (!strcmp(string, ReservedWords[i]))
-			{
-				Type = T_RESERVEDWORD;
-				break;
-			}
+
+	for (int i = 0; i < LenghtOfReservedWords; i++)
+	{
+		if (!strcmp(string, ReservedWords[i]))
+		{
+			Type = T_ERR;
+			return Type;
 		}
 	}
 
@@ -152,6 +145,19 @@ int CheckEOL(char c)
 		{
 			ungetc(c, stdin);
 		}
+			return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int CheckIfMathSymbol(char c)
+{
+	if (c == '+' || c == '-' || c == '*' || c == '/' ||
+		c == '\\' || c == '=')
+	{
 		return 1;
 	}
 	else
@@ -435,7 +441,7 @@ tToken* LoadToken()
 				AddToString(c, Token);
 				break;
 			}
-			else if ((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
+			else if (CheckIfMathSymbol(c) == 1 || isblank(c) ||
 				CheckEOL(c) == 1 || c == EOF)
 			{
 				ungetc(c, stdin);
@@ -461,10 +467,17 @@ tToken* LoadToken()
 				AddToString(c, Token);
 				break;
 			}
-			else
+			else if (CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
+				c == '\r' || c == EOF)
 			{
 				ungetc(c, stdin);
 				Token->Type = CompareWithKeywords(Token->String);
+				return Token;
+			}
+			else
+			{
+				Token->Type = T_ERR;
+				RemoveString(Token);
 				return Token;
 			}
 		}
@@ -527,7 +540,6 @@ tToken* LoadToken()
 			{
 				AfterDot = 0;
 				AddToString(c, Token);
-				AfterDot = 0;
 				break;
 			}
 			else if (c == 'e' && AfterDot == 0)
@@ -537,8 +549,8 @@ tToken* LoadToken()
 				AddToString(c, Token);
 				break;
 			}
-			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				CheckEOL(c) == 1 || c == EOF) && AfterDot == 0)
+			else if ((CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
+				c == '\r' || c == EOF) && AfterDot == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -570,8 +582,8 @@ tToken* LoadToken()
 				AddToString(c, Token);
 				break;
 			}
-			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				CheckEOL(c) == 1 || c == EOF) && AfterExp == 0)
+			else if ((CheckIfMathSymbol(c) ==1 || isblank(c) || c == '\n' ||
+				c == '\r' || c == EOF) && AfterExp == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
@@ -597,8 +609,8 @@ tToken* LoadToken()
 				AddToString(c, Token);
 				break;
 			}
-			else if (((c >= '*' && c <= '/') || c == '\\' || isblank(c) ||
-				c == '\n' || c == EOF) && AfterExp == 0)
+			else if (((c >= '*' && c <= '/') || c == '\\' || c == '=' || isblank(c) || c == '\n' ||
+				c == '\r' || c == EOF) && AfterExp == 0)
 			{
 				Token->Type = T_DOUBLEVALUE;
 				ConvertStringToDouble(Token);
