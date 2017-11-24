@@ -5,7 +5,7 @@
 
 
 
-void * mmaloc(size_t size);
+void * mmalloc(size_t size);
 void mfree(void *);
 void mfreeall(void);
 void * mrealloc(void *ptr, size_t size);
