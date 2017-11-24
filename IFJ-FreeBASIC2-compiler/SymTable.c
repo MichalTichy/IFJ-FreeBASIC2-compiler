@@ -3,7 +3,7 @@
 
 #include "ADT.h"
 #include "ManagedMalloc.h"
-#include "Symtable.h"
+#include "SymTable.h"
 #include "errors.h"
 
 
@@ -64,7 +64,7 @@ void STInsert(tSTItemPtr* tableptr, char* token)
 	}
 	else
 	{
-		(*itemPtr)->len = strlen(token);
+		(*itemPtr)->len = (unsigned)strlen(token);
 		(*itemPtr)->data = token;
 		(*itemPtr)->lptr = NULL;
 		(*itemPtr)->rptr = NULL;
