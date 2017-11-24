@@ -1,16 +1,24 @@
 #include "Scanner.h"
 
 //Language IFJ17 contain 35 keywords
-#define LenghtOfReservedWords 12
+#define LenghtOfKeyWords 26
+#define LenghtOfReservedWords 9
 
 /**
 * Reserved words of IFJ17 language
 */
 
+char *KeyWords[LenghtOfKeyWords] = 
+{
+	"as", "asc", "declare", "dim", "do", "double", "else", "end", "chr",
+	"function", "if", "input", "integer", "length", "loop", "print", "return",
+	"scope", "string", "substr", "then", "while", "elseif", "and", "or", "not"
+};
+
 char *ReservedWords[LenghtOfReservedWords] =
 {
-	"and", "boolean", "continue", "exit", "false",
-	"for", "next", "not", "or", "shared", "static", "true"
+	"boolean", "continue", "exit", "false", "for", "next",
+	"shared", "static", "true"
 };
 
 
@@ -99,40 +107,24 @@ void ConvertStringToDouble(tToken *Token)
 TokenType CompareWithKeywords(char* string)
 {
 	TokenType Type;
+	Type = T_ID;
 
-	if (!strcmp(string, "as")) Type = T_AS;
-	else if (!strcmp(string, "asc")) Type = T_ASC;
-	else if (!strcmp(string, "declare")) Type = T_DECLARE;
-	else if (!strcmp(string, "dim")) Type = T_DIM;
-	else if (!strcmp(string, "do")) Type = T_DO;
-	else if (!strcmp(string, "double")) Type = T_DOUBLE;
-	else if (!strcmp(string, "else")) Type = T_ELSE;
-	else if (!strcmp(string, "end")) Type = T_END;
-	else if (!strcmp(string, "chr")) Type = T_CHR;
-	else if (!strcmp(string, "function")) Type = T_FUNCTION;
-	else if (!strcmp(string, "if")) Type = T_IF;
-	else if (!strcmp(string, "input")) Type = T_INPUT;
-	else if (!strcmp(string, "integer")) Type = T_INTEGER;
-	else if (!strcmp(string, "lenght")) Type = T_LENGHT;
-	else if (!strcmp(string, "loop")) Type = T_LOOP;
-	else if (!strcmp(string, "print")) Type = T_PRINT;
-	else if (!strcmp(string, "return")) Type = T_RETURN;
-	else if (!strcmp(string, "scope")) Type = T_SCOPE;
-	else if (!strcmp(string, "string")) Type = T_STRING;
-	else if (!strcmp(string, "then")) Type = T_THEN;
-	else if (!strcmp(string, "while")) Type = T_WHILE;
-	else if (!strcmp(string, "elseif")) Type = T_ELSEIF;
-	else
+	for (int i = 0; i < LenghtOfKeyWords; i++)
 	{
-		for (int i = 0; i < LenghtOfReservedWords; i++)
+		if (!strcmp(string, KeyWords[i]))
 		{
-			Type = T_ID;
+			Type = i + 22;
+			return Type;
+		}
+	}
 
-			if (!strcmp(string, ReservedWords[i]))
-			{
-				Type = T_ERR;
-				break;
-			}
+
+	for (int i = 0; i < LenghtOfReservedWords; i++)
+	{
+		if (!strcmp(string, ReservedWords[i]))
+		{
+			Type = T_ERR;
+			return Type;
 		}
 	}
 

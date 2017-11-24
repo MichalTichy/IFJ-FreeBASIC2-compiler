@@ -47,7 +47,7 @@ int Exp_STRING();
 int Exp_SUBSTRING();
 int Exp_THEN();
 int Exp_WHILE();
-
+int Exp_NOT();
 
 
 

@@ -3,7 +3,7 @@
 
 #include "ADT.h"
 #include "ManagedMalloc.h"
-#include "Symtable.h"
+#include "SymTable.h"
 #include "errors.h"
 
 
@@ -17,11 +17,11 @@ tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
 	tSTItemPtr itemPtr = *tableptr;
 	while (itemPtr != NULL)
 	{
-		if (strcmp((*tableptr)->data, token) == 0)
+		if (strcmp(itemPtr->data, token) == 0)
 		{
 			break;
 		}
-		else if (strcmp((*tableptr)->data, token) < 0)		// Token is bigger
+		else if (strcmp(itemPtr->data, token) < 0)		// Token is bigger
 		{
 			itemPtr = itemPtr->rptr;
 		}
@@ -40,8 +40,7 @@ void STInsert(tSTItemPtr* tableptr, char* token)
 		return;
 	}
 	tSTItemPtr* itemPtr = tableptr;
-	tSTItemPtr saveFirst = *tableptr;
-	while (itemPtr != NULL)
+	while ((*itemPtr) != NULL)
 	{
 		if (strcmp((*itemPtr)->data, token) == 0)			// Token is here
 		{
@@ -65,11 +64,11 @@ void STInsert(tSTItemPtr* tableptr, char* token)
 	}
 	else
 	{
+		(*itemPtr)->len = (unsigned)strlen(token);
 		(*itemPtr)->data = token;
 		(*itemPtr)->lptr = NULL;
 		(*itemPtr)->rptr = NULL;
 	}
-	*tableptr = saveFirst;
 
 }
 
@@ -144,5 +143,6 @@ void STDeleteTopScope(tSTScopePtr* scope)
 {
 	STFree((&(*scope)->symtable));
 	mfree(*scope);
+	*scope = NULL;
 }
 

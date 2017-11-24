@@ -25,8 +25,6 @@ void STInit(tSTItemPtr* tableptr);
 
 tSTItemPtr STSearch (tSTItemPtr* tableptr, char* key);
 
-void STReallocItemData(tSTItemPtr itemPtr, unsigned int desiredLenght);
-
 void STInsert (tSTItemPtr* tableptr, char* key);
 
 void STFree (tSTItemPtr* tableptr);

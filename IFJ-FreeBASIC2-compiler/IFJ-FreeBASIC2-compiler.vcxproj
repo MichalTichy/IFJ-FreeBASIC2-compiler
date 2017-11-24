@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClInclude Include="ADT.h" />
     <ClInclude Include="Basics.h" />
+    <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="errors.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="ManagedMalloc.h" />
@@ -100,6 +101,7 @@
     <ClCompile Include="Tests.c" />
     <ClCompile Include="TestScanner.c" />
     <ClCompile Include="TestStack.c" />
+    <ClCompile Include="TestSymTable.c" />
     <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemGroup>

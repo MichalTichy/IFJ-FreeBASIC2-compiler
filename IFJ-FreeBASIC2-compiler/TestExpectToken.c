@@ -527,3 +527,16 @@ int Exp_WHILE()
 	FreeToken(token);
 	return 0;
 }
+
+int Exp_NOT()
+{
+	tToken *token;
+	token = LoadToken();
+	if (token->Type != T_NOT)
+	{
+		return -1;
+	}
+	FreeToken(token);
+	return 0;
+}
+

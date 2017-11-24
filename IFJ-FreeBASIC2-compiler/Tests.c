@@ -1,4 +1,7 @@
 ﻿#include "Tests.h"
+#include "TestScanner.h"
+#include "TestStack.h"
+#include "TestSymTable.h"
 
 void RunTests() {
 	ExampleTests();
@@ -14,16 +17,14 @@ void RunTests() {
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
-
-	
-	
+	printf("******* Symbol Table tests *******\n");
+	AllSymTableTests();
+	printf("--------------\n");
 
 	ClearSTDIN();
 	printf("Press ENTER key to Continue\n");
 	getchar();
 }
-
-#pragma region Lexical
 
 void ReturnTokenTest()
 {
@@ -48,10 +49,8 @@ void ReturnTokenTest()
 
 	Pass();
 }
-#pragma endregion
 
 
-#pragma region Examples
 
 void ExampleTests()
 {
@@ -97,9 +96,7 @@ void PassedTestExample() {
 	}
 
 }
-#pragma endregion
 
-#pragma region HELPERS
 void LoadFileToSTDIN(char* fileName)
 {
 	freopen(fileName, "r", stdin);
@@ -115,7 +112,7 @@ void Fail(char* message) {
 void Pass() {
 	printf("PASSED %s\n", currentTestName);
 }
-#pragma endregion
+
 
 
 
