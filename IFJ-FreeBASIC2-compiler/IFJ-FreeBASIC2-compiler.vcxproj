@@ -65,11 +65,12 @@
     <SourcesToCopyRemotelyOverride>@(SourcesToCopyRemotely)</SourcesToCopyRemotelyOverride>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
-    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(ProjectDir)/TestSamples/ScannerTests/INTVAL.txt;$(ProjectDir)/TestSamples/ScannerTests/DoubleValue.txt;$(ProjectDir)/TestSamples/ScannerTests/StringValue.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
+    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(ProjectDir)/TestSamples/ScannerTests/INTVAL.txt;$(ProjectDir)/TestSamples/ScannerTests/DoubleValue.txt;$(ProjectDir)/TestSamples/ScannerTests/StringValue.txt;$(ProjectDir)/TestSamples/ScannerTests/comment.txt;$(ProjectDir)/TestSamples/ScannerTests/id.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
   </PropertyGroup>
   <ItemGroup>
     <ClInclude Include="ADT.h" />
     <ClInclude Include="Basics.h" />
+    <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="errors.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="ManagedMalloc.h" />
@@ -82,6 +83,7 @@
     <ClInclude Include="TestExpectToken.h" />
     <ClInclude Include="Tests.h" />
     <ClInclude Include="TestScanner.h" />
+    <ClInclude Include="TestStack.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
@@ -98,6 +100,8 @@
     <ClCompile Include="TestExpectToken.c" />
     <ClCompile Include="Tests.c" />
     <ClCompile Include="TestScanner.c" />
+    <ClCompile Include="TestStack.c" />
+    <ClCompile Include="TestSymTable.c" />
     <ClCompile Include="Token.c" />
   </ItemGroup>
   <ItemGroup>
@@ -113,7 +117,13 @@
       <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
       <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
     </Text>
-    <Text Include="TestSamples\ScannerTests\DoubleValue.txt">
+    <Text Include="TestSamples\ScannerTests\comment.txt">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
+      <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
+    </Text>
+    <Text Include="TestSamples\ScannerTests\DoubleValue.txt" />
+    <Text Include="TestSamples\ScannerTests\id.txt">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
       <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>

@@ -17,7 +17,11 @@ typedef enum  {
 	scope,
 	statement,
 	ifCondition,
-	elseIfCondition
+	elseIfCondition,
+	whileBlock,
+	binaryExpression,
+	prefixExpression,
+	negationExpression
 }NodeType;
 
 typedef struct NodeInteger
@@ -36,17 +40,38 @@ typedef struct NodeString
 	int lenght;
 } tNodeString;
 
+typedef struct NodeBinaryExpression{
+	struct Node* left;
+	struct Node* right;
+	TokenType OP;
+
+}tNodeBinaryExpression;
+
+
+typedef struct NodePrefixExpression
+{
+	struct Node* expression;
+	TokenType OP;
+
+} tNodePrefixExpression;
+
+typedef struct NodeNegationExpression
+{
+	struct Node* expression;
+
+} tNodeNegationExpression;
+
 typedef struct NodeExpression
 {
-	//todo 
+	ScalarType ResultType;
+	union ExpressionData
+	{
+		struct NodeString* string;
+		struct Node* expression;
+
+	}tExpressionData;
 
 } tNodeExpression;
-
-typedef struct NodeScope
-{
-	//todo statements
-
-} tNodeScope;
 
 typedef struct NodeVariableDeclaration
 {
@@ -67,28 +92,13 @@ typedef struct NodeVariableAssigment
 
 
 
-typedef struct NodeStatement
-{
-	NodeType type;
-	union StatementNode
-	{
-		struct NodeVariableDeclaration variable_declaration;
-		struct NodeVariableAssigment variable_assigment;
-		//todo procedure call
-		//todo compound statements
-	} tStatementNode;
-	struct NodeStatement* Next;
-
-} tNodeStatement;
-
-
 typedef struct NodeIfStatement
 {
 	tNodeExpression* Condition;
 
-	tNodeStatement* Pass;
+	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* elseIf;
-	tNodeStatement* Fail;
+	struct NodeStatement* Fail;
 
 
 } tNodeIfStatement;
@@ -96,19 +106,49 @@ typedef struct NodeIfStatement
 typedef struct NodeElseIfStatement
 {
 	tNodeExpression* Condition;
-	tNodeStatement* Pass;
+	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* Next;
 	tNodeIfStatement* parent;
 
 } tNodeElseIfStatement;
+
+typedef struct NodeScope
+{
+	struct NodeStatement* Statement;
+
+} tNodeScope;
+
+typedef struct NodeWhileBlock
+{
+
+	tNodeExpression* Condition;
+	struct NodeStatement* Statement;
+
+} tNodeBlock;
+
+typedef struct NodeStatement
+{
+	NodeType type;
+	union StatementNode
+	{
+		struct NodeVariableDeclaration* variable_declaration;
+		struct NodeVariableAssigment* variable_assigment;
+		struct NodeScope* scope;
+		struct NodeIfStatement* ifBlock;
+		struct NodeWhileBlock* whileBlock;
+		//todo procedure call
+	} tStatementNode;
+	struct NodeStatement* Next;
+
+} tNodeStatement;
 
 typedef struct Node
 {
 	NodeType type;
 	union Data
 	{
-		struct NodeVariableDeclaration variable_declaration;
-		struct NodeVariableAssigment variable_assigment;
+		struct NodeVariableDeclaration* variable_declaration;
+		struct NodeVariableAssigment* variable_assigment;
 		struct NodeInteger* intValue;
 		struct NodeDouble* doubleValue;
 		struct NodeString* stringValue;
@@ -116,6 +156,11 @@ typedef struct Node
 		struct NodeStatement* statement;
 		struct NodeIfStatement* ifStatement;
 		struct NodeElseIfStatement* elseIfStatement;
+		struct NodeScope* scope;
+		struct NodeWhileBlock* whileBlock;
+		struct NodeBinaryExpression* binaryExpression;
+		struct NodePrefixExpression* prefixExpression;
+		struct NodeNegationExpression* negationExpression;
 	} tData;
 }tNode;
 
@@ -136,11 +181,13 @@ tNode * InitIntegerNode(long int value);
 
 tNode* InitDoubleNode(double value);
 
-tNode* IniStringNode(char* value, int lenght);
+tNode* InitStringNode(char* value, int lenght);
 
 tNode * InitVarDeclarationNode();
 
 tNode * ProcessVarDeclaration();
+tNode * ProcessExpression();
+tNode* ProcessRelationalExpression();
 
 ScalarType TokenTypeToScalarType(TokenType tokenType);
 tNode* ProcessStatement();

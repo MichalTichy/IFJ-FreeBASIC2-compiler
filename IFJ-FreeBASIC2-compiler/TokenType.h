@@ -45,20 +45,23 @@ typedef enum {
 	T_SUBSTRING,
 	T_THEN,
 	T_WHILE,
-
-	T_RESERVEDWORD, //vvvvv ReservedWords Bonus tasks
+	T_ELSEIF, //bonus
 	T_AND,
+	T_OR,
+	T_NOT
+
+	 //vvvvv ReservedWords Bonus tasks
+	/*
 	T_BOOLEAN,
 	T_CONTINUE,
-	T_ELSEIF,
+	
 	T_EXIT,
 	T_FALSE,
 	T_FOR,
 	T_NEXT,
-	T_NOT,
-	T_OR,
 	T_SHARED,
 	T_STATIC,
-	T_TRUE
+	T_TRUE*/
 
 } TokenType;
+

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Scanner.h"
-#include "Tests.h"
 
 int Exp_ID(char* expectedString);
 int Exp_ERR();
@@ -48,8 +47,7 @@ int Exp_STRING();
 int Exp_SUBSTRING();
 int Exp_THEN();
 int Exp_WHILE();
-int Exp_RESERVEDWORD();
-
+int Exp_NOT();
 
 
 

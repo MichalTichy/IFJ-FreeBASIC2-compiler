@@ -23,6 +23,8 @@
     <ClInclude Include="TestExpectToken.h" />
     <ClInclude Include="TestScanner.h" />
     <ClInclude Include="SymTable.h" />
+    <ClInclude Include="TestStack.h" />
+    <ClInclude Include="TestSymTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
@@ -36,13 +38,17 @@
     <ClCompile Include="TestExpectToken.c" />
     <ClCompile Include="TestScanner.c" />
     <ClCompile Include="SymTable.c" />
+    <ClCompile Include="TestStack.c" />
+    <ClCompile Include="TestSymTable.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSamples\iterativeFactorial.txt" />
     <Text Include="TestSamples\stringTests.txt" />
     <Text Include="TestSamples\basic.txt" />
     <Text Include="TestSamples\ScannerTests\INTVAL.txt" />
-    <Text Include="TestSamples\ScannerTests\DoubleValue.txt" />
     <Text Include="TestSamples\ScannerTests\StringValue.txt" />
+    <Text Include="TestSamples\ScannerTests\DoubleValue.txt" />
+    <Text Include="TestSamples\ScannerTests\comment.txt" />
+    <Text Include="TestSamples\ScannerTests\id.txt" />
   </ItemGroup>
 </Project>

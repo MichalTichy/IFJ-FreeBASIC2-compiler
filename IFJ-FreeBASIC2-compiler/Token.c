@@ -21,7 +21,7 @@ void InitToken(tToken *Token)
 * when malloc fail type of token is set to T_ERR. 
 */
 
-tToken* InitString(tToken *Token, int LenghtOfString)
+tToken* InitString(tToken *Token, long unsigned int LenghtOfString)
 {
 	if ((Token->String = (char *) malloc(sizeof(char) * LenghtOfString + 1)) == NULL)
 	{
@@ -38,7 +38,7 @@ tToken* InitString(tToken *Token, int LenghtOfString)
 * is set to T_ERR and free string from memory.
 */
 
-void ReallocString(tToken *Token,int LenghtOfString)
+void ReallocString(tToken *Token, long unsigned int LenghtOfString)
 {
 	LenghtOfString += 10;
 
