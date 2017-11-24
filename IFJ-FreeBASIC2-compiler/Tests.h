@@ -11,5 +11,6 @@ void FailedTestExample();
 void PassedTestExample();
 
 void ReturnTokenTest();
+void Expression1();
 
 extern char* currentTestName;

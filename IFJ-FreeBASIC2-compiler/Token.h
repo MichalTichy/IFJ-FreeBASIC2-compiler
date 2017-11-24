@@ -1,3 +1,5 @@
+#ifndef TOKEN
+#define TOOKEN
 #include <stdio.h>
 #include <stdlib.h>
 #include "TokenType.h"
@@ -14,3 +16,6 @@ void InitToken(tToken *Token);
 tToken* InitString(tToken *Token, long unsigned int LenghtOfString);
 void ReallocString(tToken *Token, long unsigned int LenghtOfString);
 void FreeToken(tToken *Token);
+
+#endif
+

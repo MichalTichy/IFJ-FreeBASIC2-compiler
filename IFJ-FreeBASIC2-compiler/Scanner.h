@@ -1,3 +1,5 @@
+#ifndef SCANNER
+#define SCANNER
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +29,8 @@ void ConvertStringToDouble(tToken *Token);
 TokenType CompareWithKeywords(char* string);
 tToken* GetNextToken();
 tToken* LoadToken();
-void ReturnToken();
+tToken* ReturnToken();
 void ResetScanner();
 int CheckEOL(char c);
+
+#endif

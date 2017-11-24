@@ -83,7 +83,7 @@ void DLInsertLast(tDLList *L, void* val) {
 	if (L->Last == NULL) 
 		L->First = newElement;
 	else
-		L->Last->lptr = newElement;
+		L->Last->rptr = newElement;
 
 	L->Last = newElement;
 }

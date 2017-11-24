@@ -1,15 +1,22 @@
 #include "Parser.h"
 tToken* token;
 
-void Parse() {
+tNode* Parse() {
 	Next();
+	tNode* program = ProcessProgram();
+	if (program==NULL)
+	{
+		exit(SYNTAX_ERR);
+	}
+	return program;
+
 }
 
 void Next() {
 	token = GetNextToken();
 }
 void Back() {
-	ReturnToken();
+	token = ReturnToken();
 }
 
 void BackMultipleTimes(int steps) {
@@ -42,20 +49,10 @@ tNode* ProcessString() {
 	return NULL;
 }
 
-
-
-tNode* ProcessScalar() {
-	return ProcessNumber() || ProcessString();
-}
-
-tNode* ProcessNumber() {
-	return ProcessInteger() || ProcessDouble();
-}
-
-
 tNode* InitIntegerNode(long int value) {
 	tNode* node = malloc(sizeof(struct Node));
 	node->type = integerVal;
+	node->tData.intValue = malloc(sizeof(struct NodeInteger));
 	node->tData.intValue->value = value;
 	return node;
 }
@@ -63,6 +60,7 @@ tNode* InitIntegerNode(long int value) {
 tNode* InitDoubleNode(double value) {
 	tNode* node = malloc(sizeof(struct Node));
 	node->type = doubleVal;
+	node->tData.doubleValue= malloc(sizeof(struct NodeDouble));
 	node->tData.doubleValue->value = value;
 	return node;
 }
@@ -70,6 +68,7 @@ tNode* InitDoubleNode(double value) {
 tNode* InitStringNode(char* value, int lenght) {
 	tNode* node = malloc(sizeof(struct Node));
 	node->type =stringVal;
+	node->tData.stringValue = malloc(sizeof(struct NodeString));
 	node->tData.stringValue->value = value;
 	node->tData.stringValue->lenght = lenght;
 	return node;
@@ -78,40 +77,47 @@ tNode* InitStringNode(char* value, int lenght) {
 tNode* InitVarDeclarationNode() {
 	tNode* node = malloc(sizeof(struct Node));
 	node->type = varDeclaration;
+	node->tData.variable_declaration = malloc(sizeof(struct NodeVariableDeclaration));
 	return node;
 }
 
 
 tNode* InitVarAssigmentNode() {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.variable_assigment = malloc(sizeof(struct NodeVariableAssigment));
 	node->type = varAssigment;
 	return node;
 }
 
 tNode* InitScopeNode() {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.scope = malloc(sizeof(struct NodeScope));
 	node->type = scope;
 	return node;
 }
 tNode* InitPrefixExpressionNode() {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.prefixExpression = malloc(sizeof(struct NodePrefixExpression));
 	node->type = prefixExpression;
 	return node;
 }
 tNode* InitNegationExpressionNode() {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.negationExpression = malloc(sizeof(struct NodeNegationExpression));
 	node->type = negationExpression;
 	return node;
 }
 
 tNode* InitStatementNode() {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.statement= malloc(sizeof(struct NodeStatement));
 	node->type = statement;
 	return node;
 }
 
 tNode* InitIfStatementNode() {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.ifStatement= malloc(sizeof(struct NodeIfStatement));
 	node->type = ifCondition;
 	return node;
 }
@@ -120,6 +126,7 @@ tNode* InitIfStatementNode() {
 tNode* InitWhileNode()
 {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.whileBlock = malloc(sizeof(struct NodeWhileBlock));
 	node->type = whileBlock;
 	return node;
 }
@@ -127,6 +134,7 @@ tNode* InitWhileNode()
 tNode* InitBinaryExpressionNode()
 {
 	tNode* node = malloc(sizeof(struct Node));
+	node->tData.binaryExpression = malloc(sizeof(struct NodeBinaryExpression));
 	node->type = binaryExpression;
 	return node;
 }
@@ -143,16 +151,55 @@ bool IsTokenScalarType()
 	return token->Type == T_INTEGER || token->Type == T_DOUBLE || token->Type == T_STRING;
 }
 
+tNode* initIdentifierNode()
+{
+
+	tNode* node = malloc(sizeof(struct Node));
+	node->tData.identifier= malloc(sizeof(struct NodeIdentifier));
+	node->type = identifier;
+	return node;
+}
+
+tNode* initExpressionNode()
+{
+
+	tNode* node = malloc(sizeof(struct Node));
+	node->tData.expression = malloc(sizeof(struct NodeExpression));
+	node->type = expression;
+	return node;
+}
+
+tNode* ProcessIdentfier()
+{
+	if (token->Type==identifier)
+	{
+		return initIdentifierNode();
+	}
+	return NULL;
+}
+
 tNode* ProcessAtom()
 {
 	if (token->Type == T_INTVALUE)
 	{
-		return InitIntegerNode(token->IntVal);
+		tNode* node= InitIntegerNode(token->IntVal);
+		Next();
+		return node;
 	}
 	if (token->Type == T_DOUBLEVALUE)
 	{
-		return InitDoubleNode(token->DoubleVal);
+		tNode* node= InitDoubleNode(token->DoubleVal);
+		Next();
+		return node;
 	}
+
+	tNode* id = ProcessIdentfier();
+	if (id!=NULL)
+	{
+		Next();
+		return id;
+	}
+
 	return NULL;
 }
 
@@ -246,11 +293,11 @@ tNode* ProcessMultiplicationExpression()
 	while (token->Type == T_MULTIPLY || token->Type==T_DIVIDE)
 	{
 		tNode* newExp = InitBinaryExpressionNode();
+		newExp->tData.binaryExpression->OP = token->Type;
+		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessPrefixExpression();
-		newExp->tData.binaryExpression->OP = token->Type;
 		exp = newExp;
-		Next();
 	}
 	return exp;
 	
@@ -263,11 +310,11 @@ tNode* ProcessIntDivisionExpression()
 	while (token->Type == T_INTDIVIDE)
 	{
 		tNode* newExp = InitBinaryExpressionNode();
+		newExp->tData.binaryExpression->OP = token->Type;
+		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessMultiplicationExpression();
-		newExp->tData.binaryExpression->OP = token->Type;
 		exp = newExp;
-		Next();
 	}
 	return exp;
 }
@@ -279,10 +326,10 @@ tNode* ProcessAddExpression()
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
-		newExp->tData.binaryExpression->right = ProcessIntDivisionExpression();
 		newExp->tData.binaryExpression->OP = token->Type;
-		exp = newExp;
 		Next();
+		newExp->tData.binaryExpression->right = ProcessIntDivisionExpression();
+		exp = newExp;
 	}
 	return exp;
 }
@@ -294,10 +341,10 @@ tNode* ProcessRelationalExpression()
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
-		newExp->tData.binaryExpression->right = ProcessAddExpression();
 		newExp->tData.binaryExpression->OP = token->Type;
-		exp = newExp;
 		Next();
+		newExp->tData.binaryExpression->right = ProcessAddExpression();
+		exp = newExp;
 	}
 	return exp;
 }
@@ -309,10 +356,10 @@ tNode* ProcessLogicalAndExpression()
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
-		newExp->tData.binaryExpression->right = ProcessRelationalExpression();
 		newExp->tData.binaryExpression->OP = T_AND;
-		exp = newExp;
 		Next();
+		newExp->tData.binaryExpression->right = ProcessRelationalExpression();
+		exp = newExp;
 	}
 	return exp;
 }
@@ -324,17 +371,20 @@ tNode* ProcessLogicalOrExpression()
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
-		newExp->tData.binaryExpression->right= ProcessLogicalAndExpression();
 		newExp->tData.binaryExpression->OP = T_OR;
-		exp = newExp;
 		Next();
+		newExp->tData.binaryExpression->right= ProcessLogicalAndExpression();
+		exp = newExp;
 	}
 	return exp;
 }
 
-tNode* ProcessExpression()
+tNode*  ProcessExpression()
 {
-	//TODO
+	tNode* exp = ProcessLogicalAndExpression();
+	tNode* wrap = initExpressionNode();
+	wrap->tData.expression->tExpressionData.expression=exp;
+	return wrap;
 }
 
 tNode* ProcessVarDeclaration() {
@@ -366,7 +416,7 @@ tNode* ProcessVarDeclaration() {
 						tNode* expression = ProcessExpression();
 						if (expression!=NULL)
 						{
-							declaration->tData.variable_declaration->Expression = expression->tData.expression;
+							declaration->tData.variable_declaration->Expression = expression;
 							return declaration;
 						}
 					}
@@ -399,7 +449,7 @@ tNode* ProcessAssigment() {
 		{
 			Next();
 			takenTokens++;
-			tNodeExpression* expression = ProcessExpression()->tData.expression;
+			tNode* expression = ProcessExpression();
 			if (expression!=NULL)
 			{
 				assigment->tData.variable_assigment->Expression = expression;
@@ -437,14 +487,15 @@ tNode* ProcessScope() {
 			scope->tData.scope->Statement = statement->tData.statement;
 			Next();
 			takenTokens++;
-		}
-		else if (token->Type == T_END)
-		{
-			Next();
-			takenTokens++;
-			if (token->Type == T_SCOPE)
+
+			if (token->Type == T_END)
 			{
-				return scope;
+				Next();
+				takenTokens++;
+				if (token->Type == T_SCOPE)
+				{
+					return scope;
+				}
 			}
 		}
 	}
@@ -466,11 +517,11 @@ tNodeElseIfStatement* ProcessElseIfStatements(tNodeIfStatement* parent)
 		tNode* elseIfCondition = ProcessExpression();
 		if (elseIfCondition != NULL)
 		{
-			elseIf->Condition = elseIfCondition->tData.expression;
+			elseIf->Condition = elseIfCondition;
 
 			Next();
 			takenTokens++;
-			tNode* elseIfStatements = ProcessExpression();
+			tNode* elseIfStatements = ProcessStatement();
 
 			if (elseIfStatements != NULL)
 			{
@@ -515,7 +566,7 @@ tNode* ProcessIfStatement() {
 		tNode* expression = ProcessExpression();
 		if (expression != NULL)
 		{
-			ifNode->tData.ifStatement->Condition = expression->tData.expression;
+			ifNode->tData.ifStatement->Condition = expression;
 			Next();
 			takenTokens++;
 			if (token->Type == T_THEN)
@@ -582,7 +633,7 @@ tNode* ProcessWhileStatement() {
 			tNode* expression = ProcessExpression();
 			if (expression!=NULL)
 			{
-				whileNode->tData.whileBlock->Condition = expression->tData.expression;
+				whileNode->tData.whileBlock->Condition = expression;
 				Next();
 				takenTokens++;
 

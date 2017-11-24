@@ -3,7 +3,7 @@
 
 #include "ADT.h"
 #include "ManagedMalloc.h"
-#include "SymTable.h"
+#include "Symtable.h"
 #include "errors.h"
 
 

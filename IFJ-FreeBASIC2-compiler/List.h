@@ -1,4 +1,6 @@
-﻿#include "Basics.h"
+﻿#ifndef LIST
+#define LIST
+#include "Basics.h"
 #include "Token.h"
 typedef struct tDLElem {                 /* prvek dvousměrně vázaného seznamu */
 	void* data;                                            /* užitečná data */
@@ -30,3 +32,4 @@ void DLPred(tDLList *);
 bool DLActive(tDLList *);
 bool DLIsEmpty(tDLList *);
 bool DLIsActiveItemLast(tDLList *L);
+#endif

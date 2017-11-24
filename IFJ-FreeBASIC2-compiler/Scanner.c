@@ -29,13 +29,19 @@ tDLList* TokenList = NULL;
 void ResetScanner() {
 	TokenList = NULL;
 }
-void ReturnToken() {
+
+tToken* ReturnToken() {
 	if (TokenList == NULL)
 	{
 		TokenList = malloc(sizeof(tDLList));
 		DLInitList(TokenList);
 	}
 	DLPred(TokenList);
+	if (TokenList->Act!=NULL)
+	{
+		return TokenList->Act->data;
+	}
+	return NULL;
 }
 tToken* GetNextToken() {
 	if (TokenList == NULL)

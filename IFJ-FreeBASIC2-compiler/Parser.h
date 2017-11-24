@@ -1,3 +1,6 @@
+#ifndef PARSER
+#define PARSER
+
 #include "Basics.h"
 #include "Scanner.h"
 
@@ -21,7 +24,8 @@ typedef enum  {
 	whileBlock,
 	binaryExpression,
 	prefixExpression,
-	negationExpression
+	negationExpression,
+	identifier
 }NodeType;
 
 typedef struct NodeInteger
@@ -39,6 +43,11 @@ typedef struct NodeString
 	char* value;
 	int lenght;
 } tNodeString;
+
+typedef struct NodeIdentifier
+{
+	//todo pointer to symtable
+} tNodeIdentifier;
 
 typedef struct NodeBinaryExpression{
 	struct Node* left;
@@ -77,7 +86,7 @@ typedef struct NodeVariableDeclaration
 {
 	//todo pointer to ID
 	ScalarType varType;
-	tNodeExpression* Expression;
+	struct Node* Expression;
 
 } tNodeVariableDeclaration;
 
@@ -85,7 +94,7 @@ typedef struct NodeVariableAssigment
 {
 	//todo pointer to ID
 	ScalarType varType;
-	tNodeExpression* Expression;
+	struct Node* Expression;
 
 } tNodeVariableAssigment;
 
@@ -94,7 +103,7 @@ typedef struct NodeVariableAssigment
 
 typedef struct NodeIfStatement
 {
-	tNodeExpression* Condition;
+	struct Node* Condition;
 
 	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* elseIf;
@@ -105,7 +114,7 @@ typedef struct NodeIfStatement
 
 typedef struct NodeElseIfStatement
 {
-	tNodeExpression* Condition;
+	struct Node* Condition;
 	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* Next;
 	tNodeIfStatement* parent;
@@ -121,7 +130,7 @@ typedef struct NodeScope
 typedef struct NodeWhileBlock
 {
 
-	tNodeExpression* Condition;
+	struct Node*  Condition;
 	struct NodeStatement* Statement;
 
 } tNodeBlock;
@@ -161,10 +170,11 @@ typedef struct Node
 		struct NodeBinaryExpression* binaryExpression;
 		struct NodePrefixExpression* prefixExpression;
 		struct NodeNegationExpression* negationExpression;
+		struct NodeIdentifier* identifier;
 	} tData;
 }tNode;
 
-void Parse();
+tNode* Parse();
 
 void Next();
 
@@ -191,3 +201,6 @@ tNode* ProcessRelationalExpression();
 
 ScalarType TokenTypeToScalarType(TokenType tokenType);
 tNode* ProcessStatement();
+tNode* ProcessProgram();
+
+#endif

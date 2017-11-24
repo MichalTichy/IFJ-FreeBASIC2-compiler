@@ -1,3 +1,5 @@
+#ifndef TOKENTYPE
+#define TOKENTYPE
 typedef enum {
 
 	T_ID,
@@ -65,3 +67,4 @@ typedef enum {
 
 } TokenType;
 
+#endif
