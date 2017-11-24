@@ -85,8 +85,7 @@ void * mrealloc(void * ptr, size_t size)
 		{
 			if (list.Act->data == ptr)
 			{
-				list.Act = list.Act->lptr;
-				DLPostDelete(&list);
+				list.Act->data = tmp;
 				return tmp;
 			}
 			list.Act = list.Act->lptr;
