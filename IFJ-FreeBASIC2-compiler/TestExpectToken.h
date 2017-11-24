@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Scanner.h"
-#include "Tests.h"
 
 int Exp_ID(char* expectedString);
 int Exp_ERR();

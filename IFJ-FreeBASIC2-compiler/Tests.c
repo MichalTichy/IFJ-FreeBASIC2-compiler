@@ -1,4 +1,7 @@
 ﻿#include "Tests.h"
+#include "TestScanner.h"
+#include "TestStack.h"
+#include "TestSymTable.h"
 
 void RunTests() {
 	ExampleTests();
@@ -14,6 +17,10 @@ void RunTests() {
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
+	printf("******* Symbol Table tests *******\n");
+	AllSymTableTests();
+	printf("--------------\n");
+
 
 	
 	

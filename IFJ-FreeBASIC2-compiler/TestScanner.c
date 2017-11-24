@@ -1,4 +1,5 @@
 #include "TestScanner.h"
+#include "Tests.h"
 
 char* currentTestName;
 
