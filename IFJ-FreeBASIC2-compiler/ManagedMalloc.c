@@ -68,3 +68,30 @@ void mfreeall()
 	}
 }
 
+void * mrealloc(void * ptr, size_t size)
+{
+	void * tmp = realloc(ptr, size);
+	if (tmp == ptr) return tmp;
+
+	if (list.First->data == ptr)
+	{
+		DLDeleteFirst(&list);
+		return tmp;
+	}
+	else
+	{
+		list.Act = list.Last;
+		do
+		{
+			if (list.Act->data == ptr)
+			{
+				list.Act = list.Act->lptr;
+				DLPostDelete(&list);
+				return tmp;
+			}
+			list.Act = list.Act->lptr;
+		} while (list.Act != list.First);
+
+
+}
+
