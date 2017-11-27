@@ -12,5 +12,6 @@ void PassedTestExample();
 
 void ReturnTokenTest();
 void Expression1();
+void simplifiedIterativeFactorial();
 
 extern char* currentTestName;

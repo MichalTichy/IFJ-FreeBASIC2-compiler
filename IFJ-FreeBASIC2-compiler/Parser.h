@@ -25,7 +25,8 @@ typedef enum  {
 	binaryExpression,
 	prefixExpression,
 	negationExpression,
-	identifier
+	identifier,
+	empty
 }NodeType;
 
 typedef struct NodeInteger

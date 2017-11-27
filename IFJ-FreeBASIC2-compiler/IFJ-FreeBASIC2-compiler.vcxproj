@@ -65,7 +65,7 @@
     <SourcesToCopyRemotelyOverride>@(SourcesToCopyRemotely)</SourcesToCopyRemotelyOverride>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
-    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(ProjectDir)/TestSamples/ScannerTests/INTVAL.txt;$(ProjectDir)/TestSamples/ScannerTests/DoubleValue.txt;$(ProjectDir)/TestSamples/ScannerTests/StringValue.txt;$(ProjectDir)/TestSamples/ScannerTests/comment.txt;$(ProjectDir)/TestSamples/ScannerTests/id.txt;$(ProjectDir)/TestSamples/ParserTests/Expression1.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
+    <AdditionalSourcesToCopyMapping>$(ProjectDir)/TestSamples/iterativeFactorial.txt;$(ProjectDir)/TestSamples/stringTests.txt;$(ProjectDir)/TestSamples/basic.txt;$(ProjectDir)/TestSamples/ScannerTests/INTVAL.txt;$(ProjectDir)/TestSamples/ScannerTests/DoubleValue.txt;$(ProjectDir)/TestSamples/ScannerTests/StringValue.txt;$(ProjectDir)/TestSamples/ScannerTests/comment.txt;$(ProjectDir)/TestSamples/ScannerTests/id.txt;$(ProjectDir)/TestSamples/ParserTests/Expression1.txt;$(ProjectDir)/TestSamples/ParserTests/simplifiedIterativeFactorial.txt;$(AdditionalSourcesToCopyMapping)</AdditionalSourcesToCopyMapping>
   </PropertyGroup>
   <ItemGroup>
     <ClInclude Include="ADT.h" />
@@ -118,6 +118,11 @@
       <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
     </Text>
     <Text Include="TestSamples\ParserTests\Expression1.txt">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
+      <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
+    </Text>
+    <Text Include="TestSamples\ParserTests\simplifiedIterativeFactorial.txt">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
       <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
