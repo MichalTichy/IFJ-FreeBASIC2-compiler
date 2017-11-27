@@ -24,7 +24,7 @@ void * mmalloc(size_t size)
 
 void mfree(void * ptr)
 {
-	if (ptr != NULL || listSize != 0)
+	if (ptr != NULL && listSize != 0)
 	{
 		if (list.First->data == ptr)
 		{
