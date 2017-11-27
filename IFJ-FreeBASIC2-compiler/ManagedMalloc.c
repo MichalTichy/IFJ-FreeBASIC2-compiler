@@ -61,7 +61,7 @@ void mfreeall()
 		while (list.Act != NULL)
 		{
 			free(list.Act->data);
-			list.Act = list.Act;
+			list.Act = list.Act->rptr;
 			DLDeleteFirst(&list);
 			listSize--;
 		}

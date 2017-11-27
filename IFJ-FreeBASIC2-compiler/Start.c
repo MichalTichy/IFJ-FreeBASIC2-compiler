@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "Basics.h"
-
-#define DEBUG 1
+#include "Start.h"
 
 #if DEBUG 
 #include "Tests.h"

@@ -29,6 +29,8 @@ void RunTests() {
 	AllSymTableTests();
 	printf("--------------\n");
 
+	mfreeall();
+
 	ClearSTDIN();
 	printf("Press ENTER key to Continue\n");
 	getchar();

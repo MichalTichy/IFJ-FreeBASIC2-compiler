@@ -276,18 +276,21 @@ void Identificator()
 		Fail("Expected token EOL : 2");
 		return;
 	}
-	if (Exp_ERR())
+	if (Exp_INTVALUE(5))
 	{
-		Fail("Expected token ERR : 3");
+		Fail("Expected token INTVALUE : 3");
+		return;
+	}
+	if (Exp_ID("a"))
+	{
+		Fail("Expected token ID : 4");
 		return;
 	}
 	if (Exp_ERR())
 	{
-		Fail("Expected token ERR : 4");
+		Fail("Expected token ERR : 5");
 		return;
 	}
-
-
 
 	Pass();
 }
