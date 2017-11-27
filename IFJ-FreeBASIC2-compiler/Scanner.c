@@ -1,8 +1,21 @@
 #include "Scanner.h"
+#include "string.h"
+#include "Start.h"
+
+#if DEBUG
+#define LEXERROR 1
+#endif
+
+#if !DEBUG
+#define LEXERROR 0
+#endif
 
 //Language IFJ17 contain 35 keywords
 #define LenghtOfKeyWords 26
 #define LenghtOfReservedWords 9
+
+long unsigned int *LenghtOfString = 10;
+
 
 /**
 * Reserved words of IFJ17 language
@@ -22,8 +35,6 @@ char *ReservedWords[LenghtOfReservedWords] =
 };
 
 
-// Used for realloc
-long unsigned int LenghtOfString = 10;
 tDLList* TokenList = NULL;
 
 void ResetScanner() {
@@ -72,181 +83,6 @@ tToken* GetNextToken() {
 }
 
 /**
-* Operations with strings
-*/
-
-void AddToString(char c, tToken *Token)
-{
-	if (Token->Lenght % 10 == 0)
-	{
-		LenghtOfString += 10;
-		ReallocString(Token, LenghtOfString);
-	}
-
-	Token->Lenght = Token->Lenght + 1;
-	Token->String[Token->Lenght] = '\0';
-	Token->String[Token->Lenght - 1] = c;
-}
-
-void RemoveString(tToken *Token)
-{
-	if (Token->String != NULL)
-	{
-		free(Token->String);
-		Token->String = NULL;
-	}
-	Token->Lenght = 0;
-}
-
-void ConvertStringToInteger(tToken *Token)
-{
-	Token->IntVal = strtol(Token->String, NULL, 10);
-	RemoveString(Token);
-}
-
-void ConvertStringToDouble(tToken *Token)
-{
-	Token->DoubleVal = strtod(Token->String, NULL);
-	RemoveString(Token);
-}
-
-TokenType CompareWithKeywords(char* string)
-{
-	TokenType Type;
-	Type = T_ID;
-
-	for (int i = 0; i < LenghtOfKeyWords; i++)
-	{
-		if (!strcmp(string, KeyWords[i]))
-		{
-			Type = i + 22;
-			return Type;
-		}
-	}
-
-
-	for (int i = 0; i < LenghtOfReservedWords; i++)
-	{
-		if (!strcmp(string, ReservedWords[i]))
-		{
-			Type = T_ERR;
-			return Type;
-		}
-	}
-
-	return Type;
-}
-
-int CheckEOL(char c)
-{
-	if (c == '\n')
-	{
-		return 1;
-	}
-	else if (c == '\r')
-	{
-		c = (char) getchar();
-
-		if (c != '\n')
-		{
-			ungetc(c, stdin);
-		}
-			return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int CheckIfMathSymbol(char c)
-{
-	if (c == '+' || c == '-' || c == '*' || c == '/' ||
-		c == '\\' || c == '=')
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
-{
-	AddToString('\\', Token);
-	c = (char) getchar();
-
-	if (c >= '0' && c <= '1')
-	{
-		AddToString(c, Token);
-		c = (char) getchar();
-
-		if (c >= '0' && c <= '9')
-		{
-			AddToString(c, Token);
-			c = (char) getchar();
-
-			if (c >= '0' && c <= '9')
-			{
-				AddToString(c, Token);
-				return 0;
-			}
-
-		}
-
-		return 1;
-
-	}
-	else if (c == '2')
-	{
-		AddToString(c, Token);
-		c = (char) getchar();
-
-		if (c >= '0' && c <= '5')
-		{
-			AddToString(c, Token);
-			c = (char) getchar();
-
-			if (c >= '0' && c <= '5')
-			{
-				AddToString(c, Token);
-				return 0;
-			}
-		}
-
-		return 1;
-
-	}
-	else if (c != '\"' && c != 'n' && c != 't' && c != '\\')
-	{
-		return 1;
-	}
-	else
-	{
-		if (c == '\"')
-		{
-			AddToString('\"', Token);
-		}
-		else if (c == 'n')
-		{
-			AddToString('n', Token);
-		}
-		else if (c == '\\')
-		{
-			AddToString('\\', Token);
-		}
-		else if (c == 't')
-		{
-			AddToString('t', Token);
-		}
-		
-		return 0;
-	}
-}
-
-
-/**
 * Function to get next token from source file.
 */
 tToken* LoadToken()
@@ -293,14 +129,14 @@ tToken* LoadToken()
 			else if (c >= '0' && c <= '9')
 			{
 				Token = InitString(Token, LenghtOfString);
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				state = S_Number;
 				break;
 			}
 			else if ((c >= 'a' && c <= 'z') || c == '_')
 			{
 				Token = InitString(Token, LenghtOfString);
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				state = S_ID;
 				break;
 			}
@@ -378,9 +214,7 @@ tToken* LoadToken()
 			}
 			else
 			{
-				RemoveString(Token);
-				Token->Type = T_ERR;
-				return Token;
+				return ScannerError(Token);
 			}
 		}
 
@@ -429,14 +263,14 @@ tToken* LoadToken()
 
 			if (c == '.')
 			{
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				AfterDot = 1;
 				state = S_Double;
 				break;
 			}
 			else if (c >= '0' && c <= '9')
 			{
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				state = S_Number;
 				break;
 			}
@@ -444,22 +278,13 @@ tToken* LoadToken()
 			{
 				AfterExp = 1;
 				state = S_Exp;
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				break;
-			}
-			else if (CheckIfMathSymbol(c) == 1 || isblank(c) ||
-				CheckEOL(c) == 1 || c == EOF)
-			{
-				ungetc(c, stdin);
-				Token->Type = T_INTVALUE;
-				ConvertStringToInteger(Token);
-				return Token;
 			}
 			else
 			{
-				Token->Type = T_ERR;
-				RemoveString(Token);
-				return Token;
+				ungetc(c, stdin);
+				return ConvertStringToInteger(Token);
 			}
 		}
 
@@ -470,7 +295,7 @@ tToken* LoadToken()
 			if (isalpha(c) || isdigit(c) || c == '_')
 			{
 				state = S_ID;
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				break;
 			}
 			else if (CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
@@ -482,9 +307,7 @@ tToken* LoadToken()
 			}
 			else
 			{
-				Token->Type = T_ERR;
-				RemoveString(Token);
-				return Token;
+				return ScannerError(Token);
 			}
 		}
 
@@ -499,17 +322,13 @@ tToken* LoadToken()
 
 					if (CheckEOL(c) == 1)
 					{
-						RemoveString(Token);
-						Token->Type = T_ERR;
-						return Token;
+						return ScannerError(Token);
 					}
 					else if (c == '\\')
 					{
 						if (CheckIfEscapeSeuquenceIsValid(c, Token) == 1)
 						{
-							RemoveString(Token);
-							Token->Type = T_ERR;
-							return Token;
+							return ScannerError(Token);
 						}
 					}
 					else if (c == '"')
@@ -518,7 +337,7 @@ tToken* LoadToken()
 					}
 					else
 					{
-						AddToString(c, Token);
+						AddToString(c, Token, LenghtOfString);
 					}
 					
 				}
@@ -531,9 +350,7 @@ tToken* LoadToken()
 			}
 			else
 			{
-				RemoveString(Token);
-				Token->Type = T_ERR;
-				return Token;
+				return ScannerError(Token);
 			}
 
 		}
@@ -545,30 +362,25 @@ tToken* LoadToken()
 			if (c >= '0' && c <= '9')
 			{
 				AfterDot = 0;
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				break;
 			}
 			else if (c == 'e' && AfterDot == 0)
 			{
 				AfterExp = 1;
 				state = S_Exp;
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				break;
 			}
 			else if ((CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
 				c == '\r' || c == EOF) && AfterDot == 0)
 			{
-				Token->Type = T_DOUBLEVALUE;
-				ConvertStringToDouble(Token);
-				RemoveString(Token);
 				ungetc(c, stdin);
-				return Token;
+				return ConvertStringToDouble(Token);
 			}
 			else
 			{
-				Token->Type = T_ERR;
-				RemoveString(Token);
-				return Token;
+				return ScannerError(Token);
 			}
 		}
 
@@ -579,29 +391,24 @@ tToken* LoadToken()
 			if (c == '+' || c == '-')
 			{
 				state = S_ExpSign;
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				break;
 			}
 			else if (c >= '0' && c <= '9')
 			{
 				AfterExp = 0;
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				break;
 			}
 			else if ((CheckIfMathSymbol(c) ==1 || isblank(c) || c == '\n' ||
 				c == '\r' || c == EOF) && AfterExp == 0)
 			{
-				Token->Type = T_DOUBLEVALUE;
-				ConvertStringToDouble(Token);
-				RemoveString(Token);
 				ungetc(c, stdin);
-				return Token;
+				return ConvertStringToDouble(Token);
 			}
 			else
 			{
-				Token->Type = T_ERR;
-				RemoveString(Token);
-				return Token;
+				return ScannerError(Token);
 			}
 		}
 
@@ -612,23 +419,18 @@ tToken* LoadToken()
 			if (c >= '0' && c <= '9')
 			{
 				AfterExp = 0;
-				AddToString(c, Token);
+				AddToString(c, Token, LenghtOfString);
 				break;
 			}
-			else if (((c >= '*' && c <= '/') || c == '\\' || c == '=' || isblank(c) || c == '\n' ||
+			else if ((CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
 				c == '\r' || c == EOF) && AfterExp == 0)
 			{
-				Token->Type = T_DOUBLEVALUE;
-				ConvertStringToDouble(Token);
-				RemoveString(Token);
 				ungetc(c, stdin);
-				return Token;
+				return ConvertStringToDouble(Token);
 			}
 			else
 			{
-				Token->Type = T_ERR;
-				RemoveString(Token);
-				return Token;
+				return ScannerError(Token);
 			}
 		}
 
@@ -680,18 +482,13 @@ tToken* LoadToken()
 
 						if (c == '\'' || c == EOF)
 						{
-							Token->Type = T_ERR;
-							RemoveString(Token);
-							return Token;
+							return ScannerError(Token);
 						}
 
 					}
-
 					if (c == EOF)
 					{
-						Token->Type = T_ERR;
-						RemoveString(Token);
-						return Token;
+						return ScannerError(Token);
 					}
 				}
 			}
@@ -707,4 +504,153 @@ tToken* LoadToken()
 		}
 	}
 
+}
+
+tToken* ScannerError(tToken *Token)
+{
+	if (LEXERROR == 1)
+	{
+		Token->Type = T_LexERROR;
+		return Token;
+	}
+	else
+	{
+		mfreeall();
+		exit(1);
+	}
+	
+}
+
+TokenType CompareWithKeywords(char* string)
+{
+	TokenType Type;
+	Type = T_ID;
+
+	for (int i = 0; i < LenghtOfKeyWords; i++)
+	{
+		if (!strcmp(string, KeyWords[i]))
+		{
+			Type = i + 21;
+			return Type;
+		}
+	}
+
+
+	for (int i = 0; i < LenghtOfReservedWords; i++)
+	{
+		if (!strcmp(string, ReservedWords[i]))
+		{
+			return Type = T_LexERROR;
+		}
+	}
+
+	return Type;
+}
+
+int CheckEOL(char c)
+{
+	if (c == '\n')
+	{
+		return 1;
+	}
+	else if (c == '\r')
+	{
+		c = (char)getchar();
+
+		if (c != '\n')
+		{
+			ungetc(c, stdin);
+		}
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int CheckIfMathSymbol(char c)
+{
+	if (c == '+' || c == '-' || c == '*' || c == '/' ||
+		c == '\\' || c == '=')
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
+{
+	AddToString('\\', Token, LenghtOfString);
+	c = (char)getchar();
+
+	if (c >= '0' && c <= '1')
+	{
+		AddToString(c, Token, LenghtOfString);
+		c = (char)getchar();
+
+		if (c >= '0' && c <= '9')
+		{
+			AddToString(c, Token, LenghtOfString);
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '9')
+			{
+				AddToString(c, Token, LenghtOfString);
+				return 0;
+			}
+
+		}
+
+		return 1;
+
+	}
+	else if (c == '2')
+	{
+		AddToString(c, Token, LenghtOfString);
+		c = (char)getchar();
+
+		if (c >= '0' && c <= '5')
+		{
+			AddToString(c, Token, LenghtOfString);
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '5')
+			{
+				AddToString(c, Token, LenghtOfString);
+				return 0;
+			}
+		}
+
+		return 1;
+
+	}
+	else if (c != '\"' && c != 'n' && c != 't' && c != '\\')
+	{
+		return 1;
+	}
+	else
+	{
+		if (c == '\"')
+		{
+			AddToString('\"', Token, LenghtOfString);
+		}
+		else if (c == 'n')
+		{
+			AddToString('n', Token, LenghtOfString);
+		}
+		else if (c == '\\')
+		{
+			AddToString('\\', Token, LenghtOfString);
+		}
+		else if (c == 't')
+		{
+			AddToString('t', Token, LenghtOfString);
+		}
+
+		return 0;
+	}
 }

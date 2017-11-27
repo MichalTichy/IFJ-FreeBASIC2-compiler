@@ -15,7 +15,6 @@ typedef struct {
 void InitToken(tToken *Token);
 tToken* InitString(tToken *Token, long unsigned int LenghtOfString);
 void ReallocString(tToken *Token, long unsigned int LenghtOfString);
-void FreeToken(tToken *Token);
 
 #endif
 

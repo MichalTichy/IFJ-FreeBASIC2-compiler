@@ -70,6 +70,8 @@
   <ItemGroup>
     <ClInclude Include="ADT.h" />
     <ClInclude Include="Basics.h" />
+    <ClInclude Include="Start.h" />
+    <ClInclude Include="string.h" />
     <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="errors.h" />
     <ClInclude Include="List.h" />
@@ -96,6 +98,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClCompile>
     <ClCompile Include="Start.c" />
+    <ClCompile Include="string.c" />
     <ClCompile Include="SymTable.c" />
     <ClCompile Include="TestExpectToken.c" />
     <ClCompile Include="Tests.c" />

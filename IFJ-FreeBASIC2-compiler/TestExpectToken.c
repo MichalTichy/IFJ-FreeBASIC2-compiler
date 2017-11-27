@@ -8,7 +8,6 @@ int Exp_ID(char* expectedString)
 	{
 		return -1;
 	}
-	FreeToken(token);
 	return 0;
 }
 
@@ -16,11 +15,11 @@ int Exp_ERR()
 {
 	tToken *token;
 	token = LoadToken();
-	if (token->Type != T_ERR)
+	if (token->Type != T_LexERROR)
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -32,7 +31,7 @@ int Exp_EOF()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -44,7 +43,7 @@ int Exp_EOL()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -56,7 +55,7 @@ int Exp_INTVALUE(int expected)
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -68,7 +67,7 @@ int Exp_DOUBLEVALUE(double expected)
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -80,7 +79,7 @@ int Exp_STRINGVALUE(char* expectedString)
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -92,7 +91,7 @@ int Exp_ADD()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -104,7 +103,7 @@ int Exp_SUB()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -116,7 +115,7 @@ int Exp_MULTIPLY()
 	{
 		return -1;
 	}
-	FreeToken(token);
+
 	return 0;
 }
 
@@ -128,7 +127,7 @@ int Exp_DIVIDE()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -140,7 +139,7 @@ int Exp_INTDIVIDE()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -152,7 +151,7 @@ int Exp_SEMICOLON()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -164,7 +163,7 @@ int Exp_COLON()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -176,7 +175,7 @@ int Exp_LEFTBRACKET()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -188,7 +187,7 @@ int Exp_RIGHTBRACKET()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -200,7 +199,7 @@ int Exp_ASSIGN()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -212,7 +211,7 @@ int Exp_NOTEQUAL()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -224,7 +223,7 @@ int Exp_LESS()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -236,7 +235,7 @@ int Exp_GREATER()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -248,7 +247,7 @@ int Exp_GREATEROREQUAL()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -260,7 +259,7 @@ int Exp_LESSEROREQUAL()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -272,7 +271,7 @@ int Exp_AS()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -284,7 +283,7 @@ int Exp_ASC()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -296,7 +295,7 @@ int Exp_DECLARE()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -308,7 +307,7 @@ int Exp_DIM()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -320,7 +319,7 @@ int Exp_DO()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -332,7 +331,7 @@ int Exp_DOUBLE()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -344,7 +343,7 @@ int Exp_ELSE()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -356,7 +355,7 @@ int Exp_END()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -368,7 +367,7 @@ int Exp_CHR()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -380,7 +379,7 @@ int Exp_FUNCTION()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -392,7 +391,7 @@ int Exp_IF()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -404,7 +403,7 @@ int Exp_INPUT()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -416,7 +415,7 @@ int Exp_INTEGER()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -428,7 +427,7 @@ int Exp_LENGHT()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -440,7 +439,7 @@ int Exp_LOOP()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -452,7 +451,7 @@ int Exp_PRINT()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -464,7 +463,7 @@ int Exp_RETURN()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -476,7 +475,7 @@ int Exp_SCOPE()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -488,7 +487,7 @@ int Exp_STRING()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -500,7 +499,7 @@ int Exp_SUBSTRING()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -512,7 +511,7 @@ int Exp_THEN()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -524,7 +523,7 @@ int Exp_WHILE()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 
@@ -536,7 +535,7 @@ int Exp_NOT()
 	{
 		return -1;
 	}
-	FreeToken(token);
+	
 	return 0;
 }
 

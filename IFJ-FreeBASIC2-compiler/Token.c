@@ -1,4 +1,6 @@
 #include "Token.h"
+#include "ManagedMalloc.h"
+#include "errors.h"
 
 // Basic allocated lenght of string
 //#define LenghtOfString 10
@@ -23,44 +25,13 @@ void InitToken(tToken *Token)
 
 tToken* InitString(tToken *Token, long unsigned int LenghtOfString)
 {
-	if ((Token->String = (char *) malloc(sizeof(char) * LenghtOfString + 1)) == NULL)
+	if ((Token->String = mmalloc(sizeof(char) * LenghtOfString + 1)) == NULL)
 	{
-		Token->String = NULL;
-		Token->Type = T_ERR;
+		mfreeall();
+		ERR_CODE code = INTERNAL_ERR;
+		exit(code);
 	}
 
 	Token->String[0] = '\0';
 	return Token;
-}
-
-/**
-* Function reallocate string in token when malloc fail type of token
-* is set to T_ERR and free string from memory.
-*/
-
-void ReallocString(tToken *Token, long unsigned int LenghtOfString)
-{
-	LenghtOfString += 10;
-
-	if ((Token->String = (char *) realloc(Token->String, sizeof(char) * LenghtOfString)) == NULL)
-	{
-		if (Token->String != NULL)
-		{
-			free(Token->String);
-		}
-		Token->Type = T_ERR;
-	}
-}
-
-/**
-* Function free token from memory.
-*/
-void FreeToken(tToken *Token)
-{
-	if (Token->String != NULL)
-	{
-		free(Token->String);
-	}
-	free(Token);
-	InitToken(Token);
 }
