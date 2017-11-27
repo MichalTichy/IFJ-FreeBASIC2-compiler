@@ -3,7 +3,6 @@
 typedef enum {
 
 	T_ID,
-	T_ERR,
 	T_EOF,
 	T_EOL,
 	T_INTVALUE,
@@ -50,7 +49,7 @@ typedef enum {
 	T_ELSEIF, //bonus
 	T_AND,
 	T_OR,
-	T_NOT
+	T_NOT,
 
 	 //vvvvv ReservedWords Bonus tasks
 	/*
@@ -64,6 +63,8 @@ typedef enum {
 	T_SHARED,
 	T_STATIC,
 	T_TRUE*/
+
+	T_LexERROR,		//return 1 USED WHEN DEBUG
 
 } TokenType;
 

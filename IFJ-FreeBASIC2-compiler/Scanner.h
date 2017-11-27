@@ -22,15 +22,14 @@ typedef enum {
 
 }tState;
 
-void AddToString(char c, tToken *Token);
-void RemoveString(tToken *Token);
-void ConvertStringToInteger(tToken *Token);
-void ConvertStringToDouble(tToken *Token);
 TokenType CompareWithKeywords(char* string);
+tToken* ScannerError(tToken* Token);
 tToken* GetNextToken();
 tToken* LoadToken();
 tToken* ReturnToken();
 void ResetScanner();
 int CheckEOL(char c);
+int CheckIfMathSymbol(char c);
+int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token);
 
 #endif
