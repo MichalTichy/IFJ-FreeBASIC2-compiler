@@ -6,7 +6,6 @@ char* currentTestName;
 
 void ScannerTests()
 {
-	SimpleCheck();
 	IntegerValue();
 	StringValue();
 	Comment();
@@ -27,22 +26,9 @@ void ScannerTests()
 	DobleValue3();
 	DobleValue4();
 	StringError1();
+	StringError2();
 	Idenfificator2();
-}
-
-void SimpleCheck()
-{
-	ResetScanner();
-	currentTestName = "Simple check";
-	LoadFileToSTDIN("../../../TestSamples/ScannerTests/Identificator3.txt");
-
-	tToken *Token;
-	Token = LoadToken();
-
-	while (Token->Type != EOF)
-	{
-		Token = LoadToken();
-	}
+	Idenfificator3();
 }
 
 void ClearUntilEOL()
@@ -315,9 +301,14 @@ void Identificator()
 		Fail("Expected token ID : 4");
 		return;
 	}
+	if (Exp_ID("b"))
+	{
+		Fail("Expected token ID : 5");
+		return;
+	}
 	if (Exp_ERR())
 	{
-		Fail("Expected token ERR : 5");
+		Fail("Expected token ERR : 6");
 		return;
 	}
 
@@ -1409,6 +1400,21 @@ void StringError1()
 	Pass();
 }
 
+void StringError2()
+{
+	ResetScanner();
+	currentTestName = "StringError2";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/StringError2.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
+		return;
+	}
+
+	Pass();
+}
+
 void Idenfificator2()
 {
 	ResetScanner();
@@ -1416,6 +1422,21 @@ void Idenfificator2()
 	LoadFileToSTDIN("../../../TestSamples/ScannerTests/Identificator2.txt");
 
 	if (Exp_ID("_225_"))
+	{
+		Fail("Expected token ID : 1");
+		return;
+	}
+
+	Pass();
+}
+
+void Idenfificator3()
+{
+	ResetScanner();
+	currentTestName = "Identificator3";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/Identificator3.txt");
+
+	if (Exp_ID("wdjjdwo____wdwafj45wfw_44_"))
 	{
 		Fail("Expected token ID : 1");
 		return;

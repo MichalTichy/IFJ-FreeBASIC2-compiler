@@ -67,5 +67,6 @@
     <Text Include="TestSamples\ScannerTests\StringError1.txt" />
     <Text Include="TestSamples\ScannerTests\Identificator2.txt" />
     <Text Include="TestSamples\ScannerTests\Identificator3.txt" />
+    <Text Include="TestSamples\ScannerTests\StringError2.txt" />
   </ItemGroup>
 </Project>

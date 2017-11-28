@@ -340,6 +340,10 @@ tToken* LoadToken()
 					Token->Type = T_STRINGVALUE;
 					return Token;
 				}
+				else
+				{
+					return ScannerError(Token);
+				}
 			}
 			else
 			{
