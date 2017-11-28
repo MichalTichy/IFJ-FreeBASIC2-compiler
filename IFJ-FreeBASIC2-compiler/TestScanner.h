@@ -23,3 +23,4 @@ void DobleValue2();
 void DobleValue3();
 void DobleValue4();
 void StringError1();
+void Idenfificator2();

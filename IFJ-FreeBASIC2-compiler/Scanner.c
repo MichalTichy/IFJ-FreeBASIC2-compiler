@@ -1,5 +1,5 @@
 #include "Scanner.h"
-#include "string.h"
+#include "List.h"
 #include "ManagedMalloc.h"
 
 #if DEBUG
@@ -107,7 +107,7 @@ tToken* LoadToken()
 		{
 		case S_Start:
 		{
-			if (c == ' ')
+			if (isblank(c))
 			{
 				state = S_Start;
 				c = (char) tolower((char) getchar());
@@ -290,7 +290,7 @@ tToken* LoadToken()
 		{
 			c = (char) tolower(getchar());
 
-			if (isalpha(c) || isdigit(c) || c == '_')
+			if (c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_')
 			{
 				state = S_ID;
 				AddToString(c, Token, Token->Lenght);

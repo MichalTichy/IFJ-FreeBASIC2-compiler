@@ -26,8 +26,8 @@ void ScannerTests()
 	DobleValue3();
 	DobleValue4();
 	StringError1();
+	Idenfificator2();
 }
-
 
 void ClearUntilEOL()
 {
@@ -1387,6 +1387,21 @@ void StringError1()
 	if (Exp_ERR())
 	{
 		Fail("Expected token ERR : 1");
+		return;
+	}
+
+	Pass();
+}
+
+void Idenfificator2()
+{
+	ResetScanner();
+	currentTestName = "Identificator2";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/Identificator2.txt");
+
+	if (Exp_ID("_225_"))
+	{
+		Fail("Expected token ID : 1");
 		return;
 	}
 

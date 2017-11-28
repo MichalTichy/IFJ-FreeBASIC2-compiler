@@ -24,7 +24,6 @@
     <ClInclude Include="TestScanner.h" />
     <ClInclude Include="TestStack.h" />
     <ClInclude Include="TestSymTable.h" />
-    <ClInclude Include="string.h" />
     <ClInclude Include="SymTable.h" />
   </ItemGroup>
   <ItemGroup>
@@ -41,7 +40,6 @@
     <ClCompile Include="SymTable.c" />
     <ClCompile Include="TestStack.c" />
     <ClCompile Include="TestSymTable.c" />
-    <ClCompile Include="string.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSamples\iterativeFactorial.txt" />
@@ -67,5 +65,7 @@
     <Text Include="TestSamples\ScannerTests\DoubleValue3.txt" />
     <Text Include="TestSamples\ScannerTests\DoubleValue4.txt" />
     <Text Include="TestSamples\ScannerTests\StringError1.txt" />
+    <Text Include="TestSamples\ScannerTests\Identificator2.txt" />
+    <Text Include="TestSamples\ScannerTests\Identificator3.txt" />
   </ItemGroup>
 </Project>
