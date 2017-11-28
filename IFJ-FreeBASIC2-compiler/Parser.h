@@ -3,6 +3,7 @@
 
 #include "Basics.h"
 #include "Scanner.h"
+#include "ManagedMalloc.h"
 
 typedef enum  {
 	TYPE_Integer,

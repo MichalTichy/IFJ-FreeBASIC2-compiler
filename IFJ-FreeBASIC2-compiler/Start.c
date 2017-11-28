@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "Basics.h"
-
+#include "ManagedMalloc.h"
 #if DEBUG 
 #include "Tests.h"
 #endif
@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 #if !DEBUG
 	printf("HAHA");
 	getchar();
-	return 0;
 #endif
 
+	exitSecurely(OK_ERR);
 }
