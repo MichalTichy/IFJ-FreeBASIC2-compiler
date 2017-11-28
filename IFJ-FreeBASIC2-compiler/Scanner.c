@@ -296,16 +296,11 @@ tToken* LoadToken()
 				AddToString(c, Token, Token->Lenght);
 				break;
 			}
-			else if (CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
-				c == '\r' || c == EOF)
+			else
 			{
 				ungetc(c, stdin);
 				Token->Type = CompareWithKeywords(Token->String);
 				return Token;
-			}
-			else
-			{
-				return ScannerError(Token);
 			}
 		}
 

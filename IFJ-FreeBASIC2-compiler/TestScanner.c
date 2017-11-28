@@ -6,6 +6,7 @@ char* currentTestName;
 
 void ScannerTests()
 {
+	SimpleCheck();
 	IntegerValue();
 	StringValue();
 	Comment();
@@ -27,6 +28,21 @@ void ScannerTests()
 	DobleValue4();
 	StringError1();
 	Idenfificator2();
+}
+
+void SimpleCheck()
+{
+	ResetScanner();
+	currentTestName = "Simple check";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/Identificator3.txt");
+
+	tToken *Token;
+	Token = LoadToken();
+
+	while (Token->Type != EOF)
+	{
+		Token = LoadToken();
+	}
 }
 
 void ClearUntilEOL()
