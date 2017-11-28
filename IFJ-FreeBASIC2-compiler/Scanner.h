@@ -29,7 +29,7 @@ tToken* LoadToken();
 tToken* ReturnToken();
 void ResetScanner();
 int CheckEOL(char c);
-int CheckIfMathSymbol(char c);
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token);
+int CheckIfMathSymbol(char c);
 
 #endif

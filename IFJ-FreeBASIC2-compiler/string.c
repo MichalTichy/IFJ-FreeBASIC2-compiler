@@ -19,9 +19,7 @@ void AddToString(char c, tToken *Token, int LenghtOfString)
 
 void ReallocString(tToken *Token, int LenghtOfString)
 {
-	LenghtOfString += 10;
-
-	if ((Token->String = mrealloc(Token->String, sizeof(char) * (size_t)LenghtOfString)) == NULL)
+	if ((Token->String = mrealloc(Token->String, sizeof(char) * LenghtOfString)) == NULL)
 	{
 		mfreeall();
 		ERR_CODE code = INTERNAL_ERR;

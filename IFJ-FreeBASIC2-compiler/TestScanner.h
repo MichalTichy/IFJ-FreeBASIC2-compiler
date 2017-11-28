@@ -10,3 +10,4 @@ void Comment();
 void Identificator();
 void IterativeFactorial();
 void BasicProgram();
+void ErrorTest_1();

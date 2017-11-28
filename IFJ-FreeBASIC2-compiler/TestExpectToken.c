@@ -1,4 +1,5 @@
 #include "TestExpectToken.h"
+#include "ManagedMalloc.h"
 
 int Exp_ID(char* expectedString)
 {
@@ -19,7 +20,6 @@ int Exp_ERR()
 	{
 		return -1;
 	}
-	
 	return 0;
 }
 
