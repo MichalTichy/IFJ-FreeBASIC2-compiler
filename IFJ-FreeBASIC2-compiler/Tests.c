@@ -22,6 +22,7 @@ void RunTests() {
 	Expression1();
 	printf("--------------\n");
 	ReturnTokenTest();
+	simplifiedIterativeFactorial();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -60,6 +61,16 @@ void ReturnTokenTest()
 	Pass();
 }
 
+void simplifiedIterativeFactorial()
+{
+	ResetScanner();
+	currentTestName = "simplifiedIterativeFactorial";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
+	Next();
+	tNode* result = ProcessProgram();
+
+	Pass();
+}
 void Expression1()
 {
 	ResetScanner();

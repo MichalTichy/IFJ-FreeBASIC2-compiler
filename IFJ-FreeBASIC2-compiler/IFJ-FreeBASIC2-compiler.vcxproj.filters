@@ -53,5 +53,6 @@
     <Text Include="TestSamples\ScannerTests\comment.txt" />
     <Text Include="TestSamples\ScannerTests\id.txt" />
     <Text Include="TestSamples\ParserTests\Expression1.txt" />
+    <Text Include="TestSamples\ParserTests\simplifiedIterativeFactorial.txt" />
   </ItemGroup>
 </Project>
