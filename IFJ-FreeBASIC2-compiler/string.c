@@ -21,7 +21,7 @@ void ReallocString(tToken *Token, int LenghtOfString)
 {
 	LenghtOfString += 10;
 
-	if ((Token->String = mrealloc(Token->String, sizeof(char) * LenghtOfString)) == NULL)
+	if ((Token->String = mrealloc(Token->String, sizeof(char) * (size_t)LenghtOfString)) == NULL)
 	{
 		mfreeall();
 		ERR_CODE code = INTERNAL_ERR;

@@ -1,4 +1,4 @@
-#include "Symtable.h"
+#include "SymTable.h"
 #include "Tests.h"
 
 void TestSTInit()
