@@ -49,74 +49,74 @@ tNode* ProcessString() {
 }
 
 tNode* InitIntegerNode(long int value) {
-	tNode* node = malloc(sizeof(struct Node));
+	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = integerVal;
-	node->tData.intValue = malloc(sizeof(struct NodeInteger));
+	node->tData.intValue = mmalloc(sizeof(struct NodeInteger));
 	node->tData.intValue->value = value;
 	return node;
 }
 
 tNode* InitDoubleNode(double value) {
-	tNode* node = malloc(sizeof(struct Node));
+	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = doubleVal;
-	node->tData.doubleValue= malloc(sizeof(struct NodeDouble));
+	node->tData.doubleValue= mmalloc(sizeof(struct NodeDouble));
 	node->tData.doubleValue->value = value;
 	return node;
 }
 
 tNode* InitStringNode(char* value, int lenght) {
-	tNode* node = malloc(sizeof(struct Node));
+	tNode* node = mmalloc(sizeof(struct Node));
 	node->type =stringVal;
-	node->tData.stringValue = malloc(sizeof(struct NodeString));
+	node->tData.stringValue = mmalloc(sizeof(struct NodeString));
 	node->tData.stringValue->value = value;
 	node->tData.stringValue->lenght = lenght;
 	return node;
 }
 
 tNode* InitVarDeclarationNode() {
-	tNode* node = malloc(sizeof(struct Node));
+	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = varDeclaration;
-	node->tData.variable_declaration = malloc(sizeof(struct NodeVariableDeclaration));
+	node->tData.variable_declaration = mmalloc(sizeof(struct NodeVariableDeclaration));
 	return node;
 }
 
 
 tNode* InitVarAssigmentNode() {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.variable_assigment = malloc(sizeof(struct NodeVariableAssigment));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.variable_assigment = mmalloc(sizeof(struct NodeVariableAssigment));
 	node->type = varAssigment;
 	return node;
 }
 
 tNode* InitScopeNode() {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.scope = malloc(sizeof(struct NodeScope));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.scope = mmalloc(sizeof(struct NodeScope));
 	node->type = scope;
 	return node;
 }
 tNode* InitPrefixExpressionNode() {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.prefixExpression = malloc(sizeof(struct NodePrefixExpression));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.prefixExpression = mmalloc(sizeof(struct NodePrefixExpression));
 	node->type = prefixExpression;
 	return node;
 }
 tNode* InitNegationExpressionNode() {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.negationExpression = malloc(sizeof(struct NodeNegationExpression));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.negationExpression = mmalloc(sizeof(struct NodeNegationExpression));
 	node->type = negationExpression;
 	return node;
 }
 
 tNode* InitStatementNode() {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.statement= malloc(sizeof(struct NodeStatement));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.statement= mmalloc(sizeof(struct NodeStatement));
 	node->type = statement;
 	return node;
 }
 
 tNode* InitIfStatementNode() {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.ifStatement= malloc(sizeof(struct NodeIfStatement));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.ifStatement= mmalloc(sizeof(struct NodeIfStatement));
 	node->type = ifCondition;
 	return node;
 }
@@ -124,22 +124,22 @@ tNode* InitIfStatementNode() {
 
 tNode* InitWhileNode()
 {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.whileBlock = malloc(sizeof(struct NodeWhileBlock));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.whileBlock = mmalloc(sizeof(struct NodeWhileBlock));
 	node->type = whileBlock;
 	return node;
 }
 
 tNode* InitBinaryExpressionNode()
 {
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.binaryExpression = malloc(sizeof(struct NodeBinaryExpression));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.binaryExpression = mmalloc(sizeof(struct NodeBinaryExpression));
 	node->type = binaryExpression;
 	return node;
 }
 
 tNodeElseIfStatement* InitElseIfStatementNode(tNodeIfStatement* parent) {
-	tNodeElseIfStatement* node = malloc(sizeof(struct NodeElseIfStatement));
+	tNodeElseIfStatement* node = mmalloc(sizeof(struct NodeElseIfStatement));
 	node->parent= parent;
 	return node;
 }
@@ -153,8 +153,8 @@ bool IsTokenScalarType()
 tNode* initIdentifierNode()
 {
 
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.identifier= malloc(sizeof(struct NodeIdentifier));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.identifier= mmalloc(sizeof(struct NodeIdentifier));
 	node->type = identifier;
 	return node;
 }
@@ -162,8 +162,8 @@ tNode* initIdentifierNode()
 tNode* initExpressionNode()
 {
 
-	tNode* node = malloc(sizeof(struct Node));
-	node->tData.expression = malloc(sizeof(struct NodeExpression));
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.expression = mmalloc(sizeof(struct NodeExpression));
 	node->type = expression;
 	return node;
 }
@@ -273,10 +273,6 @@ tNode* ProcessPrefixExpression()
 	if (negation!=NULL)
 	{
 		return negation;
-	}
-	else
-	{
-		free(negation);
 	}
 
 	return ProcessHighestPrecedenceExpression();
@@ -462,7 +458,7 @@ tNode* ProcessVarDeclaration() {
 	}
 
 	BackMultipleTimes(takenTokens);
-	free(declaration);
+	mfree(declaration);
 	return NULL;
 }
 
@@ -489,7 +485,7 @@ tNode* ProcessAssigment() {
 	}
 
 	BackMultipleTimes(takenTokens);
-	free(assigment);
+	mfree(assigment);
 	return NULL;
 }
 
@@ -702,20 +698,14 @@ tNode* ProcessCompoundStatement() {
 	tNode* scope = ProcessScope();
 	if (scope!=NULL)
 		return scope;
-	else
-		free(scope);
 
 	tNode* ifStatement = ProcessIfStatement();
 	if (ifStatement !=NULL)
 		return ifStatement;
-	else
-		free(ifStatement);
 
 	tNode* whileStatement = ProcessWhileStatement();
 	if (whileStatement !=NULL)
 		return whileStatement;
-	else
-		free(whileStatement);
 
 
 
@@ -737,14 +727,10 @@ tNode* ProcessQuirkStatement() {
 	tNode* print = ProcessPrintStatement();
 	if (print !=NULL)
 		return print;
-	else
-		free(print);
 
 	tNode* input = ProcessInputStatement();
 	if (input !=NULL)
 		return input;
-	else
-		free(input);
 
 	
 	BackMultipleTimes(takenTokens);

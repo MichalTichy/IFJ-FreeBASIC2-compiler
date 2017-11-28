@@ -95,3 +95,8 @@ void * mrealloc(void * ptr, size_t size)
 	}
 }
 
+void exitSecurely(ERR_CODE errorCode) {
+	mfreeall();
+	exit(errorCode);
+}
+
