@@ -4,6 +4,7 @@
 #include "TestStack.h"
 #include "TestSymTable.h"
 #include "Parser.h"
+#include "ManagedMalloc.h"
 
 void RunTests() {
 	ExampleTests();

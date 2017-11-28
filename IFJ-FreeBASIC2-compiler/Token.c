@@ -3,7 +3,7 @@
 #include "errors.h"
 
 // Basic allocated lenght of string
-//#define LenghtOfString 10
+#define LenghtOfString 10
 
 /**
  * Function allocate and initialise token
@@ -23,7 +23,7 @@ void InitToken(tToken *Token)
 * when malloc fail type of token is set to T_ERR. 
 */
 
-tToken* InitString(tToken *Token, long unsigned int LenghtOfString)
+tToken* InitString(tToken *Token)
 {
 	if ((Token->String = mmalloc(sizeof(char) * LenghtOfString + 1)) == NULL)
 	{

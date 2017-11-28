@@ -1,4 +1,4 @@
-void AddToString(char c, tToken *Token, unsigned long int *LenghtOfString);
-void RemoveString(tToken *Token);
-tToken* ConvertStringToInteger(tToken *Token);
-tToken* ConvertStringToDouble(tToken *Token);
+void AddToString(char c, tToken *Token, int LenghtOfString);
+void ReallocString(tToken *Token, int LenghtOfString);
+void ConvertStringToInteger(tToken *Token);
+void ConvertStringToDouble(tToken *Token);

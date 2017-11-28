@@ -70,7 +70,6 @@
   <ItemGroup>
     <ClInclude Include="ADT.h" />
     <ClInclude Include="Basics.h" />
-    <ClInclude Include="Start.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="errors.h" />
@@ -166,6 +165,14 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <ClCompile>
+      <PreprocessorDefinitions>DEBUG</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions />
+    </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

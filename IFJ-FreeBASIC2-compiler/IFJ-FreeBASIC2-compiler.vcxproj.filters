@@ -26,7 +26,6 @@
     <ClInclude Include="TestStack.h" />
     <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="string.h" />
-    <ClInclude Include="Start.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />

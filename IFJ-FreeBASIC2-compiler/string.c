@@ -4,7 +4,7 @@
 #include "errors.h"
 
 
-void AddToString(char c, tToken *Token, unsigned long int *LenghtOfString)
+void AddToString(char c, tToken *Token, int LenghtOfString)
 {
 	if (Token->Lenght % 10 == 0)
 	{
@@ -17,7 +17,7 @@ void AddToString(char c, tToken *Token, unsigned long int *LenghtOfString)
 	Token->String[Token->Lenght - 1] = c;
 }
 
-void ReallocString(tToken *Token, long unsigned int LenghtOfString)
+void ReallocString(tToken *Token, int LenghtOfString)
 {
 	LenghtOfString += 10;
 
@@ -29,13 +29,13 @@ void ReallocString(tToken *Token, long unsigned int LenghtOfString)
 	}
 }
 
-tToken* ConvertStringToInteger(tToken *Token)
+void ConvertStringToInteger(tToken *Token)
 {
 	Token->IntVal = strtol(Token->String, NULL, 10);
 	Token->Type = T_INTVALUE;
 }
 
-tToken* ConvertStringToDouble(tToken *Token)
+void ConvertStringToDouble(tToken *Token)
 {
 	Token->DoubleVal = strtod(Token->String, NULL);
 	Token->Type = T_DOUBLEVALUE;

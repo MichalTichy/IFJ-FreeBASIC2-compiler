@@ -1,6 +1,6 @@
 #include "Scanner.h"
 #include "string.h"
-#include "Start.h"
+#include "ManagedMalloc.h"
 
 #if DEBUG
 #define LEXERROR 1
@@ -13,9 +13,6 @@
 //Language IFJ17 contain 35 keywords
 #define LenghtOfKeyWords 26
 #define LenghtOfReservedWords 9
-
-long unsigned int *LenghtOfString = 10;
-
 
 /**
 * Reserved words of IFJ17 language
@@ -128,15 +125,15 @@ tToken* LoadToken()
 			}
 			else if (c >= '0' && c <= '9')
 			{
-				Token = InitString(Token, LenghtOfString);
-				AddToString(c, Token, LenghtOfString);
+				Token = InitString(Token);
+				AddToString(c, Token, Token->Lenght);
 				state = S_Number;
 				break;
 			}
 			else if ((c >= 'a' && c <= 'z') || c == '_')
 			{
-				Token = InitString(Token, LenghtOfString);
-				AddToString(c, Token, LenghtOfString);
+				Token = InitString(Token);
+				AddToString(c, Token, Token->Lenght);
 				state = S_ID;
 				break;
 			}
@@ -192,7 +189,7 @@ tToken* LoadToken()
 			}
 			else if (c == '!')
 			{
-				Token = InitString(Token, LenghtOfString);
+				Token = InitString(Token);
 				c = (char) tolower((char) getchar());
 				state = S_ExcString;
 				break;
@@ -263,14 +260,14 @@ tToken* LoadToken()
 
 			if (c == '.')
 			{
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				AfterDot = 1;
 				state = S_Double;
 				break;
 			}
 			else if (c >= '0' && c <= '9')
 			{
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				state = S_Number;
 				break;
 			}
@@ -278,13 +275,14 @@ tToken* LoadToken()
 			{
 				AfterExp = 1;
 				state = S_Exp;
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				break;
 			}
 			else
 			{
 				ungetc(c, stdin);
-				return ConvertStringToInteger(Token);
+				ConvertStringToInteger(Token);
+				return Token;
 			}
 		}
 
@@ -295,7 +293,7 @@ tToken* LoadToken()
 			if (isalpha(c) || isdigit(c) || c == '_')
 			{
 				state = S_ID;
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				break;
 			}
 			else if (CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
@@ -337,7 +335,7 @@ tToken* LoadToken()
 					}
 					else
 					{
-						AddToString(c, Token, LenghtOfString);
+						AddToString(c, Token, Token->Lenght);
 					}
 					
 				}
@@ -362,21 +360,21 @@ tToken* LoadToken()
 			if (c >= '0' && c <= '9')
 			{
 				AfterDot = 0;
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				break;
 			}
 			else if (c == 'e' && AfterDot == 0)
 			{
 				AfterExp = 1;
 				state = S_Exp;
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				break;
 			}
-			else if ((CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
-				c == '\r' || c == EOF) && AfterDot == 0)
+			else if (AfterDot == 0)
 			{
 				ungetc(c, stdin);
-				return ConvertStringToDouble(Token);
+				ConvertStringToDouble(Token);
+				return Token;
 			}
 			else
 			{
@@ -391,20 +389,20 @@ tToken* LoadToken()
 			if (c == '+' || c == '-')
 			{
 				state = S_ExpSign;
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				break;
 			}
 			else if (c >= '0' && c <= '9')
 			{
 				AfterExp = 0;
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				break;
 			}
-			else if ((CheckIfMathSymbol(c) ==1 || isblank(c) || c == '\n' ||
-				c == '\r' || c == EOF) && AfterExp == 0)
+			else if (AfterExp == 0)
 			{
 				ungetc(c, stdin);
-				return ConvertStringToDouble(Token);
+				ConvertStringToDouble(Token);
+				return Token;
 			}
 			else
 			{
@@ -419,14 +417,14 @@ tToken* LoadToken()
 			if (c >= '0' && c <= '9')
 			{
 				AfterExp = 0;
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				break;
 			}
-			else if ((CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
-				c == '\r' || c == EOF) && AfterExp == 0)
+			else if (AfterExp == 0)
 			{
 				ungetc(c, stdin);
-				return ConvertStringToDouble(Token);
+				ConvertStringToDouble(Token);
+				return Token;
 			}
 			else
 			{
@@ -584,22 +582,22 @@ int CheckIfMathSymbol(char c)
 
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 {
-	AddToString('\\', Token, LenghtOfString);
+	AddToString('\\', Token, Token->Lenght);
 	c = (char)getchar();
 
 	if (c >= '0' && c <= '1')
 	{
-		AddToString(c, Token, LenghtOfString);
+		AddToString(c, Token, Token->Lenght);
 		c = (char)getchar();
 
 		if (c >= '0' && c <= '9')
 		{
-			AddToString(c, Token, LenghtOfString);
+			AddToString(c, Token, Token->Lenght);
 			c = (char)getchar();
 
 			if (c >= '0' && c <= '9')
 			{
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				return 0;
 			}
 
@@ -610,17 +608,17 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 	}
 	else if (c == '2')
 	{
-		AddToString(c, Token, LenghtOfString);
+		AddToString(c, Token, Token->Lenght);
 		c = (char)getchar();
 
 		if (c >= '0' && c <= '5')
 		{
-			AddToString(c, Token, LenghtOfString);
+			AddToString(c, Token, Token->Lenght);
 			c = (char)getchar();
 
 			if (c >= '0' && c <= '5')
 			{
-				AddToString(c, Token, LenghtOfString);
+				AddToString(c, Token, Token->Lenght);
 				return 0;
 			}
 		}
@@ -636,19 +634,19 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 	{
 		if (c == '\"')
 		{
-			AddToString('\"', Token, LenghtOfString);
+			AddToString('\"', Token, Token->Lenght);
 		}
 		else if (c == 'n')
 		{
-			AddToString('n', Token, LenghtOfString);
+			AddToString('n', Token, Token->Lenght);
 		}
 		else if (c == '\\')
 		{
-			AddToString('\\', Token, LenghtOfString);
+			AddToString('\\', Token, Token->Lenght);
 		}
 		else if (c == 't')
 		{
-			AddToString('t', Token, LenghtOfString);
+			AddToString('t', Token, Token->Lenght);
 		}
 
 		return 0;

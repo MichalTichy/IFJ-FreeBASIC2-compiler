@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "Basics.h"
-#include "Start.h"
 
 #if DEBUG 
 #include "Tests.h"
@@ -18,6 +17,8 @@ int main(int argc, char* argv[])
 #endif
 
 #if !DEBUG
+	printf("HAHA");
+	getchar();
 	return 0;
 #endif
 
