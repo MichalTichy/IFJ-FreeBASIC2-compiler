@@ -13,6 +13,7 @@ void ScannerTests()
 	Identificator();
 	IterativeFactorial();
 	BasicProgram();
+	ErrorTest_1();
 }
 
 
@@ -798,6 +799,27 @@ void BasicProgram()
 	if (Exp_EOF())
 	{
 		Fail("Expected EOF as token 14");
+		return;
+	}
+
+	Pass();
+}
+
+void ErrorTest_1()
+{
+	ResetScanner();
+	currentTestName = "ErrorTest_1";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/ErrorTest_1.txt");
+
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : 1");
+		return;
+	}
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 2");
 		return;
 	}
 

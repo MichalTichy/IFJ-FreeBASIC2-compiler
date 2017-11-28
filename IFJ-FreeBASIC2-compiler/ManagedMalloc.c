@@ -75,7 +75,7 @@ void * mrealloc(void * ptr, size_t size)
 
 	if (list.First->data == ptr)			// is first
 	{
-		list.Act->data = tmp;				// update ptr
+		list.First->data = tmp;				// update ptr
 		return tmp;
 	}
 	else

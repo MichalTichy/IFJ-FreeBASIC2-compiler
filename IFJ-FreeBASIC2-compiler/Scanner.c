@@ -41,7 +41,7 @@ void ResetScanner() {
 tToken* ReturnToken() {
 	if (TokenList == NULL)
 	{
-		TokenList = malloc(sizeof(tDLList));
+		TokenList = mmalloc(sizeof(tDLList));
 		DLInitList(TokenList);
 	}
 	DLPred(TokenList);
@@ -54,7 +54,7 @@ tToken* ReturnToken() {
 tToken* GetNextToken() {
 	if (TokenList == NULL)
 	{
-		TokenList = malloc(sizeof(tDLList));
+		TokenList = mmalloc(sizeof(tDLList));
 		DLInitList(TokenList);
 	}
 
@@ -91,7 +91,7 @@ tToken* LoadToken()
 	int AfterExp = 0;
 
 	//Malloc Token
-	if ((Token = (tToken *)malloc(sizeof(tToken))) == NULL)
+	if ((Token = (tToken *)mmalloc(sizeof(tToken))) == NULL)
 	{
 		Token = NULL;
 	}
@@ -545,6 +545,19 @@ TokenType CompareWithKeywords(char* string)
 	return Type;
 }
 
+int CheckIfMathSymbol(char c)
+{
+	if (c == '+' || c == '-' || c == '*' || c == '/' ||
+		c == '\\' || c == '=')
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 int CheckEOL(char c)
 {
 	if (c == '\n')
@@ -559,19 +572,6 @@ int CheckEOL(char c)
 		{
 			ungetc(c, stdin);
 		}
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int CheckIfMathSymbol(char c)
-{
-	if (c == '+' || c == '-' || c == '*' || c == '/' ||
-		c == '\\' || c == '=')
-	{
 		return 1;
 	}
 	else
