@@ -21,7 +21,7 @@
 char *KeyWords[LenghtOfKeyWords] = 
 {
 	"as", "asc", "declare", "dim", "do", "double", "else", "end", "chr",
-	"function", "if", "input", "integer", "length", "loop", "print", "return",
+	"function", "if", "input", "integer", "lenght", "loop", "print", "return",
 	"scope", "string", "substr", "then", "while", "elseif", "and", "or", "not"
 };
 
@@ -519,6 +519,21 @@ tToken* ScannerError(tToken *Token)
 	
 }
 
+tToken* SyntaxError(tToken *Token)
+{
+	if (LEXERROR == 1)
+	{
+		Token->Type = T_SyntaxERROR;
+		return Token;
+	}
+	else
+	{
+		mfreeall();
+		exit(2);
+	}
+
+}
+
 TokenType CompareWithKeywords(char* string)
 {
 	TokenType Type;
@@ -538,7 +553,7 @@ TokenType CompareWithKeywords(char* string)
 	{
 		if (!strcmp(string, ReservedWords[i]))
 		{
-			return Type = T_LexERROR;
+			return Type = T_SyntaxERROR;
 		}
 	}
 
@@ -585,17 +600,47 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 	AddToString('\\', Token, Token->Lenght);
 	c = (char)getchar();
 
-	if (c >= '0' && c <= '1')
+	if (c == '0') // 0
 	{
 		AddToString(c, Token, Token->Lenght);
 		c = (char)getchar();
 
-		if (c >= '0' && c <= '9')
+		if (c == '0') // 0 0
 		{
 			AddToString(c, Token, Token->Lenght);
 			c = (char)getchar();
 
-			if (c >= '0' && c <= '9')
+			if (c >= '1' && c <= '9') // 0 0 (1-9)
+			{
+				AddToString(c, Token, Token->Lenght);
+				return 0;
+			}
+		}
+		else if ((c >= '1' && c <= '9')) // 0 (1-9) 
+		{
+			AddToString(c, Token, Token->Lenght);
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '9') // 0 (1-9) (0-9)
+			{
+				AddToString(c, Token, Token->Lenght);
+				return 0;
+			}
+		}
+
+		return 1;
+	}
+	if (c == '1') // 1
+	{
+		AddToString(c, Token, Token->Lenght);
+		c = (char)getchar();
+
+		if (c >= '0' && c <= '9') // 1 (0-9)
+		{
+			AddToString(c, Token, Token->Lenght);
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '9') // 1 (0-9) (0-9)
 			{
 				AddToString(c, Token, Token->Lenght);
 				return 0;
@@ -604,19 +649,29 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 		}
 
 		return 1;
-
 	}
-	else if (c == '2')
+	else if (c == '2') // 2
 	{
 		AddToString(c, Token, Token->Lenght);
 		c = (char)getchar();
 
-		if (c >= '0' && c <= '5')
+		if (c >= '0' && c <= '4') // 2 (0-4)
 		{
 			AddToString(c, Token, Token->Lenght);
 			c = (char)getchar();
 
-			if (c >= '0' && c <= '5')
+			if (c >= '0' && c <= '9') // 2 (0-4) (0-9) 
+			{
+				AddToString(c, Token, Token->Lenght);
+				return 0;
+			}
+		}
+		else if (c == '5') // 2 5
+		{
+			AddToString(c, Token, Token->Lenght);
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '5') // 2 5 (0-5)
 			{
 				AddToString(c, Token, Token->Lenght);
 				return 0;
@@ -624,12 +679,13 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 		}
 
 		return 1;
-
 	}
+
 	else if (c != '\"' && c != 'n' && c != 't' && c != '\\')
 	{
 		return 1;
 	}
+
 	else
 	{
 		if (c == '\"')

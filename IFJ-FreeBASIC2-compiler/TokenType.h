@@ -65,6 +65,7 @@ typedef enum {
 	T_TRUE*/
 
 	T_LexERROR,		//return 1 USED WHEN DEBUG
+	T_SyntaxERROR,	//return 2 USED WHEN DEBUG
 
 } TokenType;
 

@@ -7,13 +7,25 @@ char* currentTestName;
 void ScannerTests()
 {
 	IntegerValue();
-	DoubleValue();
 	StringValue();
 	Comment();
 	Identificator();
 	IterativeFactorial();
 	BasicProgram();
 	ErrorTest_1();
+	ErrorComment();
+	ErrorComment2();
+	KeyWordsTest();
+	ReservedWordsTest();
+	DobleValueError1();
+	DobleValueError2();
+	DobleValueError3();
+	DobleValueError4();
+	DoubleValue();
+	DobleValue2();
+	DobleValue3();
+	DobleValue4();
+	StringError1();
 }
 
 
@@ -820,6 +832,561 @@ void ErrorTest_1()
 	if (Exp_ERR())
 	{
 		Fail("Expected token ERR : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void ErrorComment()
+{
+	ResetScanner();
+	currentTestName = "ErrorComment";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/ErrorComment.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void ErrorComment2()
+{
+	ResetScanner();
+	currentTestName = "ErrorComment2";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/ErrorComment2.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void KeyWordsTest()
+{
+	ResetScanner();
+	currentTestName = "Keywords";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/Keywords.txt");
+	
+	if (Exp_AS())
+	{
+		Fail("Expected token AS : 1");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_ASC())
+	{
+		Fail("Expected token ASC : 2");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_DECLARE())
+	{
+		Fail("Expected token DECLARE : 3");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_DIM())
+	{
+		Fail("Expected token DIM : 4");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_DO())
+	{
+		Fail("Expected token DO : 5");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_DOUBLE())
+	{
+		Fail("Expected token DOUBLE : 6");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_ELSE())
+	{
+		Fail("Expected token ELSE : 7");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_END())
+	{
+		Fail("Expected token END : 8");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_CHR())
+	{
+		Fail("Expected token CHR : 9");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_FUNCTION())
+	{
+		Fail("Expected token FUNCTION : 10");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_IF())
+	{
+		Fail("Expected token IF : 11");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_INPUT())
+	{
+		Fail("Expected token INPUT : 12");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_INTEGER())
+	{
+		Fail("Expected token INTEGER : 13");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_LENGHT())
+	{
+		Fail("Expected token LENGHT : 14");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_LOOP())
+	{
+		Fail("Expected token LOOP : 15");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_PRINT())
+	{
+		Fail("Expected token PRINT : 16");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_RETURN())
+	{
+		Fail("Expected token RETUNR : 17");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SCOPE())
+	{
+		Fail("Expected token SCOPE : 18");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_STRING())
+	{
+		Fail("Expected token STRING : 19");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SUBSTRING())
+	{
+		Fail("Expected token SUBSTRING : 20");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_THEN())
+	{
+		Fail("Expected token THEN : 21");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_WHILE())
+	{
+		Fail("Expected token WHILE : 22");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_ELSEIF())
+	{
+		Fail("Expected token ELSEIF : 23");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_AND())
+	{
+		Fail("Expected token AND : 24");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_OR())
+	{
+		Fail("Expected token OR : 25");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_NOT())
+	{
+		Fail("Expected token NOT : 26");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : x");
+		return;
+	}
+
+	Pass();
+}
+
+void ReservedWordsTest()
+{
+	ResetScanner();
+	currentTestName = "ReservedWords";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/ReservedWords.txt");
+
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 1");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 2");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 3");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 4");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 5");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 6");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 7");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 8");
+		return;
+	}
+	if (Exp_EOL())
+	{
+		Fail("Expected token EOL : x");
+		return;
+	}
+	if (Exp_SyntaxERR())
+	{
+		Fail("Expected token SyERR : 9");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : x");
+		return;
+	}
+
+	Pass();
+}
+
+void DobleValueError1()
+{
+	ResetScanner();
+	currentTestName = "DoubleValueError1";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/DoubleValueError1.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void DobleValueError2()
+{
+	ResetScanner();
+	currentTestName = "DoubleValueError2";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/DoubleValueError2.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
+		return;
+	}
+
+	Pass();
+}
+
+void DobleValueError3()
+{
+	ResetScanner();
+	currentTestName = "DoubleValueError3";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/DoubleValueError3.txt");
+
+	if (Exp_DOUBLEVALUE(3000000))
+	{
+		Fail("Expected token DOUBLEVALUE : 1");
+		return;
+	}
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void DobleValueError4()
+{
+	ResetScanner();
+	currentTestName = "DoubleValueError4";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/DoubleValueError4.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
+		return;
+	}
+
+	Pass();
+}
+
+void DobleValue2()
+{
+	ResetScanner();
+	currentTestName = "DoubleValue2";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/DoubleValue2.txt");
+
+	if (Exp_DOUBLEVALUE(35000))
+	{
+		Fail("Expected token DOUBLEVALUE : 1");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void DobleValue3()
+{
+	ResetScanner();
+	currentTestName = "DoubleValue3";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/DoubleValue3.txt");
+
+	if (Exp_DOUBLEVALUE(36000))
+	{
+		Fail("Expected token DOUBLEVALUE : 1");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void DobleValue4()
+{
+	ResetScanner();
+	currentTestName = "DoubleValue4";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/DoubleValue4.txt");
+
+	if (Exp_DOUBLEVALUE(0.36))
+	{
+		Fail("Expected token DOUBLEVALUE : 1");
+		return;
+	}
+	if (Exp_EOF())
+	{
+		Fail("Expected token EOF : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void StringError1()
+{
+	ResetScanner();
+	currentTestName = "StringError1";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/StringError1.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
 		return;
 	}
 
