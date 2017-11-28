@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "Basics.h"
 #include "ManagedMalloc.h"
+#include "Parser.h"
+#include "generator.h"
 #if DEBUG 
 #include "Tests.h"
 #endif
@@ -20,6 +22,6 @@ int main(int argc, char* argv[])
 	printf("HAHA");
 	getchar();
 #endif
-
+	Generate(Parse());
 	exitSecurely(OK_ERR);
 }

@@ -1,13 +1,9 @@
+//#include "Parser.h"
+
 #ifndef GENERATOR
 #define GENERATOR
 
-typedef enum
-{
-	placeholder,
-	placeholder2
-}instructionType;
-
-
+void Generate(struct Node* root);
 
 #endif
 
