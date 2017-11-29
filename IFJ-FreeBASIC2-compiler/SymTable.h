@@ -3,6 +3,7 @@
 #define SYMTABLE
 
 #include "Parser.h"
+#include "Basics.h"
 
 typedef struct tSTItem
 {

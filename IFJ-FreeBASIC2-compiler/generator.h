@@ -2,7 +2,7 @@
 #ifndef GENERATOR
 #define GENERATOR
 
-void Generate(struct Node* root);
+void Generate(tProgram* program);
 
 #endif
 
