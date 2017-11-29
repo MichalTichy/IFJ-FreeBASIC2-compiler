@@ -7,12 +7,6 @@
 #include "SymTable.h"
 
 typedef enum  {
-	TYPE_Integer,
-	TYPE_Double,
-	TYPE_String
-} ScalarType;
-
-typedef enum  {
 	integerVal,
 	doubleVal,
 	stringVal,

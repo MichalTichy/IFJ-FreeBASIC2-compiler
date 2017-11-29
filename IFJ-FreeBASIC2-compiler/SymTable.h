@@ -4,7 +4,6 @@
 
 #include "Parser.h"
 
-
 typedef struct tSTItem
 {
 	ScalarType type;

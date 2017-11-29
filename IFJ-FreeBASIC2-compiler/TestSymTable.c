@@ -1,5 +1,6 @@
 #include "SymTable.h"
 #include "Tests.h"
+#include "Parser.h"
 
 void TestSTInit()
 {
@@ -45,7 +46,7 @@ void TestSTInsert()
 	tSTItemPtr symtable;
 	STInit(&symtable);
 
-	STInsert(&symtable, "key",);
+	STInsert(&symtable, "key", TYPE_String);
 
 	if (symtable != NULL)
 	{
@@ -103,12 +104,12 @@ void TestSTInsertMultiple()
 	tSTItemPtr symtable;
 	STInit(&symtable);
 
-	STInsert(&symtable, "Eva",);
-	STInsert(&symtable, "Eda",);
-	STInsert(&symtable, "Jana",);
-	STInsert(&symtable, "Eduard",);
-	STInsert(&symtable, "Honza",);
-	STInsert(&symtable, "Zuzka",);
+	STInsert(&symtable, "Eva",TYPE_String);
+	STInsert(&symtable, "Eda", TYPE_String);
+	STInsert(&symtable, "Jana", TYPE_String);
+	STInsert(&symtable, "Eduard", TYPE_String);
+	STInsert(&symtable, "Honza", TYPE_String);
+	STInsert(&symtable, "Zuzka", TYPE_String);
 
 	if (strcmp(symtable->lptr->rptr->data, "Eduard") == 0)
 	{
@@ -187,12 +188,12 @@ void TestSTSearch()
 	tSTItemPtr symtable;
 	STInit(&symtable);
 
-	STInsert(&symtable, "Eva",);
-	STInsert(&symtable, "Eda",);
-	STInsert(&symtable, "Jana",);
-	STInsert(&symtable, "Eduard",);
-	STInsert(&symtable, "Honza",);
-	STInsert(&symtable, "Zuzka",);
+	STInsert(&symtable, "Eva", TYPE_String);
+	STInsert(&symtable, "Eda", TYPE_String);
+	STInsert(&symtable, "Jana", TYPE_String);
+	STInsert(&symtable, "Eduard", TYPE_String);
+	STInsert(&symtable, "Honza", TYPE_String);
+	STInsert(&symtable, "Zuzka", TYPE_String);
 
 	tSTItemPtr itemptr = STSearch(&symtable, "Honza");
 
@@ -264,15 +265,15 @@ void TestScopeSearch()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsert(&scope, "rain",);
-	STScopeInsert(&scope, "pain",);
+	STScopeInsert(&scope, "rain", TYPE_String);
+	STScopeInsert(&scope, "pain", TYPE_String);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsert(&scope3, "believer",);
+	STScopeInsert(&scope3, "believer", TYPE_String);
 
 	tSTItemPtr item = STScopeSearch(&scope3, "pain");
 
@@ -306,15 +307,15 @@ void TestSTDeleteTopScope()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsert(&scope, "hell",);
-	STScopeInsert(&scope, "pain",);
+	STScopeInsert(&scope, "hell", TYPE_String);
+	STScopeInsert(&scope, "pain", TYPE_String);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsert(&scope3, "no sleep",);
+	STScopeInsert(&scope3, "no sleep", TYPE_String);
 
 	STDeleteTopScope(&scope3);
 
