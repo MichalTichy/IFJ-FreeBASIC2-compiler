@@ -33,7 +33,7 @@ tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
 	return itemPtr;
 }
 
-void STInsert(tSTItemPtr* tableptr, char* token)
+void STInsert(tSTItemPtr* tableptr, char* token, ScalarType type)
 {	
 	if (tableptr == NULL)
 	{
@@ -58,14 +58,13 @@ void STInsert(tSTItemPtr* tableptr, char* token)
 	*itemPtr = mmalloc(sizeof(struct tSTItem));
 	if ((*itemPtr) == NULL)
 	{
-		mfreeall();
-		ERR_CODE code = INTERNAL_ERR;
-		exit(code);
+		exitSecurely(INTERNAL_ERR);
 	}
 	else
 	{
 		(*itemPtr)->len = (unsigned)strlen(token);
 		(*itemPtr)->data = token;
+		(*itemPtr)->type = type;
 		(*itemPtr)->lptr = NULL;
 		(*itemPtr)->rptr = NULL;
 	}
@@ -134,9 +133,9 @@ tSTItemPtr STScopeSearch(tSTScopePtr* scope, char* key)
 	return item;
 }
 
-void STScopeInsert(tSTScopePtr* scope, char* key)
+void STScopeInsert(tSTScopePtr* scope, char* key, ScalarType type)
 {
-	STInsert(&((*scope)->symtable), key);
+	STInsert(&((*scope)->symtable), key,type);
 }
 
 void STDeleteTopScope(tSTScopePtr* scope)

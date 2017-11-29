@@ -50,9 +50,11 @@ typedef struct NodeString
 typedef struct NodeIdentifier
 {
 	char* id;
+	ScalarType type;
 } tNodeIdentifier;
 
 typedef struct NodeBinaryExpression{
+	ScalarType resultType;
 	struct Node* left;
 	struct Node* right;
 	TokenType OP;
@@ -62,6 +64,7 @@ typedef struct NodeBinaryExpression{
 
 typedef struct NodePrefixExpression
 {
+	ScalarType resultType;
 	struct Node* expression;
 	TokenType OP;
 
@@ -69,6 +72,7 @@ typedef struct NodePrefixExpression
 
 typedef struct NodeNegationExpression
 {
+	ScalarType resultType;
 	struct Node* expression;
 
 } tNodeNegationExpression;
@@ -194,7 +198,9 @@ void Back();
 
 void BackMultipleTimes(int steps);
 tProgram* InitProgramNode();
-tNode * ProcessNumber();
+
+ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation);
+
 tNode* ProcessDouble(struct tSTScope* parentScope);
 
 tNode * ProcessInteger(struct tSTScope* parentScope);
@@ -210,7 +216,7 @@ tNode * InitVarDeclarationNode();
 tNode * ProcessVarDeclaration(struct tSTScope* parentScope);
 tNode * ProcessExpression(struct tSTScope* parentScope);
 tNode* ProcessRelationalExpression(struct tSTScope* parentScope);
-
+ScalarType ExtractType(tNode* node);
 ScalarType TokenTypeToScalarType(TokenType tokenType);
 tNode* ProcessStatement(struct tSTScope* parentScope);
 tNode* ProcessProgram(struct tSTScope* parentScope);

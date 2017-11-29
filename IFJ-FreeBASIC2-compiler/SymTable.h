@@ -7,7 +7,7 @@
 
 typedef struct tSTItem
 {
-	TokenType type;
+	ScalarType type;
 	char* data;
 	unsigned int len;
 	struct tSTItem* lptr;
@@ -25,7 +25,7 @@ void STInit(tSTItemPtr* tableptr);
 
 tSTItemPtr STSearch (tSTItemPtr* tableptr, char* key);
 
-void STInsert (tSTItemPtr* tableptr, char* key);
+void STInsert (tSTItemPtr* tableptr, char* key, ScalarType type);
 
 void STFree (tSTItemPtr* tableptr);
 
@@ -33,7 +33,7 @@ void STMakeScope(tSTScopePtr* scope, tSTScopePtr parentScope); // make scope wit
 
 tSTItemPtr STScopeSearch(tSTScopePtr* scope, char* key); // Search in all scopes
 
-void STScopeInsert(tSTScopePtr* scope, char* key); // insert into top scope
+void STScopeInsert(tSTScopePtr* scope, char* key, ScalarType type); // insert into top scope
 
 void STDeleteTopScope(tSTScopePtr* scope); // Delete top scope
 

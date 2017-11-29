@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include "TestExpectToken.h"
 tToken* token;
 
 tProgram* Parse() {
@@ -193,6 +194,7 @@ tNode* ProcessIdentifier(struct tSTScope* parentScope)
 		{
 			exitSecurely(SEMANT_ERR_DEF);
 		}
+		node->tData.identifier->type = symPableItem->type;
 		return node;
 	}
 	return NULL;
@@ -258,14 +260,30 @@ tNode* ProcessNegationExpression(struct tSTScope* parentScope)
 		takenTokens++;
 		tNode* relationalExpression = ProcessRelationalExpression(parentScope);
 		if (relationalExpression)
-		{
+		{			
 			tNode* exp = InitNegationExpressionNode();
 			exp->tData.negationExpression->expression = relationalExpression;
+			exp->tData.negationExpression->resultType = GetResultType(ExtractType(relationalExpression),NULL,T_NOT);
 			return exp;
 		}
 	}
 	BackMultipleTimes(takenTokens);
 	return NULL;
+}
+
+ScalarType ExtractType(tNode* node)
+{
+	switch (node->type) {
+		case integerVal: return TYPE_Integer;
+		case doubleVal: return TYPE_Double;
+		case stringVal: return TYPE_String;
+		case expression: return node->tData.expression->ResultType;
+		case binaryExpression: return node->tData.binaryExpression->resultType;
+		case prefixExpression: return node->tData.prefixExpression->resultType;
+		case negationExpression: return node->tData.negationExpression->resultType;
+		case identifier: return node->tData.identifier->type;
+		default:return NULL;
+	}
 }
 tNode* ProcessPrefixExpression(struct tSTScope* parentScope)
 {
@@ -278,6 +296,9 @@ tNode* ProcessPrefixExpression(struct tSTScope* parentScope)
 		if (prefExpression!=NULL)
 		{
 			tNode* exp = InitPrefixExpressionNode();
+			ScalarType expType = ExtractType(exp);
+			ScalarType prefExpType = ExtractType(prefExpression);
+			exp->type=GetResultType(expType, prefExpType,token->Type);
 			exp->tData.prefixExpression->OP = token->Type;
 			exp->tData.prefixExpression->expression = prefExpression;
 			return exp;
@@ -313,6 +334,7 @@ tNode* ProcessMultiplicationExpression(struct tSTScope* parentScope)
 		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessPrefixExpression(parentScope);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
 		exp = newExp;
 	}
 
@@ -336,6 +358,7 @@ tNode* ProcessIntDivisionExpression(struct tSTScope* parentScope)
 		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessMultiplicationExpression(parentScope);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
 		exp = newExp;
 	}
 
@@ -357,6 +380,7 @@ tNode* ProcessAddExpression(struct tSTScope* parentScope)
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessIntDivisionExpression(parentScope);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
 		exp = newExp;
 	}
 
@@ -378,6 +402,7 @@ tNode* ProcessRelationalExpression(struct tSTScope* parentScope)
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessAddExpression(parentScope);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
 		exp = newExp;
 	}
 	if (!matched)
@@ -398,6 +423,7 @@ tNode* ProcessLogicalAndExpression(struct tSTScope* parentScope)
 		newExp->tData.binaryExpression->OP = T_AND;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessRelationalExpression(parentScope);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
 		exp = newExp;
 	}
 
@@ -419,6 +445,7 @@ tNode* ProcessLogicalOrExpression(struct tSTScope* parentScope)
 		newExp->tData.binaryExpression->OP = T_OR;
 		Next();
 		newExp->tData.binaryExpression->right= ProcessLogicalAndExpression(parentScope);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
 		exp = newExp;
 	}
 	if (!matched)
@@ -431,6 +458,7 @@ tNode*  ProcessExpression(struct tSTScope* parentScope)
 	tNode* exp = ProcessLogicalAndExpression(parentScope);
 	tNode* wrap = initExpressionNode();
 	wrap->tData.expression->tExpressionData.expression=exp;
+	wrap->tData.expression->ResultType = ExtractType(exp);
 	return wrap;
 }
 
@@ -460,7 +488,7 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 					struct tSTItem* symPableItem = STScopeSearch(&parentScope, declaration->tData.variable_declaration->id);
 					if (symPableItem != NULL)
 						exitSecurely(SEMANT_ERR_DEF);
-					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id);
+					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
 
 					//todo check if item isnt allready defined
 					if (token->Type==T_ASSIGN)
@@ -470,6 +498,8 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 						tNode* expression = ProcessExpression(parentScope);
 						if (expression!=NULL)
 						{
+
+							declaration->tData.variable_declaration->varType = GetResultType(declaration->tData.variable_declaration->varType, ExtractType(expression), T_ASSIGN);
 							declaration->tData.variable_declaration->Expression = expression;
 							return declaration;
 						}
@@ -488,6 +518,116 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 	BackMultipleTimes(takenTokens);
 	mfree(declaration);
 	return NULL;
+}
+
+ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation)
+{
+	switch (type1) {
+		case TYPE_Integer:
+			if (type2==TYPE_String)
+				exitSecurely(SEMANT_ERR_TYPE);
+			if (type2 == TYPE_Double)
+				switch (operation) {
+				case T_ADD:
+				case T_SUB:
+				case T_MULTIPLY:
+				case T_DIVIDE:
+					return TYPE_Double;
+				case T_INTDIVIDE:
+				case T_NOTEQUAL:
+				case T_LESS:
+				case T_GREATER:
+				case T_GREATEROREQUAL:
+				case T_LESSEROREQUAL:
+				case T_AND:
+				case T_OR:
+					return TYPE_Integer;
+				case T_ASSIGN:return type1;
+				default:;
+				}
+			if (type2 == TYPE_Integer)
+			{
+				if (operation == T_DIVIDE)
+					return TYPE_Double;
+				else
+					return TYPE_Integer;
+			}
+			if (type2==NULL && operation==T_NOT)
+			{
+				return TYPE_Integer;
+			}
+			break;
+	case TYPE_Double:
+		if (type2 == TYPE_String)
+			exitSecurely(SEMANT_ERR_TYPE);
+		if (type2==TYPE_Integer)
+		{
+			switch (operation) {
+			case T_ADD:
+			case T_SUB:
+			case T_MULTIPLY:
+			case T_DIVIDE:
+				return TYPE_Double;
+			case T_INTDIVIDE:
+			case T_NOTEQUAL:
+			case T_LESS:
+			case T_GREATER:
+			case T_GREATEROREQUAL:
+			case T_LESSEROREQUAL:
+			case T_AND:
+			case T_OR:
+			case T_ASSIGN:return type1;
+			default:;
+			}			
+		}
+		if (type2 == TYPE_Double)
+		{
+			switch (operation) {
+			case T_ADD:
+			case T_SUB:
+			case T_MULTIPLY:
+			case T_DIVIDE:
+				return TYPE_Double;
+			case T_INTDIVIDE:
+			case T_NOTEQUAL:
+			case T_LESS:
+			case T_GREATER:
+			case T_GREATEROREQUAL:
+			case T_LESSEROREQUAL:
+			case T_AND:
+			case T_OR:
+			case T_NOT:
+				return TYPE_Integer;
+			case T_ASSIGN:return type1;
+			default:;
+			}
+		}
+
+		if (type2 == NULL && operation == T_NOT)
+		{
+			return TYPE_Integer;
+		}
+		break;
+		case TYPE_String:
+			if (type2 == TYPE_Double || type2==TYPE_Integer)
+				exitSecurely(SEMANT_ERR_TYPE);
+		if (type2 == TYPE_String)
+		{
+			if (operation == T_ADD || operation==T_ASSIGN)
+				return TYPE_String;
+			else
+				exitSecurely(SEMANT_ERR_TYPE);
+		}
+		if (type2 == NULL && operation == T_NOT)
+		{
+			return TYPE_Integer;
+		}
+		break;
+	default: ;
+		//TODO
+	}
+	
+	exitSecurely(INTERNAL_ERR);
 }
 
 tNode* ProcessAssigment(struct tSTScope* parentScope) {
@@ -509,6 +649,7 @@ tNode* ProcessAssigment(struct tSTScope* parentScope) {
 			tNode* expression = ProcessExpression(parentScope);
 			if (expression!=NULL)
 			{
+				assigment->tData.variable_assigment->varType = GetResultType(symPableItem->type, expression->type,T_ASSIGN);
 				assigment->tData.variable_assigment->Expression = expression;
 				return assigment;
 			}

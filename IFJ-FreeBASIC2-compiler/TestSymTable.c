@@ -45,7 +45,7 @@ void TestSTInsert()
 	tSTItemPtr symtable;
 	STInit(&symtable);
 
-	STInsert(&symtable, "key");
+	STInsert(&symtable, "key",);
 
 	if (symtable != NULL)
 	{
@@ -103,12 +103,12 @@ void TestSTInsertMultiple()
 	tSTItemPtr symtable;
 	STInit(&symtable);
 
-	STInsert(&symtable, "Eva");
-	STInsert(&symtable, "Eda");
-	STInsert(&symtable, "Jana");
-	STInsert(&symtable, "Eduard");
-	STInsert(&symtable, "Honza");
-	STInsert(&symtable, "Zuzka");
+	STInsert(&symtable, "Eva",);
+	STInsert(&symtable, "Eda",);
+	STInsert(&symtable, "Jana",);
+	STInsert(&symtable, "Eduard",);
+	STInsert(&symtable, "Honza",);
+	STInsert(&symtable, "Zuzka",);
 
 	if (strcmp(symtable->lptr->rptr->data, "Eduard") == 0)
 	{
@@ -187,12 +187,12 @@ void TestSTSearch()
 	tSTItemPtr symtable;
 	STInit(&symtable);
 
-	STInsert(&symtable, "Eva");
-	STInsert(&symtable, "Eda");
-	STInsert(&symtable, "Jana");
-	STInsert(&symtable, "Eduard");
-	STInsert(&symtable, "Honza");
-	STInsert(&symtable, "Zuzka");
+	STInsert(&symtable, "Eva",);
+	STInsert(&symtable, "Eda",);
+	STInsert(&symtable, "Jana",);
+	STInsert(&symtable, "Eduard",);
+	STInsert(&symtable, "Honza",);
+	STInsert(&symtable, "Zuzka",);
 
 	tSTItemPtr itemptr = STSearch(&symtable, "Honza");
 
@@ -264,15 +264,15 @@ void TestScopeSearch()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsert(&scope, "rain");
-	STScopeInsert(&scope, "pain");
+	STScopeInsert(&scope, "rain",);
+	STScopeInsert(&scope, "pain",);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsert(&scope3, "believer");
+	STScopeInsert(&scope3, "believer",);
 
 	tSTItemPtr item = STScopeSearch(&scope3, "pain");
 
@@ -306,15 +306,15 @@ void TestSTDeleteTopScope()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsert(&scope, "hell");
-	STScopeInsert(&scope, "pain");
+	STScopeInsert(&scope, "hell",);
+	STScopeInsert(&scope, "pain",);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsert(&scope3, "no sleep");
+	STScopeInsert(&scope3, "no sleep",);
 
 	STDeleteTopScope(&scope3);
 
