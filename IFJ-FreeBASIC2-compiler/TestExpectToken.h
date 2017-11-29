@@ -4,6 +4,7 @@
 
 int Exp_ID(char* expectedString);
 int Exp_ERR();
+int Exp_SyntaxERR();
 int Exp_EOF();
 int Exp_EOL();
 int Exp_INTVALUE(int expected);
@@ -48,7 +49,9 @@ int Exp_SUBSTRING();
 int Exp_THEN();
 int Exp_WHILE();
 int Exp_NOT();
-
+int Exp_ELSEIF();
+int Exp_AND();
+int Exp_OR();
 
 
 

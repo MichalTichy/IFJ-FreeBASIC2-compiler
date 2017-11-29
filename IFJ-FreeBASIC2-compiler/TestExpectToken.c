@@ -23,6 +23,17 @@ int Exp_ERR()
 	return 0;
 }
 
+int Exp_SyntaxERR()
+{
+	tToken *token;
+	token = LoadToken();
+	if (token->Type != T_SyntaxERROR)
+	{
+		return -1;
+	}
+	return 0;
+}
+
 int Exp_EOF()
 {
 	tToken *token;
@@ -539,3 +550,38 @@ int Exp_NOT()
 	return 0;
 }
 
+int Exp_ELSEIF()
+{
+	tToken *token;
+	token = LoadToken();
+	if (token->Type != T_ELSEIF)
+	{
+		return -1;
+	}
+
+	return 0;
+}
+
+int Exp_AND()
+{
+	tToken *token;
+	token = LoadToken();
+	if (token->Type != T_AND)
+	{
+		return -1;
+	}
+
+	return 0;
+}
+
+int Exp_OR()
+{
+	tToken *token;
+	token = LoadToken();
+	if (token->Type != T_OR)
+	{
+		return -1;
+	}
+
+	return 0;
+}

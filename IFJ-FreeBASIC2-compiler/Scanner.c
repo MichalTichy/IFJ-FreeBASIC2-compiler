@@ -1,5 +1,5 @@
 #include "Scanner.h"
-#include "string.h"
+#include "List.h"
 #include "ManagedMalloc.h"
 
 #if DEBUG
@@ -21,7 +21,7 @@
 char *KeyWords[LenghtOfKeyWords] = 
 {
 	"as", "asc", "declare", "dim", "do", "double", "else", "end", "chr",
-	"function", "if", "input", "integer", "length", "loop", "print", "return",
+	"function", "if", "input", "integer", "lenght", "loop", "print", "return",
 	"scope", "string", "substr", "then", "while", "elseif", "and", "or", "not"
 };
 
@@ -85,10 +85,10 @@ tToken* GetNextToken() {
 tToken* LoadToken()
 {
 	tToken *Token;
-	tState state = S_Start;
-	char c;
-	int AfterDot = 0;
-	int AfterExp = 0;
+	tState state = S_Start;	//States of finite-state automaton
+	char c;					//Input char from stdion
+	int AfterDot = 0;		//Help variable when state is after dot
+	int AfterExp = 0;		//Help variable when state is after exponent
 
 	//Malloc Token
 	if ((Token = (tToken *)mmalloc(sizeof(tToken))) == NULL)
@@ -107,21 +107,11 @@ tToken* LoadToken()
 		{
 		case S_Start:
 		{
-			if (c == ' ')
+			if (isblank(c))
 			{
 				state = S_Start;
 				c = (char) tolower((char) getchar());
 				break;
-			}
-			else if (CheckEOL(c) == 1)
-			{
-				Token->Type = T_EOL;
-				return Token;
-			}
-			else if (c == EOF)
-			{
-				Token->Type = T_EOF;
-				return Token;
 			}
 			else if (c >= '0' && c <= '9')
 			{
@@ -209,6 +199,16 @@ tToken* LoadToken()
 				state = S_Comment;
 				break;
 			}
+			else if (CheckEOL(c) == 1)
+			{
+				Token->Type = T_EOL;
+				return Token;
+			}
+			else if (c == EOF)
+			{
+				Token->Type = T_EOF;
+				return Token;
+			}
 			else
 			{
 				return ScannerError(Token);
@@ -290,22 +290,17 @@ tToken* LoadToken()
 		{
 			c = (char) tolower(getchar());
 
-			if (isalpha(c) || isdigit(c) || c == '_')
+			if (c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_')
 			{
 				state = S_ID;
 				AddToString(c, Token, Token->Lenght);
 				break;
 			}
-			else if (CheckIfMathSymbol(c) == 1 || isblank(c) || c == '\n' ||
-				c == '\r' || c == EOF)
+			else
 			{
 				ungetc(c, stdin);
 				Token->Type = CompareWithKeywords(Token->String);
 				return Token;
-			}
-			else
-			{
-				return ScannerError(Token);
 			}
 		}
 
@@ -344,6 +339,10 @@ tToken* LoadToken()
 				{
 					Token->Type = T_STRINGVALUE;
 					return Token;
+				}
+				else
+				{
+					return ScannerError(Token);
 				}
 			}
 			else
@@ -513,10 +512,23 @@ tToken* ScannerError(tToken *Token)
 	}
 	else
 	{
-		mfreeall();
-		exit(1);
+		exitSecurely(LEX_ERR);
 	}
 	
+}
+
+tToken* SyntaxError(tToken *Token)
+{
+	if (LEXERROR == 1)
+	{
+		Token->Type = T_SyntaxERROR;
+		return Token;
+	}
+	else
+	{
+		exitSecurely(SYNTAX_ERR);
+	}
+
 }
 
 TokenType CompareWithKeywords(char* string)
@@ -538,7 +550,7 @@ TokenType CompareWithKeywords(char* string)
 	{
 		if (!strcmp(string, ReservedWords[i]))
 		{
-			return Type = T_LexERROR;
+			return Type = T_SyntaxERROR;
 		}
 	}
 
@@ -585,38 +597,78 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 	AddToString('\\', Token, Token->Lenght);
 	c = (char)getchar();
 
-	if (c >= '0' && c <= '1')
+	if (c == '0') // 0
 	{
 		AddToString(c, Token, Token->Lenght);
 		c = (char)getchar();
 
-		if (c >= '0' && c <= '9')
+		if (c == '0') // 0 0
 		{
 			AddToString(c, Token, Token->Lenght);
 			c = (char)getchar();
 
-			if (c >= '0' && c <= '9')
+			if (c >= '1' && c <= '9') // 0 0 (1-9)
 			{
 				AddToString(c, Token, Token->Lenght);
 				return 0;
 			}
+		}
+		else if ((c >= '1' && c <= '9')) // 0 (1-9) 
+		{
+			AddToString(c, Token, Token->Lenght);
+			c = (char)getchar();
 
+			if (c >= '0' && c <= '9') // 0 (1-9) (0-9)
+			{
+				AddToString(c, Token, Token->Lenght);
+				return 0;
+			}
 		}
 
 		return 1;
-
 	}
-	else if (c == '2')
+	if (c == '1') // 1
 	{
 		AddToString(c, Token, Token->Lenght);
 		c = (char)getchar();
 
-		if (c >= '0' && c <= '5')
+		if (c >= '0' && c <= '9') // 1 (0-9)
 		{
 			AddToString(c, Token, Token->Lenght);
 			c = (char)getchar();
 
-			if (c >= '0' && c <= '5')
+			if (c >= '0' && c <= '9') // 1 (0-9) (0-9)
+			{
+				AddToString(c, Token, Token->Lenght);
+				return 0;
+			}
+
+		}
+
+		return 1;
+	}
+	else if (c == '2') // 2
+	{
+		AddToString(c, Token, Token->Lenght);
+		c = (char)getchar();
+
+		if (c >= '0' && c <= '4') // 2 (0-4)
+		{
+			AddToString(c, Token, Token->Lenght);
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '9') // 2 (0-4) (0-9) 
+			{
+				AddToString(c, Token, Token->Lenght);
+				return 0;
+			}
+		}
+		else if (c == '5') // 2 5
+		{
+			AddToString(c, Token, Token->Lenght);
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '5') // 2 5 (0-5)
 			{
 				AddToString(c, Token, Token->Lenght);
 				return 0;
@@ -624,12 +676,12 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 		}
 
 		return 1;
-
 	}
 	else if (c != '\"' && c != 'n' && c != 't' && c != '\\')
 	{
 		return 1;
 	}
+
 	else
 	{
 		if (c == '\"')

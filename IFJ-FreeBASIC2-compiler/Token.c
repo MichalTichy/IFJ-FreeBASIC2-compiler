@@ -3,12 +3,7 @@
 #include "errors.h"
 
 // Basic allocated lenght of string
-#define LenghtOfString 10
-
-/**
- * Function allocate and initialise token
- * when malloc fail token is NULL.
- */
+#define BasicLenghtOfString 10
 
 void InitToken(tToken *Token)
 {
@@ -18,20 +13,46 @@ void InitToken(tToken *Token)
 	Token->Lenght = 0;
 }
 
-/**
-* Function allocate string in token
-* when malloc fail type of token is set to T_ERR. 
-*/
-
 tToken* InitString(tToken *Token)
 {
-	if ((Token->String = mmalloc(sizeof(char) * LenghtOfString + 1)) == NULL)
+	if ((Token->String = mmalloc(sizeof(char) * BasicLenghtOfString + 1)) == NULL)
 	{
-		mfreeall();
-		ERR_CODE code = INTERNAL_ERR;
-		exit(code);
+		exitSecurely(INTERNAL_ERR);
 	}
 
 	Token->String[0] = '\0';
 	return Token;
+}
+
+void AddToString(char c, tToken *Token, int LenghtOfString)
+{
+	if (Token->Lenght % 10 == 0)
+	{
+		LenghtOfString += 10;
+		ReallocString(Token, LenghtOfString);
+	}
+
+	Token->Lenght = Token->Lenght + 1;
+	Token->String[Token->Lenght] = '\0';
+	Token->String[Token->Lenght - 1] = c;
+}
+
+void ReallocString(tToken *Token, int LenghtOfString)
+{
+	if ((Token->String = mrealloc(Token->String, sizeof(char) * (size_t)LenghtOfString)) == NULL)
+	{
+		exitSecurely(INTERNAL_ERR);
+	}
+}
+
+void ConvertStringToInteger(tToken *Token)
+{
+	Token->IntVal = strtol(Token->String, NULL, 10);
+	Token->Type = T_INTVALUE;
+}
+
+void ConvertStringToDouble(tToken *Token)
+{
+	Token->DoubleVal = strtod(Token->String, NULL);
+	Token->Type = T_DOUBLEVALUE;
 }
