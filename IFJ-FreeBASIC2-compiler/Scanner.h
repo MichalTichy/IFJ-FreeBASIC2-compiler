@@ -7,7 +7,7 @@
 #include "List.h"
 
 typedef enum {
-
+	
 	S_Start,
 	S_Number,
 	S_ID,

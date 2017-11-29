@@ -4,6 +4,7 @@
 #include "Basics.h"
 #include "Scanner.h"
 #include "ManagedMalloc.h"
+#include "SymTable.h"
 
 typedef enum  {
 	TYPE_Integer,
@@ -48,7 +49,7 @@ typedef struct NodeString
 
 typedef struct NodeIdentifier
 {
-	//todo pointer to symtable
+	char* id;
 } tNodeIdentifier;
 
 typedef struct NodeBinaryExpression{
@@ -86,7 +87,7 @@ typedef struct NodeExpression
 
 typedef struct NodeVariableDeclaration
 {
-	//todo pointer to ID
+	char* id;
 	ScalarType varType;
 	struct Node* Expression;
 
@@ -94,7 +95,7 @@ typedef struct NodeVariableDeclaration
 
 typedef struct NodeVariableAssigment
 {
-	//todo pointer to ID
+	char* id;
 	ScalarType varType;
 	struct Node* Expression;
 
@@ -105,8 +106,9 @@ typedef struct NodeVariableAssigment
 
 typedef struct NodeIfStatement
 {
+	struct tSTScope* passScope;
+	struct tSTScope* failScope;
 	struct Node* Condition;
-
 	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* elseIf;
 	struct NodeStatement* Fail;
@@ -116,6 +118,7 @@ typedef struct NodeIfStatement
 
 typedef struct NodeElseIfStatement
 {
+	struct tSTScope* scope;
 	struct Node* Condition;
 	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* Next;
@@ -125,13 +128,14 @@ typedef struct NodeElseIfStatement
 
 typedef struct NodeScope
 {
+	struct tSTScope* scope;
 	struct NodeStatement* Statement;
 
 } tNodeScope;
 
 typedef struct NodeWhileBlock
 {
-
+	struct tSTScope* scope;
 	struct Node*  Condition;
 	struct NodeStatement* Statement;
 
@@ -152,6 +156,12 @@ typedef struct NodeStatement
 	struct NodeStatement* Next;
 
 } tNodeStatement;
+
+typedef struct Program
+{
+	struct tSTScope* globalScope;
+	struct Node* Main;
+}tProgram;
 
 typedef struct Node
 {
@@ -176,18 +186,18 @@ typedef struct Node
 	} tData;
 }tNode;
 
-tNode* Parse();
+tProgram* Parse();
 
 void Next();
 
 void Back();
 
 void BackMultipleTimes(int steps);
-
+tProgram* InitProgramNode();
 tNode * ProcessNumber();
-tNode* ProcessDouble();
+tNode* ProcessDouble(struct tSTScope* parentScope);
 
-tNode * ProcessInteger();
+tNode * ProcessInteger(struct tSTScope* parentScope);
 
 tNode * InitIntegerNode(long int value);
 
@@ -197,12 +207,12 @@ tNode* InitStringNode(char* value, int lenght);
 
 tNode * InitVarDeclarationNode();
 
-tNode * ProcessVarDeclaration();
-tNode * ProcessExpression();
-tNode* ProcessRelationalExpression();
+tNode * ProcessVarDeclaration(struct tSTScope* parentScope);
+tNode * ProcessExpression(struct tSTScope* parentScope);
+tNode* ProcessRelationalExpression(struct tSTScope* parentScope);
 
 ScalarType TokenTypeToScalarType(TokenType tokenType);
-tNode* ProcessStatement();
-tNode* ProcessProgram();
+tNode* ProcessStatement(struct tSTScope* parentScope);
+tNode* ProcessProgram(struct tSTScope* parentScope);
 
 #endif

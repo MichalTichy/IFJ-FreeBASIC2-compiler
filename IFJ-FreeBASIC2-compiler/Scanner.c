@@ -85,10 +85,10 @@ tToken* GetNextToken() {
 tToken* LoadToken()
 {
 	tToken *Token;
-	tState state = S_Start;
-	char c;
-	int AfterDot = 0;
-	int AfterExp = 0;
+	tState state = S_Start;	//States of finite-state automaton
+	char c;					//Input char from stdion
+	int AfterDot = 0;		//Help variable when state is after dot
+	int AfterExp = 0;		//Help variable when state is after exponent
 
 	//Malloc Token
 	if ((Token = (tToken *)mmalloc(sizeof(tToken))) == NULL)
@@ -112,16 +112,6 @@ tToken* LoadToken()
 				state = S_Start;
 				c = (char) tolower((char) getchar());
 				break;
-			}
-			else if (CheckEOL(c) == 1)
-			{
-				Token->Type = T_EOL;
-				return Token;
-			}
-			else if (c == EOF)
-			{
-				Token->Type = T_EOF;
-				return Token;
 			}
 			else if (c >= '0' && c <= '9')
 			{
@@ -208,6 +198,16 @@ tToken* LoadToken()
 			{
 				state = S_Comment;
 				break;
+			}
+			else if (CheckEOL(c) == 1)
+			{
+				Token->Type = T_EOL;
+				return Token;
+			}
+			else if (c == EOF)
+			{
+				Token->Type = T_EOF;
+				return Token;
 			}
 			else
 			{
@@ -512,8 +512,7 @@ tToken* ScannerError(tToken *Token)
 	}
 	else
 	{
-		mfreeall();
-		exit(1);
+		exitSecurely(LEX_ERR);
 	}
 	
 }
@@ -527,8 +526,7 @@ tToken* SyntaxError(tToken *Token)
 	}
 	else
 	{
-		mfreeall();
-		exit(2);
+		exitSecurely(SYNTAX_ERR);
 	}
 
 }
@@ -679,7 +677,6 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 
 		return 1;
 	}
-
 	else if (c != '\"' && c != 'n' && c != 't' && c != '\\')
 	{
 		return 1;

@@ -5,11 +5,6 @@
 // Basic allocated lenght of string
 #define BasicLenghtOfString 10
 
-/**
- * Function allocate and initialise token
- * when malloc fail token is NULL.
- */
-
 void InitToken(tToken *Token)
 {
 	Token->IntVal = 0;
@@ -18,18 +13,11 @@ void InitToken(tToken *Token)
 	Token->Lenght = 0;
 }
 
-/**
-* Function allocate string in token
-* when malloc fail type of token is set to T_ERR. 
-*/
-
 tToken* InitString(tToken *Token)
 {
 	if ((Token->String = mmalloc(sizeof(char) * BasicLenghtOfString + 1)) == NULL)
 	{
-		mfreeall();
-		ERR_CODE code = INTERNAL_ERR;
-		exit(code);
+		exitSecurely(INTERNAL_ERR);
 	}
 
 	Token->String[0] = '\0';
@@ -53,9 +41,7 @@ void ReallocString(tToken *Token, int LenghtOfString)
 {
 	if ((Token->String = mrealloc(Token->String, sizeof(char) * (size_t)LenghtOfString)) == NULL)
 	{
-		mfreeall();
-		ERR_CODE code = INTERNAL_ERR;
-		exit(code);
+		exitSecurely(INTERNAL_ERR);
 	}
 }
 
