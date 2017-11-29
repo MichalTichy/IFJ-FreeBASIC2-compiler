@@ -67,7 +67,7 @@ void simplifiedIterativeFactorial()
 	currentTestName = "simplifiedIterativeFactorial";
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
 	Next();
-	tNode* result = ProcessProgram();
+	tProgram* result = Parse();
 
 	Pass();
 }
@@ -77,7 +77,9 @@ void Expression1()
 	currentTestName = "5*2+3";
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/Expression1.txt");
 	Next();
-	tNode* result = ProcessRelationalExpression();
+	struct tSTScope* scope;
+	STMakeScope(&scope, NULL);
+	tNode* result = ProcessRelationalExpression(scope);
 
 	if (result->type!=binaryExpression)
 	{
