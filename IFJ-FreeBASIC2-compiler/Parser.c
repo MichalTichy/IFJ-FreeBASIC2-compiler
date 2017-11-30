@@ -324,22 +324,19 @@ tNode* ProcessMultiplicationExpression(struct tSTScope* parentScope)
 {
 
 	tNode* exp = ProcessPrefixExpression(parentScope);
-	bool matched = false;
 	Next();
 	while (token->Type == T_MULTIPLY || token->Type==T_DIVIDE)
 	{
-		matched = true;
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessPrefixExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
 		exp = newExp;
+		Next();
 	}
-
-	if (!matched)
-		Back();
+	Back();
 	return exp;
 	
 }
@@ -348,21 +345,18 @@ tNode* ProcessIntDivisionExpression(struct tSTScope* parentScope)
 {
 
 	tNode* exp = ProcessMultiplicationExpression(parentScope);
-	bool matched = false;
 	Next();
 	while (token->Type == T_INTDIVIDE)
 	{
-		matched = true;
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessMultiplicationExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
 		exp = newExp;
+		Next();
 	}
-
-	if (!matched)
 		Back();
 	return exp;
 }
@@ -370,21 +364,18 @@ tNode* ProcessIntDivisionExpression(struct tSTScope* parentScope)
 tNode* ProcessAddExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessIntDivisionExpression(parentScope);
-	bool matched = false;
 	Next();
 	while (token->Type == T_ADD || token->Type == T_SUB )
 	{
-		matched = true;
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessIntDivisionExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
 		exp = newExp;
+		Next();
 	}
-
-	if (!matched)
 		Back();
 	return exp;
 }
@@ -392,20 +383,18 @@ tNode* ProcessAddExpression(struct tSTScope* parentScope)
 tNode* ProcessRelationalExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessAddExpression(parentScope);
-	bool matched = false;
 	Next();
 	while (token->Type == T_ASSIGN || token->Type == T_GREATER || token->Type == T_LESS|| token->Type == T_NOTEQUAL|| token->Type == T_GREATEROREQUAL|| token->Type == T_LESSEROREQUAL)
 	{
-		matched = true;
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessAddExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
 		exp = newExp;
+		Next();
 	}
-	if (!matched)
 		Back();
 	return exp;
 }
@@ -413,21 +402,19 @@ tNode* ProcessRelationalExpression(struct tSTScope* parentScope)
 tNode* ProcessLogicalAndExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessRelationalExpression(parentScope);
-	bool matched = false;
 	Next();
 	while (token->Type == T_AND)
 	{
-		matched = true;
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->OP = T_AND;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessRelationalExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
 		exp = newExp;
+		Next();
 	}
 
-	if (!matched)
 		Back();
 	return exp;
 }
@@ -435,20 +422,18 @@ tNode* ProcessLogicalAndExpression(struct tSTScope* parentScope)
 tNode* ProcessLogicalOrExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessLogicalAndExpression(parentScope);
-	bool matched = false;
 	Next();
 	while (token->Type==T_OR)
 	{
-		matched = true;
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->OP = T_OR;
 		Next();
 		newExp->tData.binaryExpression->right= ProcessLogicalAndExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
 		exp = newExp;
+		Next();
 	}
-	if (!matched)
 		Back();
 	return exp;
 }
@@ -649,7 +634,7 @@ tNode* ProcessAssigment(struct tSTScope* parentScope) {
 			tNode* expression = ProcessExpression(parentScope);
 			if (expression!=NULL)
 			{
-				assigment->tData.variable_assigment->varType = GetResultType(symPableItem->type, expression->type,T_ASSIGN);
+				assigment->tData.variable_assigment->varType = GetResultType(symPableItem->type,ExtractType(expression),T_ASSIGN);
 				assigment->tData.variable_assigment->Expression = expression;
 				return assigment;
 			}
@@ -781,8 +766,6 @@ tNode* ProcessIfStatement(struct tSTScope* parentScope) {
 				{
 					ifNode->tData.ifStatement->Pass = passStatements->tData.statement;
 					Next();
-					takenTokens++;
-
 					ifNode->tData.ifStatement->elseIf = ProcessElseIfStatements(ifNode->tData.ifStatement,parentScope);
 
 					if (token->Type == T_ELSE)
@@ -886,11 +869,11 @@ tNode* ProcessCompoundStatement(struct tSTScope* parentScope) {
 }
 
 tNode* ProcessPrintStatement(struct tSTScope* parentScope) {
-	//TODO
+	return NULL;
 }
 
 tNode* ProcessInputStatement(struct tSTScope* parentScope) {
-	//TODO
+	return NULL;
 }
 
 tNode* ProcessQuirkStatement(struct tSTScope* parentScope) {
@@ -977,11 +960,17 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 		}
 	}
 
-	Next();
-	tNode* nextStatement = ProcessStatement(parentScope);
-	if (nextStatement!=NULL && nextStatement->tData.statement->type !=empty)
+	if (statement->tData.statement->type!=empty)
 	{
-		statement->tData.statement->Next = nextStatement->tData.statement;
+		Next();
+
+		tNode* nextStatement = ProcessStatement(parentScope);
+
+		if (nextStatement != NULL && nextStatement->tData.statement->type != empty)
+		{
+			statement->tData.statement->Next = nextStatement->tData.statement;
+
+		}
 	}
 	
 	return statement;

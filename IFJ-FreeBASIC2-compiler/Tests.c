@@ -66,7 +66,6 @@ void simplifiedIterativeFactorial()
 	ResetScanner();
 	currentTestName = "simplifiedIterativeFactorial";
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
-	Next();
 	tProgram* result = Parse();
 
 	Pass();
