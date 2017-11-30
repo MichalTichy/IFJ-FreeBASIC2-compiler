@@ -15,5 +15,5 @@ void Expression1();
 void simplifiedIterativeFactorial();
 void ScopeOnly();
 void MultipleVarDeclaration();
-
+void VarDeclarationWithAllTypes();
 extern char* currentTestName;

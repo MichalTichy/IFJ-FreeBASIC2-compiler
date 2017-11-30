@@ -232,6 +232,12 @@ tNode* ProcessAtom(struct tSTScope* parentScope)
 		return node;
 	}
 
+	if (token->Type == T_STRINGVALUE)
+	{
+		tNode* node= InitStringNode(token->String,token->Lenght);
+		return node;
+	}
+
 	tNode* id = ProcessIdentifier(parentScope);
 	if (id!=NULL)
 	{
