@@ -71,5 +71,6 @@
     <Text Include="TestSamples\ScannerTests\Identificator3.txt" />
     <Text Include="TestSamples\ScannerTests\StringError2.txt" />
     <Text Include="TestSamples\ParserTests\ScopeOnly.txt" />
+    <Text Include="TestSamples\ParserTests\MultipleVarDeclaration.txt" />
   </ItemGroup>
 </Project>

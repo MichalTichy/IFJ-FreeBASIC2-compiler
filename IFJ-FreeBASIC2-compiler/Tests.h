@@ -14,5 +14,6 @@ void ReturnTokenTest();
 void Expression1();
 void simplifiedIterativeFactorial();
 void ScopeOnly();
+void MultipleVarDeclaration();
 
 extern char* currentTestName;

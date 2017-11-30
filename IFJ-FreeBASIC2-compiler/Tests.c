@@ -24,6 +24,7 @@ void RunTests() {
 	ReturnTokenTest();
 	simplifiedIterativeFactorial();
 	ScopeOnly();
+	MultipleVarDeclaration();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -140,6 +141,37 @@ void ScopeOnly()
 	if (result->Main->tData.scope->Statement->type!=empty)
 	{
 		Fail("Scope statement should be empty");
+	}
+	Pass();
+}
+
+void MultipleVarDeclaration()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "MultipleVarDeclaration";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/MultipleVarDeclaration.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement->type!=varDeclaration)
+	{
+		Fail("First var declaration is missing");
+	}
+	if (result->Main->tData.scope->Statement->Next->type!=varDeclaration)
+	{
+		Fail("Second var declaration is missing");
+
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->type!=varDeclaration)
+	{
+		Fail("Third var declaration is missing");
 	}
 	Pass();
 }
