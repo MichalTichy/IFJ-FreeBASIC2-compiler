@@ -151,6 +151,8 @@ typedef struct NodeStatement
 		struct NodeScope* scope;
 		struct NodeIfStatement* ifBlock;
 		struct NodeWhileBlock* whileBlock;
+		struct PrintStatement* printStatement;
+		struct InputStatement* inputStatement;
 		//todo procedure call
 	} tStatementNode;
 	struct NodeStatement* Next;

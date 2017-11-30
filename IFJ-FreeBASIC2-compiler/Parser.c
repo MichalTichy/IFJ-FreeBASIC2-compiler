@@ -466,6 +466,10 @@ tNode* ProcessLogicalOrExpression(struct tSTScope* parentScope)
 tNode*  ProcessExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessLogicalAndExpression(parentScope);
+	if (exp==NULL)
+	{
+		return NULL;
+	}
 	tNode* wrap = initExpressionNode();
 	wrap->tData.expression->tExpressionData.expression=exp;
 	wrap->tData.expression->ResultType = ExtractType(exp);
@@ -915,6 +919,7 @@ tPrintStatement* processPrintExpression(struct tSTScope* parentScope)
 
 			tPrintStatement* nextExpression = processPrintExpression(parentScope);
 			printStatement->nextPrint = nextExpression;
+			return printStatement;
 		}
 		else
 		{
@@ -1026,7 +1031,16 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 			tNode* quirkStatement = ProcessQuirkStatement(parentScope);
 			if (quirkStatement != NULL)
 			{
-				//TODO quirkStatement
+				if (quirkStatement->type==print)
+				{
+					statement->tData.statement->type = print;
+					statement->tData.statement->tStatementNode.printStatement = quirkStatement->tData.print;
+				}
+				else if (quirkStatement->type==input)
+				{
+					statement->tData.statement->type = input;
+					statement->tData.statement->tStatementNode.inputStatement = quirkStatement->tData.input;
+				}
 			}
 			else
 			{
@@ -1057,6 +1071,10 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 		{
 			statement->tData.statement->Next = nextStatement->tData.statement;
 
+		}
+		else if (nextStatement==NULL)
+		{
+			Back();
 		}
 	}
 	

@@ -26,6 +26,7 @@ void RunTests() {
 	ScopeOnly();
 	MultipleVarDeclaration();
 	VarDeclarationWithAllTypes();
+	PrintWithoutSpace();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -157,6 +158,10 @@ void MultipleVarDeclaration()
 	{
 		Fail("Error detected");
 	}
+	if (result->Main==NULL)
+	{
+		Fail("Main failed to parse.");
+	}
 	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
 	{
 		Fail("Scope failed to parse");
@@ -174,6 +179,29 @@ void MultipleVarDeclaration()
 	{
 		Fail("Third var declaration is missing");
 	}
+	Pass();
+}
+
+void PrintWithoutSpace()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "Print without trailing space";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/printWithoutSpace.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement == NULL || result->Main->tData.scope->Statement->type!=print)
+	{
+		Fail("Print node is missing");
+	}
+	
 	Pass();
 }
 
