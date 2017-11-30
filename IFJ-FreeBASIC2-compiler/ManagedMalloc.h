@@ -3,6 +3,7 @@
 #define MMALLOC
 #include <stdlib.h>
 #include "errors.h"
+ERR_CODE lastError;
 void * mmalloc(size_t size);
 void mfree(void *);
 void mfreeall(void);

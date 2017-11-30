@@ -13,5 +13,6 @@ void PassedTestExample();
 void ReturnTokenTest();
 void Expression1();
 void simplifiedIterativeFactorial();
+void ScopeOnly();
 
 extern char* currentTestName;

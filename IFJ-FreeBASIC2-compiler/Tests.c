@@ -23,6 +23,7 @@ void RunTests() {
 	printf("--------------\n");
 	ReturnTokenTest();
 	simplifiedIterativeFactorial();
+	ScopeOnly();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -117,6 +118,28 @@ void Expression1()
 	{
 		Fail("Roots right node should be int value with value 3");
 		return;
+	}
+	Pass();
+}
+
+void ScopeOnly()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "ScopeOnly";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/ScopeOnly.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement->type!=empty)
+	{
+		Fail("Scope statement should be empty");
 	}
 	Pass();
 }

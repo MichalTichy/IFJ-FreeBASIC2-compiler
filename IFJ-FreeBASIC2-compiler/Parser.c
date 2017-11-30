@@ -117,6 +117,25 @@ tNode* InitNegationExpressionNode() {
 	return node;
 }
 
+tNode* InitInputNode() {
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.input = mmalloc(sizeof(struct InputStatement));
+	node->type = input;
+	return node;
+}
+
+tNode* InitPrintNode() {
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->tData.print = mmalloc(sizeof(struct PrintStatement));
+	node->type = print;
+	return node;
+}
+
+tPrintStatement* InitPrintStatement() {
+	tPrintStatement* node = mmalloc(sizeof(struct PrintStatement));
+	return node;
+}
+
 tNode* InitStatementNode() {
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.statement= mmalloc(sizeof(struct NodeStatement));
@@ -507,47 +526,14 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 
 ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation)
 {
-	switch (type1) {
-		case TYPE_Integer:
-			if (type2==TYPE_String)
-				exitSecurely(SEMANT_ERR_TYPE);
-			if (type2 == TYPE_Double)
-				switch (operation) {
-				case T_ADD:
-				case T_SUB:
-				case T_MULTIPLY:
-				case T_DIVIDE:
-					return TYPE_Double;
-				case T_INTDIVIDE:
-				case T_NOTEQUAL:
-				case T_LESS:
-				case T_GREATER:
-				case T_GREATEROREQUAL:
-				case T_LESSEROREQUAL:
-				case T_AND:
-				case T_OR:
-					return TYPE_Integer;
-				case T_ASSIGN:return type1;
-				default:;
-				}
-			if (type2 == TYPE_Integer)
-			{
-				if (operation == T_DIVIDE)
-					return TYPE_Double;
-				else
-					return TYPE_Integer;
-			}
-			if (type2==NULL && operation==T_NOT)
-			{
-				return TYPE_Integer;
-			}
-			break;
-	case TYPE_Double:
+	switch (type1)
+	{
+	case TYPE_Integer:
 		if (type2 == TYPE_String)
 			exitSecurely(SEMANT_ERR_TYPE);
-		if (type2==TYPE_Integer)
-		{
-			switch (operation) {
+		if (type2 == TYPE_Double)
+			switch (operation)
+			{
 			case T_ADD:
 			case T_SUB:
 			case T_MULTIPLY:
@@ -561,13 +547,50 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 			case T_LESSEROREQUAL:
 			case T_AND:
 			case T_OR:
-			case T_ASSIGN:return type1;
-			default:;
-			}			
+				return TYPE_Integer;
+			case T_ASSIGN: return type1;
+			default: ;
+			}
+		if (type2 == TYPE_Integer)
+		{
+			if (operation == T_DIVIDE)
+				return TYPE_Double;
+			else
+				return TYPE_Integer;
+		}
+		if (type2 == NULL && operation == T_NOT)
+		{
+			return TYPE_Integer;
+		}
+		break;
+	case TYPE_Double:
+		if (type2 == TYPE_String)
+			exitSecurely(SEMANT_ERR_TYPE);
+		if (type2 == TYPE_Integer)
+		{
+			switch (operation)
+			{
+			case T_ADD:
+			case T_SUB:
+			case T_MULTIPLY:
+			case T_DIVIDE:
+				return TYPE_Double;
+			case T_INTDIVIDE:
+			case T_NOTEQUAL:
+			case T_LESS:
+			case T_GREATER:
+			case T_GREATEROREQUAL:
+			case T_LESSEROREQUAL:
+			case T_AND:
+			case T_OR:
+			case T_ASSIGN: return type1;
+			default: ;
+			}
 		}
 		if (type2 == TYPE_Double)
 		{
-			switch (operation) {
+			switch (operation)
+			{
 			case T_ADD:
 			case T_SUB:
 			case T_MULTIPLY:
@@ -583,8 +606,8 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 			case T_OR:
 			case T_NOT:
 				return TYPE_Integer;
-			case T_ASSIGN:return type1;
-			default:;
+			case T_ASSIGN: return type1;
+			default: ;
 			}
 		}
 
@@ -593,12 +616,12 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 			return TYPE_Integer;
 		}
 		break;
-		case TYPE_String:
-			if (type2 == TYPE_Double || type2==TYPE_Integer)
-				exitSecurely(SEMANT_ERR_TYPE);
+	case TYPE_String:
+		if (type2 == TYPE_Double || type2 == TYPE_Integer)
+			exitSecurely(SEMANT_ERR_TYPE);
 		if (type2 == TYPE_String)
 		{
-			if (operation == T_ADD || operation==T_ASSIGN)
+			if (operation == T_ADD || operation == T_ASSIGN)
 				return TYPE_String;
 			else
 				exitSecurely(SEMANT_ERR_TYPE);
@@ -611,7 +634,7 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 	default: ;
 		//TODO
 	}
-	
+
 	exitSecurely(INTERNAL_ERR);
 }
 
@@ -868,25 +891,83 @@ tNode* ProcessCompoundStatement(struct tSTScope* parentScope) {
 	return NULL;
 }
 
-tNode* ProcessPrintStatement(struct tSTScope* parentScope) {
+tPrintStatement* processPrintExpression(struct tSTScope* parentScope)
+{
+	int takenTokens = 0;
+
+	tPrintStatement* printStatement = InitPrintStatement();
+	tNode* expression = ProcessExpression(parentScope);
+	if (expression != NULL)
+	{
+		printStatement->Expression = expression;
+		Next();
+		takenTokens++;
+		if (token->Type == T_SEMICOLON)
+		{
+			takenTokens++;
+			Next();
+
+			tPrintStatement* nextExpression = processPrintExpression(parentScope);
+			printStatement->nextPrint = nextExpression;
+		}
+		else
+		{
+			exitSecurely(SYNTAX_ERR);
+		}
+	}
+
+	BackMultipleTimes(takenTokens);
+	return NULL;
+}
+tNode* ProcessPrintNode(struct tSTScope* parentScope) {
+	int takenTokens = 0;
+
+	if (token->Type==T_PRINT)
+	{
+		Next();
+		takenTokens++;
+		tNode* printNode = InitPrintNode();
+
+		tPrintStatement* pStatement = processPrintExpression(parentScope);
+		if (pStatement!=NULL)
+		{
+			printNode->tData.print = pStatement;
+			return printNode;
+		}
+	}
+	BackMultipleTimes(takenTokens);
 	return NULL;
 }
 
-tNode* ProcessInputStatement(struct tSTScope* parentScope) {
+tNode* ProcessInputNode(struct tSTScope* parentScope) {
+	int takenTokents = 0;
+	if (token->Type==T_INPUT)
+	{
+		tNode* input = InitInputNode();
+
+		Next();
+		takenTokents++;
+		tNode* id = ProcessIdentifier(parentScope);
+		if (id!= NULL)
+		{
+			input->tData.input->identifier = id->tData.identifier;
+		}
+	}
+
+	BackMultipleTimes(takenTokents);
 	return NULL;
 }
 
 tNode* ProcessQuirkStatement(struct tSTScope* parentScope) {
 	int takenTokens = 0;
 
-	tNode* print = ProcessPrintStatement(parentScope);
+	tNode* print = ProcessPrintNode(parentScope);
 	if (print !=NULL)
 		return print;
 
-	tNode* input = ProcessInputStatement(parentScope);
+	tNode* input = ProcessInputNode(parentScope);
 	if (input !=NULL)
 		return input;
-
 	
 	BackMultipleTimes(takenTokens);
 	return NULL;

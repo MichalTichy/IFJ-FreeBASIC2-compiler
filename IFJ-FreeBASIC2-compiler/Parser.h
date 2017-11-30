@@ -22,6 +22,8 @@ typedef enum  {
 	prefixExpression,
 	negationExpression,
 	identifier,
+	input,
+	print,
 	empty
 }NodeType;
 
@@ -155,6 +157,17 @@ typedef struct NodeStatement
 
 } tNodeStatement;
 
+typedef struct PrintStatement
+{
+	struct Node* Expression;
+	struct PrintStatement* nextPrint;
+}tPrintStatement;
+
+typedef struct InputStatement
+{
+	tNodeIdentifier* identifier;
+}tInputStatement;
+
 typedef struct Program
 {
 	struct tSTScope* globalScope;
@@ -181,6 +194,8 @@ typedef struct Node
 		struct NodePrefixExpression* prefixExpression;
 		struct NodeNegationExpression* negationExpression;
 		struct NodeIdentifier* identifier;
+		struct InputStatement* input;
+		struct PrintStatement* print;
 	} tData;
 }tNode;
 
@@ -194,7 +209,7 @@ void BackMultipleTimes(int steps);
 tProgram* InitProgramNode();
 
 ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation);
-
+tPrintStatement* ProcessPrintExpression(struct tSTScope* parentScope);
 tNode* ProcessDouble(struct tSTScope* parentScope);
 
 tNode * ProcessInteger(struct tSTScope* parentScope);
