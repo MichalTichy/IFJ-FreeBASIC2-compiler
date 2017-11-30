@@ -55,7 +55,7 @@ void Recognize(struct Node* root)
 				union Data d;
 				d.statement = actualNode->tData.scope->Statement;
 				node.tData = d;*/
-				//Recognize( wrapa(statement,(union Data)actualNode->tData.scope->Statement));
+				Recognize( wrapa(statement,(union Data)actualNode->tData.scope->Statement));
 			
 			}
 			break;
@@ -66,7 +66,7 @@ void Recognize(struct Node* root)
 				if (actualNode->tData.statement->type == varDeclaration)
 				{
 					fprintf(stderr, "in statement -- vardec\n");
-					//Recognize(wrapa(varDeclaration, (union Data)actualNode->tData.variable_declaration));
+					Recognize(wrapa(varDeclaration, (union Data)actualNode->tData.variable_declaration));
 					
 				}
 				else if (actualNode->tData.statement->type == varAssigment)
@@ -135,7 +135,7 @@ void Generate(tProgram* program)
 {
 	tProgram prg = *program;
 	fprintf(stdout, ".IFJcode17\n");
-	Recognize(prg.Main);
+	Recognize(&prg.Main);
 
 }
 
