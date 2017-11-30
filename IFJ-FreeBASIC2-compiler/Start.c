@@ -19,9 +19,7 @@ int main(int argc, char* argv[])
 #endif
 
 #if !DEBUG
-	printf("HAHA");
-	getchar();
-#endif
 	Generate(Parse());
 	exitSecurely(OK_ERR);
-}
+#endif
+	
