@@ -5,6 +5,7 @@
 #include "TestSymTable.h"
 #include "Parser.h"
 #include "ManagedMalloc.h"
+#include "generator.h"
 
 void RunTests() {
 	ExampleTests();
@@ -71,6 +72,7 @@ void simplifiedIterativeFactorial()
 	currentTestName = "simplifiedIterativeFactorial";
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
 	tProgram* result = Parse();
+	Generate(result);
 
 	Pass();
 }
