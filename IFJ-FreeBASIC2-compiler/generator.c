@@ -142,7 +142,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			case varDeclaration:
 			{
 				fprintf(stdout, "DEFVAR LF@_%s\n", actualNode->tData.variable_declaration->id);
-				switch (actualNode->tData.variable_declaration->varType)
+				/*switch (actualNode->tData.variable_declaration->varType)
 				{
 				case TYPE_Integer: fprintf(stdout, "MOVE LF@_%s int@0\n", actualNode->tData.variable_declaration->id);
 					break;
@@ -151,7 +151,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 				case TYPE_String: fprintf(stdout, "MOVE LF@_%s string@0\n", actualNode->tData.variable_declaration->id);
 				default:
 					break;
-				}
+				}*/
 				
 				
 			}
