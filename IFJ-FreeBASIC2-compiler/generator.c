@@ -136,22 +136,28 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case stringVal:
 			{
-				fprintf(stderr, "stringVal\n");
+				fprintf(stdout, "string@%s",actualNode->tData.stringValue->value);
 			}
 			break;
 			case varDeclaration:
 			{
 				fprintf(stdout, "DEFVAR LF@_%s\n", actualNode->tData.variable_declaration->id);
-				/*switch (actualNode->tData.variable_declaration->varType)
+				if (actualNode->tData.variable_declaration->Expression != NULL)
 				{
-				case TYPE_Integer: fprintf(stdout, "MOVE LF@_%s int@0\n", actualNode->tData.variable_declaration->id);
-					break;
-				case TYPE_Double: fprintf(stdout, "MOVE LF@_%s double@0\n", actualNode->tData.variable_declaration->id);
-					break;
-				case TYPE_String: fprintf(stdout, "MOVE LF@_%s string@0\n", actualNode->tData.variable_declaration->id);
-				default:
-					break;
-				}*/
+					switch (actualNode->tData.variable_declaration->varType)
+					{
+					case TYPE_Integer: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+						break;
+					case TYPE_Double: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+						break;
+					case TYPE_String: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+					}
+
+					Recognize(wrapa(expression, (union Data)actualNode->tData.variable_declaration->Expression->tData), met);
+					fprintf(stdout, "\n");
+				}
+				
+				
 				
 				
 			}
@@ -247,7 +253,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 				}
 				else if (actualNode->tData.expression->ResultType == TYPE_String)
 				{
-
+					Recognize(wrapa(stringVal, (union Data)actualNode->tData.expression->tExpressionData.expression->tData), met);
 				}
 			}
 			break;
