@@ -131,7 +131,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case doubleVal:
 			{
-				fprintf(stdout, "double@%lf", actualNode->tData.doubleValue->value);
+				fprintf(stdout, "double@%f", actualNode->tData.doubleValue->value);
 			}
 			break;
 			case stringVal:
@@ -366,6 +366,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 				case whileBlock:Recognize(wrapa(whileBlock, (union Data)actualNode->tData.whileBlock->Statement->tStatementNode.whileBlock), met);
 					break;
 				}
+
 
 				Recognize(actualNode->tData.whileBlock->Statement->Next, met);
 
