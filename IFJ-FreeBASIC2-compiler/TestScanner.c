@@ -151,17 +151,17 @@ void StringValue()
 		Fail("Expected token STRINGVALUE : 1");
 		return;
 	}
-	if (Exp_STRINGVALUE("\\n"))
+	if (Exp_STRINGVALUE("\\010"))
 	{
 		Fail("Expected token STRINGVALUE : 2");
 		return;
 	}
-	if (Exp_STRINGVALUE("\\t"))
+	if (Exp_STRINGVALUE("\\009"))
 	{
 		Fail("Expected token STRINGVALUE : 3");
 		return;
 	}
-	if (Exp_STRINGVALUE("\\\\"))
+	if (Exp_STRINGVALUE("\\092"))
 	{
 		Fail("Expected token STRINGVLUE : 4");
 		return;
@@ -171,7 +171,7 @@ void StringValue()
 		Fail("Expected token STRINGVALUE : 5");
 		return;
 	}
-	if (Exp_STRINGVALUE("a !"))
+	if (Exp_STRINGVALUE("a\\032!"))
 	{
 		Fail("Expected token STRINGVALUE : 6");
 		return;
@@ -399,7 +399,7 @@ void IterativeFactorial()
 		return;
 	}
 
-	if (Exp_STRINGVALUE("Zadejte cislo pro vypocet faktorialu"))
+	if (Exp_STRINGVALUE("Zadejte\\032cislo\\032pro\\032vypocet\\032faktorialu"))
 	{
 		Fail("Expected token STRING : 14");
 		return;
@@ -477,7 +477,7 @@ void IterativeFactorial()
 		return;
 	}
 
-	if (Exp_STRINGVALUE("\\nFaktorial nelze spocitat\\n"))
+	if (Exp_STRINGVALUE("\\010Faktorial\\032nelze\\032spocitat\\010"))
 	{
 		Fail("Expected token STRINGVALUE : 25");
 		return;
@@ -657,7 +657,7 @@ void IterativeFactorial()
 		return;
 	}
 
-	if (Exp_STRINGVALUE("\\nVysledek je:"))
+	if (Exp_STRINGVALUE("\\010Vysledek\\032je:"))
 	{
 		Fail("Expected token STRINGVALUE : 55");
 		return;
@@ -681,7 +681,7 @@ void IterativeFactorial()
 		return;
 	}
 
-	if (Exp_STRINGVALUE("\\n"))
+	if (Exp_STRINGVALUE("\\010"))
 	{
 		Fail("Expected token STRINGVALUE : 59");
 		return;
