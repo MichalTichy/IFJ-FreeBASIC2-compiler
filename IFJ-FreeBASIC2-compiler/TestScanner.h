@@ -26,3 +26,4 @@ void StringError1();
 void StringError2();
 void Idenfificator2();
 void Idenfificator3();
+void BlockCommentErr();

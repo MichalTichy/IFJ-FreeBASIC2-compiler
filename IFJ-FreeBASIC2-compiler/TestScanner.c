@@ -9,6 +9,7 @@ void ScannerTests()
 	IntegerValue();
 	StringValue();
 	Comment();
+	BlockCommentErr();
 	Identificator();
 	IterativeFactorial();
 	BasicProgram();
@@ -839,6 +840,21 @@ void ErrorTest_1()
 	if (Exp_ERR())
 	{
 		Fail("Expected token ERR : 2");
+		return;
+	}
+
+	Pass();
+}
+
+void BlockCommentErr()
+{
+	ResetScanner();
+	currentTestName = "BlockCommentError";
+	LoadFileToSTDIN("../../../TestSamples/ScannerTests/BlockCommentErr.txt");
+
+	if (Exp_ERR())
+	{
+		Fail("Expected token ERR : 1");
 		return;
 	}
 
