@@ -181,7 +181,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 					{
 						if (actualNode->tData.variable_assigment->Expression->tData.expression->tExpressionData.expression->type == integerVal)
 						{
-							fprintf(stdout, "$$$MOVE LF@_%s ", actualNode->tData.variable_assigment->id);
+							fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_assigment->id);
 							Recognize(wrapa(expression, (union Data)actualNode->tData.variable_assigment->Expression->tData),met);
 							fprintf(stdout, "\n");
 						}
