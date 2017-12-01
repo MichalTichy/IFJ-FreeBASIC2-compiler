@@ -1085,7 +1085,7 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 tNode* ProcessProgram(struct tSTScope* parentScope) {
 
 	//TODO ADD SUPPORT FOR FUNCTIONS
-	int takenTokens = 0;
+	int takenTokens = SkipStatementSeparators();
 	tNode* scope = ProcessScope(parentScope);
 	if (scope!=NULL)
 	{
