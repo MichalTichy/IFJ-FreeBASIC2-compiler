@@ -26,6 +26,7 @@ void RunTests() {
 	VarDeclarationWithAllTypes();
 	PrintWithoutSpace();
 	Summator();
+	TypeMissmatch();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -203,6 +204,19 @@ void MultipleVarDeclaration()
 	if (result->Main->tData.scope->Statement->Next->Next->type!=varDeclaration)
 	{
 		Fail("Third var declaration is missing");
+	}
+	Pass();
+}
+void TypeMissmatch()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "type missMatch";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/TypeMissmatch.txt");
+	tProgram* result = Parse();
+	if (lastError!=4)
+	{
+		Fail("Wrong error detected");
 	}
 	Pass();
 }

@@ -76,5 +76,6 @@
     <Text Include="TestSamples\ParserTests\printWithoutSpace.txt" />
     <Text Include="TestSamples\ParserTests\Comments.txt" />
     <Text Include="TestSamples\ParserTests\Summator.txt" />
+    <Text Include="TestSamples\ParserTests\TypeMissmatch.txt" />
   </ItemGroup>
 </Project>
