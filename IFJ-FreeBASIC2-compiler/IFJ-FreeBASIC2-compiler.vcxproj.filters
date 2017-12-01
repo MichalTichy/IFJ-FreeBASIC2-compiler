@@ -77,5 +77,6 @@
     <Text Include="TestSamples\ScannerTests\BlockCommentErr.txt" />
     <Text Include="TestSamples\ParserTests\Comments.txt" />
     <Text Include="TestSamples\ParserTests\Summator.txt" />
+    <Text Include="TestSamples\ParserTests\TypeMissmatch.txt" />
   </ItemGroup>
 </Project>

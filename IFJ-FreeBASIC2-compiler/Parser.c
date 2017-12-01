@@ -540,7 +540,10 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 	{
 	case TYPE_Integer:
 		if (type2 == TYPE_String)
+		{
 			exitSecurely(SEMANT_ERR_TYPE);
+			return;
+		}
 		if (type2 == TYPE_Double)
 			switch (operation)
 			{
@@ -575,7 +578,10 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 		break;
 	case TYPE_Double:
 		if (type2 == TYPE_String)
+		{
 			exitSecurely(SEMANT_ERR_TYPE);
+			return;
+		}
 		if (type2 == TYPE_Integer)
 		{
 			switch (operation)
@@ -628,13 +634,19 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 		break;
 	case TYPE_String:
 		if (type2 == TYPE_Double || type2 == TYPE_Integer)
+		{
 			exitSecurely(SEMANT_ERR_TYPE);
+			return;
+		}
 		if (type2 == TYPE_String)
 		{
 			if (operation == T_ADD || operation == T_ASSIGN)
 				return TYPE_String;
 			else
+			{
 				exitSecurely(SEMANT_ERR_TYPE);
+				return;
+			}
 		}
 		if (type2 == NULL && operation == T_NOT)
 		{
@@ -646,6 +658,7 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 	}
 
 	exitSecurely(INTERNAL_ERR);
+	return;
 }
 
 tNode* ProcessAssigment(struct tSTScope* parentScope) {
@@ -1054,7 +1067,7 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 				else
 				{
 					//NOT AN STATEMENT
-					BackMultipleTimes(takenTokens);
+					Back();
 					return statement;
 				}
 			}
