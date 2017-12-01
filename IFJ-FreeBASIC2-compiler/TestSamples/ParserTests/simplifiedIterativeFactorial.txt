@@ -1,4 +1,6 @@
 scope
+dim str as string = !"\"\n\t\\\238"
+dim str0 as string = !"\001\255\\\n"
 dim a as string = !"foo"
 dim b as integer = 4500
 dim c as integer = 0045

@@ -131,7 +131,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case doubleVal:
 			{
-				fprintf(stdout, "double@%f", actualNode->tData.doubleValue->value);
+				fprintf(stdout, "float@%f", actualNode->tData.doubleValue->value);
 			}
 			break;
 			case stringVal:
