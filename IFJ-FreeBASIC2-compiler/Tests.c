@@ -18,15 +18,14 @@ void RunTests() {
 	printf("--------------\n");
 	ReturnTokenTest();
 	printf("******* Parser tests *******\n");
-	printf("--------------\n");
 	Expression1();
-	printf("--------------\n");
 	ReturnTokenTest();
 	simplifiedIterativeFactorial();
 	ScopeOnly();
 	MultipleVarDeclaration();
 	VarDeclarationWithAllTypes();
 	PrintWithoutSpace();
+	Summator();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -72,6 +71,32 @@ void simplifiedIterativeFactorial()
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
 	tProgram* result = Parse();
 
+	Pass();
+}
+
+void Summator()
+{
+	ResetScanner();
+	currentTestName = "Summator";
+	lastError = OK_ERR;
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/Summator.txt");
+	tProgram* result = Parse();
+	if (lastError != 0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main == NULL)
+	{
+		Fail("Main failed to parse.");
+	}
+	if (result->Main->type != scope || result->Main->tData.scope == NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->Next->Next->Next->Next->Next->type==varAssigment)
+	{
+		Fail("Last statement is not assigment");
+	}
 	Pass();
 }
 void Expression1()

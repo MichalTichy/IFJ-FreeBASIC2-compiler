@@ -962,6 +962,7 @@ tNode* ProcessInputNode(struct tSTScope* parentScope) {
 		if (id!= NULL)
 		{
 			input->tData.input->identifier = id->tData.identifier;
+			return input;
 		}
 	}
 
@@ -1085,7 +1086,7 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 tNode* ProcessProgram(struct tSTScope* parentScope) {
 
 	//TODO ADD SUPPORT FOR FUNCTIONS
-	int takenTokens = 0;
+	int takenTokens = SkipStatementSeparators();
 	tNode* scope = ProcessScope(parentScope);
 	if (scope!=NULL)
 	{
