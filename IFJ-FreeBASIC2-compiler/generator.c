@@ -260,7 +260,9 @@ void Recognize(struct Node* root, struct meta* metadata)
 			case scope:
 			{
 				fprintf(stdout, "CREATEFRAME\n");
+				fprintf(stdout, "PUSHFRAME\n");
 				Recognize( wrapa( statement,(union Data)actualNode->tData.scope->Statement), met);
+				fprintf(stdout, "POPFRAME\n");
 			
 			}
 			break;
