@@ -887,11 +887,6 @@ void ErrorComment2()
 	currentTestName = "ErrorComment2";
 	LoadFileToSTDIN("../../../TestSamples/ScannerTests/ErrorComment2.txt");
 
-	if (Exp_ERR())
-	{
-		Fail("Expected token ERR : 1");
-		return;
-	}
 	if (Exp_EOF())
 	{
 		Fail("Expected token EOF : 2");

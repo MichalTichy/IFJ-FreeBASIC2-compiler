@@ -472,8 +472,11 @@ tToken* LoadToken()
 							c = (char) tolower((char) getchar());
 							break;
 						}
-
-						return ScannerError(Token);
+						if (c == EOF)
+						{
+							return ScannerError(Token);
+						}
+						
 					}
 					else if (c == '/')
 					{
