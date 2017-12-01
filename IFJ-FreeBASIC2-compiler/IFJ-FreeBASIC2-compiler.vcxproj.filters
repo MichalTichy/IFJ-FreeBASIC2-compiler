@@ -26,6 +26,7 @@
     <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="SymTable.h" />
     <ClInclude Include="generator.h" />
+    <ClInclude Include="functiontable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scanner.c" />
@@ -42,6 +43,7 @@
     <ClCompile Include="TestStack.c" />
     <ClCompile Include="TestSymTable.c" />
     <ClCompile Include="generator.c" />
+    <ClCompile Include="functiontable.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestSamples\iterativeFactorial.txt" />
