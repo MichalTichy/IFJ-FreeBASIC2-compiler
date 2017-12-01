@@ -14,14 +14,13 @@
 int main(int argc, char* argv[])
 {
 	
-#if DEBUG 
-	RunTests();
-#endif
-
-#if !DEBUG
-	printf("HAHA");
-	getchar();
-#endif
-	Generate(Parse());
-	exitSecurely(OK_ERR);
+	#if DEBUG 
+		RunTests();
+	#endif
+	
+	#if !DEBUG
+		Generate(Parse());
+		exitSecurely(OK_ERR);
+	#endif
 }
+	

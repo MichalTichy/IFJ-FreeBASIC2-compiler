@@ -18,11 +18,15 @@ void RunTests() {
 	printf("--------------\n");
 	ReturnTokenTest();
 	printf("******* Parser tests *******\n");
-	printf("--------------\n");
 	Expression1();
-	printf("--------------\n");
 	ReturnTokenTest();
 	simplifiedIterativeFactorial();
+	ScopeOnly();
+	MultipleVarDeclaration();
+	VarDeclarationWithAllTypes();
+	PrintWithoutSpace();
+	Summator();
+	TypeMissmatch();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -68,6 +72,32 @@ void simplifiedIterativeFactorial()
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
 	tProgram* result = Parse();
 
+	Pass();
+}
+
+void Summator()
+{
+	ResetScanner();
+	currentTestName = "Summator";
+	lastError = OK_ERR;
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/Summator.txt");
+	tProgram* result = Parse();
+	if (lastError != 0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main == NULL)
+	{
+		Fail("Main failed to parse.");
+	}
+	if (result->Main->type != scope || result->Main->tData.scope == NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->Next->Next->Next->Next->Next->type==varAssigment)
+	{
+		Fail("Last statement is not assigment");
+	}
 	Pass();
 }
 void Expression1()
@@ -117,6 +147,142 @@ void Expression1()
 	{
 		Fail("Roots right node should be int value with value 3");
 		return;
+	}
+	Pass();
+}
+
+void ScopeOnly()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "ScopeOnly";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/ScopeOnly.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement->type!=empty)
+	{
+		Fail("Scope statement should be empty");
+	}
+	Pass();
+}
+
+void MultipleVarDeclaration()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "MultipleVarDeclaration";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/MultipleVarDeclaration.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main==NULL)
+	{
+		Fail("Main failed to parse.");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement->type!=varDeclaration)
+	{
+		Fail("First var declaration is missing");
+	}
+	if (result->Main->tData.scope->Statement->Next->type!=varDeclaration)
+	{
+		Fail("Second var declaration is missing");
+
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->type!=varDeclaration)
+	{
+		Fail("Third var declaration is missing");
+	}
+	Pass();
+}
+void TypeMissmatch()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "type missMatch";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/TypeMissmatch.txt");
+	tProgram* result = Parse();
+	if (lastError!=4)
+	{
+		Fail("Wrong error detected");
+	}
+	Pass();
+}
+
+void PrintWithoutSpace()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "Print without trailing space";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/printWithoutSpace.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement == NULL || result->Main->tData.scope->Statement->type!=print)
+	{
+		Fail("Print node is missing");
+	}
+	
+	Pass();
+}
+
+void VarDeclarationWithAllTypes()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "VarDeclarationWithAllTypes";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/VarDeclarationWithAllTypes.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
+	}
+	if (result->Main->tData.scope->Statement->type!=varDeclaration)
+	{
+		Fail("First var declaration is missing");
+	}
+	if (result->Main->tData.scope->Statement->Next->type!=varDeclaration)
+	{
+		Fail("Second var declaration is missing");
+
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->type!=varDeclaration)
+	{
+		Fail("Third var declaration is missing");
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->Next->Next->type!=varDeclaration)
+	{
+		Fail("Third var declaration is missing");
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->Next->Next->Next->type!=varDeclaration)
+	{
+		Fail("Third var declaration is missing");
+	}
+	if (result->Main->tData.scope->Statement->Next->Next->Next->Next->Next->Next->type!=varDeclaration)
+	{
+		Fail("Third var declaration is missing");
 	}
 	Pass();
 }

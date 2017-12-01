@@ -4,6 +4,7 @@
 int listSize = 0;
 
 tDLList list;
+ERR_CODE lastError;
 
 void * mmalloc(size_t size)
 {
@@ -100,6 +101,9 @@ void exitSecurely(ERR_CODE errorCode) {
 #if !DEBUG
 	mfreeall();
 	exit(errorCode);
+#endif
+#if DEBUG
+	lastError = errorCode;
 #endif
 }
 

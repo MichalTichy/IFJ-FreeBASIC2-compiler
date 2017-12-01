@@ -13,5 +13,10 @@ void PassedTestExample();
 void ReturnTokenTest();
 void Expression1();
 void simplifiedIterativeFactorial();
-
+void ScopeOnly();
+void MultipleVarDeclaration();
+void VarDeclarationWithAllTypes();
+void PrintWithoutSpace();
+void Summator();
+void TypeMissmatch();
 extern char* currentTestName;

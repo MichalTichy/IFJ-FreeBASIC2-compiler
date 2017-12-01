@@ -466,12 +466,17 @@ tToken* LoadToken()
 					{
 						c = (char) getchar();
 
-						if (c == '/' && c != EOF)
+						if (c == '/')
 						{
 							state = S_Start;
 							c = (char) tolower((char) getchar());
 							break;
 						}
+						if (c == EOF)
+						{
+							return ScannerError(Token);
+						}
+						
 					}
 					else if (c == '/')
 					{
