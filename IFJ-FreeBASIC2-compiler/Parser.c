@@ -962,6 +962,7 @@ tNode* ProcessInputNode(struct tSTScope* parentScope) {
 		if (id!= NULL)
 		{
 			input->tData.input->identifier = id->tData.identifier;
+			return input;
 		}
 	}
 

@@ -17,4 +17,5 @@ void ScopeOnly();
 void MultipleVarDeclaration();
 void VarDeclarationWithAllTypes();
 void PrintWithoutSpace();
+void Summator();
 extern char* currentTestName;
