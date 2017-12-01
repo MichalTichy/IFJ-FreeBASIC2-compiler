@@ -328,6 +328,13 @@ tToken* LoadToken()
 					{
 						break;
 					}
+					else if (c == ' ')
+					{
+						AddToString('\\', Token, Token->Lenght);
+						AddToString('0', Token, Token->Lenght);
+						AddToString('3', Token, Token->Lenght);
+						AddToString('2', Token, Token->Lenght);
+					}
 					else
 					{
 						AddToString(c, Token, Token->Lenght);
@@ -691,19 +698,27 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 	{
 		if (c == '\"')
 		{
-			AddToString('\"', Token, Token->Lenght);
+			AddToString('0', Token, Token->Lenght);
+			AddToString('3', Token, Token->Lenght);
+			AddToString('4', Token, Token->Lenght);
 		}
 		else if (c == 'n')
 		{
-			AddToString('n', Token, Token->Lenght);
+			AddToString('0', Token, Token->Lenght);
+			AddToString('1', Token, Token->Lenght);
+			AddToString('0', Token, Token->Lenght);
 		}
 		else if (c == '\\')
 		{
-			AddToString('\\', Token, Token->Lenght);
+			AddToString('0', Token, Token->Lenght);
+			AddToString('9', Token, Token->Lenght);
+			AddToString('2', Token, Token->Lenght);
 		}
 		else if (c == 't')
 		{
-			AddToString('t', Token, Token->Lenght);
+			AddToString('0', Token, Token->Lenght);
+			AddToString('0', Token, Token->Lenght);
+			AddToString('9', Token, Token->Lenght);
 		}
 
 		return 0;
