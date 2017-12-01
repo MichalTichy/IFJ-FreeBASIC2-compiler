@@ -94,7 +94,7 @@ void metaInc(enum metaMember memb, tMetaData* meta)
 		if (meta->doubleVarInUse == meta->doubleVarDeclared)
 		{
 			meta->doubleVarDeclared++;
-			fprintf(stdout, "DEFVAR LF@_doubleVar%d\n", meta->doubleVarInUse+1);
+			fprintf(stdout, "DEFVAR LF@_floatVar%d\n", meta->doubleVarInUse+1);
 			
 		}
 		meta->doubleVarInUse++;
@@ -402,7 +402,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 						case TYPE_Double:
 						{
 							metaInc(doubleVar, met);
-							fprintf(stdout, "MUL LF@_doubleVar%d", met->doubleVarInUse);
+							fprintf(stdout, "MUL LF@_floatVar%d", met->doubleVarInUse);
 						}
 							break;
 					}
