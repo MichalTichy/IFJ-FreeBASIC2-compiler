@@ -71,6 +71,7 @@
     <ClInclude Include="ADT.h" />
     <ClInclude Include="Basics.h" />
     <ClInclude Include="generator.h" />
+    <ClInclude Include="functiontable.h" />
     <ClInclude Include="SymTable.h" />
     <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="errors.h" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ADT.c" />
+    <ClCompile Include="functiontable.c" />
     <ClCompile Include="generator.c" />
     <ClCompile Include="List.c" />
     <ClCompile Include="ManagedMalloc.c" />
