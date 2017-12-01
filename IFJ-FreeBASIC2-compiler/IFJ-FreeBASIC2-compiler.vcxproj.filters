@@ -74,5 +74,6 @@
     <Text Include="TestSamples\ParserTests\MultipleVarDeclaration.txt" />
     <Text Include="TestSamples\ParserTests\VarDeclarationWithAllTypes.txt" />
     <Text Include="TestSamples\ParserTests\printWithoutSpace.txt" />
+    <Text Include="TestSamples\ScannerTests\BlockCommentErr.txt" />
   </ItemGroup>
 </Project>
