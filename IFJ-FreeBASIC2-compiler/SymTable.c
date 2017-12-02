@@ -44,7 +44,7 @@ void STInsert(tSTItemPtr* tableptr, char* token, ScalarType type)
 	{
 		if (strcmp((*itemPtr)->data, token) == 0)			// Token is here
 		{
-			break;
+			exitSecurely(SEMANT_ERR_DEF);					// error inserting existing symbol
 		}
 		else if (strcmp((*itemPtr)->data, token) < 0)		// Token is bigger
 		{
