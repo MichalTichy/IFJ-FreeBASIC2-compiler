@@ -21,7 +21,9 @@ void RunTests() {
 	printf("******* Parser tests *******\n");
 	Expression1();
 	ReturnTokenTest();
+	printf("--------------\n");
 	simplifiedIterativeFactorial();
+	printf("--------------\n");
 	ScopeOnly();
 	MultipleVarDeclaration();
 	VarDeclarationWithAllTypes();
