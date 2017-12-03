@@ -142,6 +142,8 @@ void StatementRecognize(struct NodeStatement* statement, struct meta* metadata)
 		break;
 	case input:Recognize(wrapa(statement->type, (union Data)statement->tStatementNode.inputStatement), metadata);
 		break;
+	case empty:Recognize(wrapa(statement->type, (union Data)statement->tStatementNode.inputStatement), metadata);
+		break;
 	default: fprintf(stderr, "###### StatementRecognize something else #######\n");
 		break;
 	}
@@ -485,7 +487,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 				metaInc(intVar, met);
 				fprintf(stdout, "!\"? \"\n");
-				fprintf(stdout, "READ LF@_intVar%d int\n", met->intVarInUse);
+				fprintf(stdout, "READ LF@_intVar%d int", met->intVarInUse);
 				metaDec(intVar, met);
 			}
 			default:

@@ -1,4 +1,7 @@
 scope
+
+END SCOPE
+
 Dim a As Integer
 input a
 if 1 < 0 then
@@ -23,4 +26,3 @@ VYSL = vysl * a
 a = A - 1
 LooP
 end IF
-END SCOPE
