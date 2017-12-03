@@ -84,3 +84,12 @@ void StackDestroy(TStack_t * stack)
 	stack->maxSize = 0;
 	stack->actualSize = 0;
 }
+
+void* StackTop(TStack_t * stack)
+{
+	if (stack != NULL && stack->actualSize != 0)
+	{
+		return stack->items[stack->actualSize-1];
+	}
+	return NULL;
+}
