@@ -5,6 +5,7 @@
 #include "Scanner.h"
 #include "ManagedMalloc.h"
 #include "SymTable.h"
+#include "functiontable.h"
 
 typedef enum  {
 	integerVal,
@@ -170,10 +171,19 @@ typedef struct InputStatement
 	tNodeIdentifier* identifier;
 }tInputStatement;
 
+typedef struct Function
+{
+	struct tFTItem* funTableItem;
+	struct tSTScope* scope;
+	struct Node* body;
+}tFunction;
+
 typedef struct Program
 {
 	struct tSTScope* globalScope;
+	struct tFTItem* functionTable;
 	struct Node* Main;
+
 }tProgram;
 
 typedef struct Node
@@ -230,6 +240,6 @@ tNode* ProcessRelationalExpression(struct tSTScope* parentScope);
 ScalarType ExtractType(tNode* node);
 ScalarType TokenTypeToScalarType(TokenType tokenType);
 tNode* ProcessStatement(struct tSTScope* parentScope);
-tNode* ProcessProgram(struct tSTScope* parentScope);
+tProgram* ProcessProgram();
 
 #endif
