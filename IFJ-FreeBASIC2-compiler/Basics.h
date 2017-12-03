@@ -7,7 +7,8 @@
 typedef enum {
 	TYPE_Integer,
 	TYPE_Double,
-	TYPE_String
+	TYPE_String,
+	TYPE_Void
 } ScalarType;
 
 #endif

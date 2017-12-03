@@ -30,7 +30,15 @@ tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
 			itemPtr = itemPtr->lptr;
 		}
 	}
-	return itemPtr;
+	if (itemPtr == NULL)
+	{
+		exitSecurely(SEMANT_ERR_DEF);
+		return NULL;
+	}
+	else
+	{
+		return itemPtr;
+	}
 }
 
 void STInsert(tSTItemPtr* tableptr, char* token, ScalarType type)
