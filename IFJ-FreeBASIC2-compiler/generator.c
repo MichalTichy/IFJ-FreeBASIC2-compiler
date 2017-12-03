@@ -34,10 +34,10 @@ typedef struct meta
 
 enum metaMember
 {
-	ifStatement,
-	whileStatement,
 	intVar,
 	doubleVar,
+	ifStatement,
+	whileStatement,
 	boolVar
 
 };
@@ -147,6 +147,36 @@ void StatementRecognize(struct NodeStatement* statement, struct meta* metadata)
 	}
 }
 
+void PrintOperands(ScalarType type, struct Node* lop, struct Node* rop, struct meta* met)
+{
+	if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse);
+	else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse);
+	else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse); // todo replace for bool
+
+	if (lop != NULL)
+	{
+		Recognize(lop, met);
+	}
+	else
+	{
+		if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse-1);
+		else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse-1);
+		else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse-1);
+	}
+	fprintf(stdout, " ");
+
+	if (rop != NULL)
+	{
+		Recognize(rop, met);
+	}
+	else
+	{
+		if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse);
+		else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse);
+		else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse);
+	}
+	fprintf(stdout, "\n");
+}
 
 void Recognize(struct Node* root, struct meta* metadata)
 {
@@ -331,70 +361,104 @@ void Recognize(struct Node* root, struct meta* metadata)
 
 			switch (actualNode->tData.binaryExpression->OP)
 			{
-			case T_LESS:
+			case T_ADD:
 			{
-				metaInc(boolVar, met);
-				fprintf(stdout, "LT LF@_boolVar%d ", met->boolVarInUse);
+				metaInc(actualNode->tData.binaryExpression->resultType, met);
+				fprintf(stdout, "ADD ");
+				PrintOperands(actualNode->tData.binaryExpression->resultType, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+			}
+			break;
+			case T_SUB:
+			{
+				metaInc(actualNode->tData.binaryExpression->OP, met);
+				fprintf(stdout, "SUB ");
+				PrintOperands(actualNode->tData.binaryExpression->resultType, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
 			}
 			break;
 			case T_MULTIPLY:
 			{
-				switch (actualNode->tData.binaryExpression->resultType)
-				{
-				case TYPE_Integer:
-				{
-					metaInc(intVar, met);
-					fprintf(stdout, "MUL LF@_intVar%d", met->intVarInUse);
-				}
-				break;
-				case TYPE_Double:
-				{
-					metaInc(doubleVar, met);
-					fprintf(stdout, "MUL LF@_floatVar%d", met->doubleVarInUse);
-				}
-				break;
-				}
+				metaInc(actualNode->tData.binaryExpression->OP, met);
+				fprintf(stdout, "MUL ");
+				PrintOperands(actualNode->tData.binaryExpression->resultType, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
 			}
 			break;
+			case T_ASSIGN: // also equal
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "EQ ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+			}
+			case T_NOTEQUAL:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "EQ ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+				fprintf(stdout, "NOT LF@_boolVar%d", met->boolVarInUse);
+			}
+			break;
+			case T_LESS:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "LS ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+			}
+			break;
+			case T_GREATER:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "GT ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+			}
+			break;
+			case T_GREATEROREQUAL:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "GT ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+				metaInc(boolVar, met);
+				fprintf(stdout, "EQ ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+				fprintf(stdout, "OR ");
+				PrintOperands(boolVar, NULL, NULL, met);
+				metaDec(boolVar, met);
+			}
+			break;
+			case T_LESSEROREQUAL:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "LS ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+				metaInc(boolVar, met);
+				fprintf(stdout, "EQ ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+				fprintf(stdout, "OR ");
+				PrintOperands(boolVar, NULL, NULL, met);
+				metaDec(boolVar, met);
+			}
+			break;
+			case T_AND:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "AND ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+			}
+			break;
+			case T_OR:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "OR ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+			}
+			break;
+			case T_NOT:
+			{
+				metaInc(boolVar, met);
+				fprintf(stdout, "NOT ");
+				PrintOperands(boolVar, actualNode->tData.binaryExpression->left, actualNode->tData.binaryExpression->right, met);
+			}
 			default: fprintf(stderr, "#### case binary expression op #####");
 				break;
 			}
-
-
-			if (actualNode->tData.binaryExpression->left->type == identifier)
-			{
-				Recognize(wrapa(identifier, (union Data)actualNode->tData.binaryExpression->left->tData), met);
-
-			}
-			else if (actualNode->tData.binaryExpression->left->type == integerVal)
-			{
-				Recognize(wrapa(integerVal, (union Data)actualNode->tData.binaryExpression->left->tData), met);
-			}
-			else
-			{
-				fprintf(stderr, "###### case binaryexp LEFT type something elese ###### ");
-			}
-
-			fprintf(stdout, " ");
-
-			if (actualNode->tData.binaryExpression->right->type == identifier)
-			{
-				Recognize(wrapa(identifier, (union Data)actualNode->tData.binaryExpression->right->tData), met);
-
-			}
-			else if (actualNode->tData.binaryExpression->right->type == integerVal)
-			{
-				Recognize(wrapa(integerVal, (union Data)actualNode->tData.binaryExpression->right->tData), met);
-			}
-			else
-			{
-				fprintf(stderr, "###### case binaryexp RIGHT type something elese ###### ");
-			}
-			fprintf(stdout, "\n");
-
-
-
-
 		}
 		break;
 		case prefixExpression:
@@ -412,8 +476,21 @@ void Recognize(struct Node* root, struct meta* metadata)
 		}
 		break;
 		case empty:
+		break;
+		case input:
 		{
-			fprintf(stderr, "empt\n");
+			switch (actualNode->tData.input->identifier->type)
+			{
+			case TYPE_Integer:
+			{
+				metaInc(intVar, met);
+				fprintf(stdout, "!\"? \"\n");
+				fprintf(stdout, "READ LF@_intVar%d int\n", met->intVarInUse);
+				metaDec(intVar, met);
+			}
+			default:
+				break;
+			}
 		}
 		break;
 		}

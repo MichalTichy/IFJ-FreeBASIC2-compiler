@@ -1,4 +1,6 @@
 scope
+Dim a As Integer
+input a
 if 1 < 0 then
 if 2 < 0 then
 end if
@@ -11,7 +13,7 @@ dim b as integer = 4500
 dim c as integer = 0045
 dim d as double = 78.4
 dim e as double = 78e4
-Dim a As Integer
+
 DIM vysl AS INTEGER
 If a < 0 THEN
 ELSE
