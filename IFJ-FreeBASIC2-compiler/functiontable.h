@@ -1,4 +1,6 @@
 
+#include "Scanner.h"
+
 typedef struct tFTItem
 {
 	char** parameters;
@@ -12,6 +14,10 @@ void FTInit(tFTItemPtr* tableptr);
 
 tFTItemPtr FTSearch(tFTItemPtr* tableptr, char* token);
 
-void FTInsert(tFTItemPtr* tableptr, char* token, char** parameters);
+void AddParemeter(tFTItemPtr* funItem,char* name,ScalarType type);
+void AddReturnValue(tFTItemPtr* funItem,ScalarType type);
+
+tFTItemPtr* FTInsert(tFTItemPtr* tableptr, char* token);
+tFTItemPtr* FTRemove(tFTItemPtr* funItem);
 
 void FTFree(tFTItemPtr* tableptr);
