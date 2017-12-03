@@ -7,7 +7,7 @@
 
 void FTInit(tFTItemPtr* tableptr)
 {
-
+	*tableptr = NULL;
 }
 
 tFTItemPtr FTSearch(tFTItemPtr* tableptr, char* token)
