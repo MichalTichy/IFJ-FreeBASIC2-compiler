@@ -11,6 +11,7 @@ typedef struct tFTItem
 	char** parameters;
 	char* data;
 	tFunction* body;
+	int parametersCount;
 	unsigned int len;
 	struct tFTItem* lptr;
 	struct tFTItem* rptr;

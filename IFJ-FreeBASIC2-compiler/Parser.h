@@ -25,6 +25,7 @@ typedef enum  {
 	identifier,
 	input,
 	print,
+	functionCall,
 	empty
 }NodeType;
 
@@ -77,12 +78,7 @@ typedef struct NodeNegationExpression
 typedef struct NodeExpression
 {
 	ScalarType ResultType;
-	union ExpressionData
-	{
-		struct NodeString* string;
-		struct Node* expression;
-
-	}tExpressionData;
+	struct Node* expression;
 
 } tNodeExpression;
 
@@ -154,7 +150,7 @@ typedef struct NodeStatement
 		struct NodeWhileBlock* whileBlock;
 		struct PrintStatement* printStatement;
 		struct InputStatement* inputStatement;
-		//todo procedure call
+		struct FunctionCall* functionCall;
 	} tStatementNode;
 	struct NodeStatement* Next;
 
@@ -170,6 +166,13 @@ typedef struct InputStatement
 {
 	tNodeIdentifier* identifier;
 }tInputStatement;
+
+typedef struct FunctionCall
+{
+	struct tFTItem* funTableItem;
+	struct NodeExpression** Arguments;
+	int argumentsCount;
+}tFunctionCall;
 
 typedef struct Function
 {
@@ -208,6 +211,7 @@ typedef struct Node
 		struct NodeIdentifier* identifier;
 		struct InputStatement* input;
 		struct PrintStatement* print;
+		struct FunctionCall* functionCall;
 	} tData;
 }tNode;
 
@@ -240,6 +244,7 @@ tNode* ProcessRelationalExpression(struct tSTScope* parentScope);
 ScalarType ExtractType(tNode* node);
 ScalarType TokenTypeToScalarType(TokenType tokenType);
 tNode* ProcessStatement(struct tSTScope* parentScope);
+tNode* ProcessFunctionCall(struct tSTScope* parent_scope);
 tProgram* ProcessProgram();
 
 #endif
