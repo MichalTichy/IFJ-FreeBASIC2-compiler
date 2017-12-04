@@ -234,13 +234,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case TYPE_Integer:
 			{
-				if (actualNode->tData.variable_assigment->Expression->tData.expression->tExpressionData.expression->type == integerVal)
+				if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == integerVal)
 				{
 					fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_assigment->id);
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "\n");
 				}
-				else if (actualNode->tData.variable_assigment->Expression->tData.expression->tExpressionData.expression->type == expression)
+				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == expression)
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "MOVE LF@_%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse);
@@ -251,13 +251,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case TYPE_Double:
 			{
-				if (actualNode->tData.variable_assigment->Expression->tData.expression->tExpressionData.expression->type == doubleVal)
+				if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == doubleVal)
 				{
 					fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_assigment->id);
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "\n");
 				}
-				else if (actualNode->tData.variable_assigment->Expression->tData.expression->tExpressionData.expression->type == expression)
+				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == expression)
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "MOVE LF@_%s LF@_doubleVar%d\n", actualNode->tData.variable_assigment->id, met->doubleVarInUse);
@@ -275,11 +275,11 @@ void Recognize(struct Node* root, struct meta* metadata)
 
 			if (actualNode->tData.expression->ResultType == TYPE_Integer || actualNode->tData.expression->ResultType == TYPE_Double)
 			{
-				Recognize(actualNode->tData.expression->tExpressionData.expression, met);
+				Recognize(actualNode->tData.expression->expression, met);
 			}
 			else if (actualNode->tData.expression->ResultType == TYPE_String)
 			{
-				Recognize(actualNode->tData.expression->tExpressionData.string, met);
+				Recognize(actualNode->tData.expression->string, met);
 			}
 		}
 		break;
