@@ -219,7 +219,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 				}
 
 				Recognize(actualNode->tData.variable_declaration->Expression, met);
-				//fprintf(stdout, "\n");
+				fprintf(stdout, "\n");
 			}
 		}
 		break;
@@ -272,11 +272,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case expression:
 		{
-
-			if (actualNode->tData.expression->ResultType == TYPE_Integer || actualNode->tData.expression->ResultType == TYPE_Double)
-			{
-				Recognize(actualNode->tData.expression->expression, met);
-			}
+			Recognize(actualNode->tData.expression->expression, met);
 		}
 		break;
 		case scope:
@@ -482,7 +478,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			case TYPE_Integer:
 			{
 				metaInc(intVar, met);
-				fprintf(stdout, "!\"? \"\n");
+				//fprintf(stdout, "!\"? \"\n");
 				fprintf(stdout, "READ LF@_intVar%d int", met->intVarInUse);
 				metaDec(intVar, met);
 			}
@@ -493,9 +489,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case print:
 		{
-			fprintf(stdout, "WRITE string@");
+			fprintf(stdout, "WRITE ");
 			Recognize(actualNode->tData.print->Expression, met);
-			if (actualNode->tData.print->nextPrint != NULL) StatementRecognize(wrapa(print, (union Data)actualNode->tData.print->nextPrint), met);
+			fprintf(stdout, "\n");
+			if (actualNode->tData.print->nextPrint != NULL)
+			{
+				StatementRecognize(wrapa(print, (union Data)actualNode->tData.print->nextPrint), met);
+			}
 		}
 		break;
 		}

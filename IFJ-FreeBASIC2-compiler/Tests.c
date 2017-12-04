@@ -29,6 +29,7 @@ void RunTests() {
 	VarDeclarationWithAllTypes();
 	PrintWithoutSpace();
 	Summator();
+	WhileCycle();
 	TypeMissmatch();
 	FunctionDeclarationAndCall();
 	printf("******* Stack tests *******\n\n");
@@ -314,6 +315,24 @@ void FunctionDeclarationAndCall()
 	Pass();
 }
 
+void WhileCycle()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "While cycle";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/While.txt");
+	tProgram* result = Parse();
+	if (lastError != 0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type != whileBlock)
+	{
+		Fail("Scope failed to parse");
+	}
+
+	Pass();
+}
 
 
 void ExampleTests()

@@ -59,7 +59,7 @@ tFTItemPtr FTSearch(tFTItemPtr* tableptr, char* token)
 	return itemPtr;
 }
 
-tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token,bool isDeclaration)
+tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration)
 {
 	if (tableptr == NULL)
 	{
@@ -71,7 +71,16 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token,bool isDeclaration)
 	{
 		if (strcmp((*itemPtr)->data, token) == 0)			// Token is here
 		{
-			break;
+			if ((*itemPtr)->declarationOnly && !isDeclaration)
+			{
+				(*itemPtr)->declarationOnly = false;
+				return *itemPtr;
+			}
+			else
+			{
+				exitSecurely(SEMANT_ERR_DEF);
+				return NULL;
+			}
 		}
 		else if (strcmp((*itemPtr)->data, token) < 0)		// Token is bigger
 		{
