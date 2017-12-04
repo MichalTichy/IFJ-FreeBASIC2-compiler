@@ -10,6 +10,7 @@ typedef struct tFTItem
 {
 	char** parameters;
 	char* data;
+	bool declarationOnly;
 	struct Function* body;
 	unsigned int parametersCount;
 	unsigned int parametersMax;
@@ -27,7 +28,7 @@ void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type);
 
 void AddReturnValue(tFTItemPtr* funItem, char* name, ScalarType type);
 
-tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token);
+tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration);
 
 void FTRemove(tFTItemPtr* funItem, char* token);
 

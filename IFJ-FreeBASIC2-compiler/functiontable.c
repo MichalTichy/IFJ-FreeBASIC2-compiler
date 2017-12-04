@@ -59,7 +59,7 @@ tFTItemPtr FTSearch(tFTItemPtr* tableptr, char* token)
 	return itemPtr;
 }
 
-tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token)
+tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token,bool isDeclaration)
 {
 	if (tableptr == NULL)
 	{
@@ -92,6 +92,7 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token)
 		(*itemPtr)->len = (unsigned)strlen(token);
 		(*itemPtr)->data = token;
 		(*itemPtr)->returnValue = TYPE_Void;
+		(*itemPtr)->declarationOnly = isDeclaration;
 		(*itemPtr)->parameters = mmalloc(sizeof(char*) * 5);
 		if ((*itemPtr)->parameters == NULL)
 		{

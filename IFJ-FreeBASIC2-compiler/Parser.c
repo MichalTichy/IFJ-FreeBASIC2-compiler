@@ -260,7 +260,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 		takenTokens++;
 		if (token->Type==T_ID)
 		{
-			FTInsert(functionTable, token->String);
+			FTInsert(functionTable, token->String,false);
 			tFTItemPtr fun = FTSearch(functionTable, token->String);
 			fun->body = node;
 			node->funTableItem = fun;
