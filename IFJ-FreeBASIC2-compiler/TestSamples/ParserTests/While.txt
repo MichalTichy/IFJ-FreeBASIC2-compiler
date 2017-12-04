@@ -1,12 +1,8 @@
- ' basic continue
+' basic while loop
  scope
- 	dim a as integer = 20
- 	do while a > 0
+ 	dim a as double = 25.54
+ 	do while a > (0 - 25)
  		print a;
- 		a = a - 1
- 		if a > 11 then
- 			continue do
- 		end if 
- 		print a;
+ 		a = a - 3.29
  	loop
  end scope
