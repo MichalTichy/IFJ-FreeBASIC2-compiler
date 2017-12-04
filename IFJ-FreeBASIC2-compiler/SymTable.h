@@ -23,6 +23,8 @@ typedef struct tSTScope
 
 void STInit(tSTItemPtr* tableptr);
 
+void STMakeFunciontScope(tSTScopePtr* tableptr);
+
 tSTItemPtr STSearch (tSTItemPtr* tableptr, char* key);
 
 void STInsert (tSTItemPtr* tableptr, char* key, ScalarType type);

@@ -3,6 +3,7 @@
 #include "errors.h"
 #include <string.h>
 #include "ManagedMalloc.h"
+#include "ADT.h"
 
 void ReplaceByRightmost(tFTItemPtr PtrReplaced, tFTItemPtr* RootPtr) 
 {
@@ -105,6 +106,8 @@ void FTInsert(tFTItemPtr* tableptr, char* token)
 void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type)
 {
 	tFTItemPtr item = FTSearch(funItem, name);
+	if (item = NULL)
+		exitSecurely(SEMANT_ERR_DEF);
 
 	if (item->parametersMax <= item->parametersCount)
 	{
@@ -185,4 +188,12 @@ void FTRemove (tFTItemPtr* tableptr, char* token)
 		FTRemove(&((*tableptr)->rptr), token);
 	}
 	return;
+}
+
+void AddReturnValue(tFTItemPtr* funItem, char* name, ScalarType type)
+{
+	tFTItemPtr item = FTSearch(funItem, name);
+	if (item = NULL)
+		exitSecurely(SEMANT_ERR_DEF);
+	item->returnValue = type;
 }
