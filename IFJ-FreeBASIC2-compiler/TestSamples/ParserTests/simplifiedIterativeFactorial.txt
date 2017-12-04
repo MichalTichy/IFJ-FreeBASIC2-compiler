@@ -1,5 +1,6 @@
 scope
-
+dim s as string = !"cc"
+print cc
 END SCOPE
 
 Dim a As Integer
