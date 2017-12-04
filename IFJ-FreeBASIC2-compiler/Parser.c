@@ -50,10 +50,10 @@ tNode* ProcessString(struct tSTScope* parentScope) {
 	return NULL;
 }
 
-tFunction* InitFunctionNode()
+tFunction* InitFunctionNode(struct tSTScope* parentScope)
 {
 	tFunction* node = mmalloc(sizeof(struct Function));
-	STMakeFunciontScope(&node->scope, NULL);
+	STMakeFunciontScope(&node->scope, parentScope);
 	return node;
 }
 
@@ -242,12 +242,12 @@ void ProcessParameter(tFTItemPtr functionPtr)
 	BackMultipleTimes(takenTokens);
 }
 
-tFunction* ProcessFunctionDefinition()
+tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 {
 	int takenTokens = 0;
 	if (token->Type==T_FUNCTION)
 	{
-		tFunction* node = InitFunctionNode();
+		tFunction* node = InitFunctionNode(parentScope);
 		Next();
 		takenTokens++;
 		if (token->Type==T_ID)
@@ -1283,7 +1283,7 @@ tProgram* ProcessProgram() {
 	tFunction* function = NULL;
 	do
 	{
-		function = ProcessFunctionDefinition();
+		function = ProcessFunctionDefinition(program->globalScope);
 		takenTokens+= SkipStatementSeparators();
 	}
 	while (function!=NULL);
