@@ -167,11 +167,11 @@ void ScopeOnly()
 	{
 		Fail("Error detected");
 	}
-	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	else if (result->Main->type!=scope || result->Main->tData.scope==NULL)
 	{
 		Fail("Scope failed to parse");
 	}
-	if (result->Main->tData.scope->Statement->type!=empty)
+	else if (result->Main->tData.scope->Statement->type!=empty)
 	{
 		Fail("Scope statement should be empty");
 	}
