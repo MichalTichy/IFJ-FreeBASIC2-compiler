@@ -9,7 +9,3 @@ HEADERS=$(wildcard *.h)
 
 default: $(FILES)
 	$(CC) $(CFLAGS) compiler $^
-
-test: $(FILES) $(TESTFILES)
-	$(CC) $(CFLAGS) compiler-test $^
-	./compiler-test

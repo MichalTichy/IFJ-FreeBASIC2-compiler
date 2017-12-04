@@ -27,7 +27,7 @@ void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type);
 
 void AddReturnValue(tFTItemPtr* funItem, char* name, ScalarType type);
 
-void FTInsert(tFTItemPtr* tableptr, char* token);
+tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token);
 
 void FTRemove(tFTItemPtr* funItem, char* token);
 

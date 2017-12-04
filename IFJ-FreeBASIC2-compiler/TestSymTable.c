@@ -265,8 +265,8 @@ void TestScopeSearch()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsert(&scope, "rain", TYPE_String);
-	STScopeInsert(&scope, "pain", TYPE_String);
+	STScopeInsertTop(&scope, "rain", TYPE_String);
+	STScopeInsertTop(&scope, "pain", TYPE_String);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;

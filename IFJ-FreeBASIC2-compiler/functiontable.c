@@ -59,11 +59,12 @@ tFTItemPtr FTSearch(tFTItemPtr* tableptr, char* token)
 	return itemPtr;
 }
 
-void FTInsert(tFTItemPtr* tableptr, char* token)
+tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token)
 {
 	if (tableptr == NULL)
 	{
-		return;
+		exitSecurely(INTERNAL_ERR);
+		return NULL;
 	}
 	tFTItemPtr* itemPtr = tableptr;
 	while ((*itemPtr) != NULL)
@@ -101,6 +102,7 @@ void FTInsert(tFTItemPtr* tableptr, char* token)
 		(*itemPtr)->lptr = NULL;
 		(*itemPtr)->rptr = NULL;
 	}
+	return *itemPtr;
 }
 
 void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type)
@@ -112,6 +114,10 @@ void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type)
 	if (item->parametersMax <= item->parametersCount)
 	{
 		(*funItem)->parameters = mrealloc((*funItem)->parameters, sizeof(char*) * ((*funItem)->parametersMax + 5));
+		if ((*funItem)->parameters == NULL)
+		{
+			exitSecurely(INTERNAL_ERR);
+		}
 		item->parametersMax = item->parametersMax + 5;
 	}
 
@@ -194,6 +200,6 @@ void AddReturnValue(tFTItemPtr* funItem, char* name, ScalarType type)
 {
 	tFTItemPtr item = FTSearch(funItem, name);
 	if (item == NULL)
-		exitSecurely(SEMANT_ERR_DEF);
+		exitSecurely(INTERNAL_ERR);
 	item->returnValue = type;
 }

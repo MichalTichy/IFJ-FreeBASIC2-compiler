@@ -53,7 +53,7 @@ tNode* ProcessString(struct tSTScope* parentScope) {
 tFunction* InitFunctionNode()
 {
 	tFunction* node = mmalloc(sizeof(struct Function));
-	STMakeFunciontScope(&node->scope);
+	STMakeFunciontScope(&node->scope, NULL);
 	return node;
 }
 
@@ -615,7 +615,7 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 					struct tSTItem* symPableItem = STScopeSearch(&parentScope, declaration->tData.variable_declaration->id);
 					if (symPableItem != NULL)
 						exitSecurely(SEMANT_ERR_DEF);
-					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
+					STScopeInsertTop(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
 
 					//todo check if item isnt allready defined
 					if (token->Type==T_ASSIGN)
