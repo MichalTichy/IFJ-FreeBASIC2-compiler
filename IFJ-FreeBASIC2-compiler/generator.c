@@ -219,7 +219,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 				}
 
 				Recognize(actualNode->tData.variable_declaration->Expression, met);
-				fprintf(stdout, "\n");
+				//fprintf(stdout, "\n");
 			}
 		}
 		break;
@@ -489,6 +489,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 			default:
 				break;
 			}
+		}
+		break;
+		case print:
+		{
+			fprintf(stdout, "WRITE string@");
+			Recognize(actualNode->tData.print->Expression, met);
+			if (actualNode->tData.print->nextPrint != NULL) StatementRecognize(wrapa(print, (union Data)actualNode->tData.print->nextPrint), met);
 		}
 		break;
 		}
