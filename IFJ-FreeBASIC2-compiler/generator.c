@@ -478,7 +478,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			case TYPE_Integer:
 			{
 				metaInc(intVar, met);
-				fprintf(stdout, "!\"? \"\n");
+				//fprintf(stdout, "!\"? \"\n");
 				fprintf(stdout, "READ LF@_intVar%d int", met->intVarInUse);
 				metaDec(intVar, met);
 			}
