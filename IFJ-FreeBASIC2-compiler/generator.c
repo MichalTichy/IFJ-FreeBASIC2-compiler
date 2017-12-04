@@ -272,11 +272,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case expression:
 		{
-
-			if (actualNode->tData.expression->ResultType == TYPE_Integer || actualNode->tData.expression->ResultType == TYPE_Double)
-			{
-				Recognize(actualNode->tData.expression->expression, met);
-			}
+			Recognize(actualNode->tData.expression->expression, met);
 		}
 		break;
 		case scope:
@@ -482,7 +478,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			case TYPE_Integer:
 			{
 				metaInc(intVar, met);
-				fprintf(stdout, "!\"? \"\n");
+				//fprintf(stdout, "!\"? \"\n");
 				fprintf(stdout, "READ LF@_intVar%d int", met->intVarInUse);
 				metaDec(intVar, met);
 			}
