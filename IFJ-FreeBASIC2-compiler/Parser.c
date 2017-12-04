@@ -1,7 +1,7 @@
 #include "Parser.h"
 #include "TestExpectToken.h"
 tToken* token;
-struct tFTItem* functionTable;
+struct tFTItem** functionTable;
 
 tProgram* Parse() {
 	Next();
@@ -233,8 +233,16 @@ void ProcessParameter(tFTItemPtr functionPtr)
 			takenTokens++;
 			if (IsTokenScalarType())
 			{
-				AddParemeter(functionPtr, name, TokenTypeToScalarType(token->Type));
-				ProcessParameter(functionPtr);
+				AddParemeter(&functionPtr, name, TokenTypeToScalarType(token->Type));
+
+				Next();
+				takenTokens++;
+				if (token->Type==T_COLON)
+				{
+					Next();
+					takenTokens++;
+					ProcessParameter(functionPtr);
+				}
 			}
 		}
 	}
@@ -252,8 +260,8 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 		takenTokens++;
 		if (token->Type==T_ID)
 		{
-			FTInsert(&functionTable, token->String);
-			tFTItemPtr fun = FTSearch(&functionTable, token->String);
+			FTInsert(functionTable, token->String);
+			tFTItemPtr fun = FTSearch(functionTable, token->String);
 			fun->body = node;
 			node->funTableItem = fun;
 
@@ -261,9 +269,16 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 			takenTokens++;
 			if (token->Type==T_LEFTBRACKET)
 			{
-				ProcessParameter(fun);
 				Next();
 				takenTokens++;
+
+				ProcessParameter(fun);
+
+				if (fun->parametersCount!=0)
+				{
+					Next();
+					takenTokens++;
+				}
 
 				if (token->Type==T_RIGHTBRACKET)
 				{
@@ -276,6 +291,10 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 						if (IsTokenScalarType())
 						{
 							AddReturnValue(&fun,fun->data, TokenTypeToScalarType(token->Type));
+
+							Next();
+							takenTokens++;
+
 
 							tNode* statement = ProcessStatement(node->scope);
 							if (statement != NULL)
@@ -1237,7 +1256,7 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 				else
 				{
 					tNode* functionCallNode = ProcessFunctionCall(parentScope);
-					if (functionCall!=NULL)
+					if (functionCallNode !=NULL)
 					{
 						statement->type = functionCall;
 						statement->tData.functionCall = functionCallNode->tData.functionCall;
@@ -1277,13 +1296,18 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 tProgram* ProcessProgram() {
 	
 	tProgram* program = InitProgramNode();
-	functionTable = program->functionTable;
+	functionTable = &program->functionTable;
 
 	int takenTokens = SkipStatementSeparators();
 	tFunction* function = NULL;
 	do
 	{
 		function = ProcessFunctionDefinition(program->globalScope);
+		if (function!=NULL)
+		{
+			Next();
+			takenTokens++;
+		}
 		takenTokens+= SkipStatementSeparators();
 	}
 	while (function!=NULL);

@@ -30,6 +30,7 @@ void RunTests() {
 	PrintWithoutSpace();
 	Summator();
 	TypeMissmatch();
+	FunctionDeclaration();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -287,6 +288,29 @@ void VarDeclarationWithAllTypes()
 	if (result->Main->tData.scope->Statement->Next->Next->Next->Next->Next->Next->type!=varDeclaration)
 	{
 		Fail("Third var declaration is missing");
+	}
+	Pass();
+}
+
+void FunctionDeclaration()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "Function declaration";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/BasicFunctions.txt");
+	tProgram* result = Parse();
+	if (lastError!=0)
+	{
+		Fail("Error detected");
+	}
+	tFTItemPtr function = FTSearch(&result->functionTable, "foo");
+	if (lastError != 0)
+	{
+		Fail("Error detected");
+	}
+	if (result->Main->type!=scope || result->Main->tData.scope==NULL)
+	{
+		Fail("Scope failed to parse");
 	}
 	Pass();
 }
