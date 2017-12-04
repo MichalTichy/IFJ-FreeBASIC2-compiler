@@ -206,7 +206,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case varDeclaration:
 		{
-			fprintf(stdout, "DEFVAR LF@_%s\n", actualNode->tData.variable_declaration->id);
+			fprintf(stdout, "DEFVAR LF@%s\n", actualNode->tData.variable_declaration->id);
 			if (actualNode->tData.variable_declaration->Expression != NULL)
 			{
 				switch (actualNode->tData.variable_declaration->varType)
