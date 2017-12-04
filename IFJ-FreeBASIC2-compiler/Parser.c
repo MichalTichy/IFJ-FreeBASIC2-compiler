@@ -252,7 +252,8 @@ tFunction* ProcessFunctionDefinition()
 		takenTokens++;
 		if (token->Type==T_ID)
 		{
-			tFTItemPtr fun = FTInsert(&functionTable, token->String);
+			FTInsert(&functionTable, token->String);
+			tFTItemPtr fun = FTSearch(&functionTable, token->String);
 			fun->body = node;
 			node->funTableItem = fun;
 
@@ -274,7 +275,7 @@ tFunction* ProcessFunctionDefinition()
 						takenTokens++;
 						if (IsTokenScalarType())
 						{
-							AddReturnValue(fun, TokenTypeToScalarType(token->Type));
+							AddReturnValue(&fun,fun->data, TokenTypeToScalarType(token->Type));
 
 							tNode* statement = ProcessStatement(node->scope);
 							if (statement != NULL)
@@ -300,7 +301,7 @@ tFunction* ProcessFunctionDefinition()
 					}
 				}
 			}
-			FTRemove(fun);
+			FTRemove(&fun,fun->data);
 		}
 	}
 	BackMultipleTimes(takenTokens);

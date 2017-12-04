@@ -279,7 +279,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			}
 			else if (actualNode->tData.expression->ResultType == TYPE_String)
 			{
-				Recognize(actualNode->tData.expression->string, met);
+				//Recognize(actualNode->tData.expression->string, met);
 			}
 		}
 		break;
