@@ -11,8 +11,8 @@ typedef struct tFTItem
 	char** parameters;
 	char* data;
 	tFunction* body;
-	int parametersCount;
-	int parametersMax;
+	unsigned int parametersCount;
+	unsigned int parametersMax;
 	unsigned int len;
 	ScalarType returnValue;
 	struct tFTItem* lptr;
