@@ -171,6 +171,11 @@
       <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
       <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
     </Text>
+    <Text Include="TestSamples\ParserTests\While.txt">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
+      <RemoteCopyToOutputDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyToOutputDir>
+    </Text>
     <Text Include="TestSamples\ScannerTests\BlockCommentErr.txt">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <RemoteCopyFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RemoteCopyFile>
