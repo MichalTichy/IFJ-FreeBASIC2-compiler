@@ -335,10 +335,7 @@ tNode* ProcessIdentifier(struct tSTScope* parentScope)
 		node->tData.identifier->id = token->String;
 
 		struct tSTItem* symPableItem = STScopeSearch(&parentScope, node->tData.identifier->id);
-		if (symPableItem == NULL)
-		{
-			exitSecurely(SEMANT_ERR_DEF);
-		}
+
 		node->tData.identifier->type = symPableItem->type;
 		return node;
 	}
@@ -631,9 +628,6 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 					Next();
 					takenTokens++;
 
-					struct tSTItem* symPableItem = STScopeSearch(&parentScope, declaration->tData.variable_declaration->id);
-					if (symPableItem != NULL)
-						exitSecurely(SEMANT_ERR_DEF);
 					STScopeInsertTop(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
 
 					//todo check if item isnt allready defined
