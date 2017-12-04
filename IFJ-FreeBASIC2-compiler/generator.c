@@ -489,9 +489,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case print:
 		{
-			fprintf(stdout, "WRITE string@");
+			fprintf(stdout, "WRITE ");
 			Recognize(actualNode->tData.print->Expression, met);
-			if (actualNode->tData.print->nextPrint != NULL) StatementRecognize(wrapa(print, (union Data)actualNode->tData.print->nextPrint), met);
+			fprintf(stdout, "\n");
+			if (actualNode->tData.print->nextPrint != NULL)
+			{
+				StatementRecognize(wrapa(print, (union Data)actualNode->tData.print->nextPrint), met);
+			}
 		}
 		break;
 		}
