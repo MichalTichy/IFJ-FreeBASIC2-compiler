@@ -19,5 +19,6 @@ void VarDeclarationWithAllTypes();
 void PrintWithoutSpace();
 void Summator();
 void TypeMissmatch();
+void WhileCycle();
 void FunctionDeclaration();
 extern char* currentTestName;
