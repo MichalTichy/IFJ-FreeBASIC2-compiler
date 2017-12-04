@@ -1,11 +1,11 @@
 #include "Parser.h"
 #include "TestExpectToken.h"
 tToken* token;
+struct tFTItem* functionTable;
 
 tProgram* Parse() {
 	Next();
-	tProgram* program = InitProgramNode();
-	program->Main = ProcessProgram(program->globalScope);
+	tProgram* program = ProcessProgram();
 	if (program==NULL || program->Main==NULL)
 	{
 		exitSecurely(SYNTAX_ERR);
@@ -50,10 +50,18 @@ tNode* ProcessString(struct tSTScope* parentScope) {
 	return NULL;
 }
 
+tFunction* InitFunctionNode(struct tSTScope* parentScope)
+{
+	tFunction* node = mmalloc(sizeof(struct Function));
+	STMakeFunciontScope(&node->scope, parentScope);
+	return node;
+}
+
 tProgram* InitProgramNode()
 {
 	tProgram* node = mmalloc(sizeof(struct Program));
 	STMakeScope(&node->globalScope, NULL);
+	FTInit(&node->functionTable);
 	return node;
 }
 
@@ -86,6 +94,16 @@ tNode* InitVarDeclarationNode() {
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = varDeclaration;
 	node->tData.variable_declaration = mmalloc(sizeof(struct NodeVariableDeclaration));
+	return node;
+}
+
+tNode* InitFunctionCallNode(tFTItemPtr funTableItem) {
+	tNode* node = mmalloc(sizeof(struct Node));
+	node->type = functionCall;
+	node->tData.functionCall = mmalloc(sizeof(struct FunctionCall));
+	node->tData.functionCall->funTableItem = funTableItem;
+	node->tData.functionCall->funTableItem->parametersCount;
+	node->tData.functionCall->Arguments= malloc(sizeof(struct NodeExpression *) * node->tData.functionCall->argumentsCount);
 	return node;
 }
 
@@ -201,6 +219,95 @@ tNode* initExpressionNode()
 	return node;
 }
 
+void ProcessParameter(tFTItemPtr functionPtr)
+{
+	int takenTokens = 0;
+	if (token->Type==T_ID)
+	{
+		char* name = token->String;
+		Next();
+		takenTokens++;
+		if (token->Type==T_AS)
+		{
+			Next();
+			takenTokens++;
+			if (IsTokenScalarType())
+			{
+				AddParemeter(functionPtr, name, TokenTypeToScalarType(token->Type));
+				ProcessParameter(functionPtr);
+			}
+		}
+	}
+
+	BackMultipleTimes(takenTokens);
+}
+
+tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
+{
+	int takenTokens = 0;
+	if (token->Type==T_FUNCTION)
+	{
+		tFunction* node = InitFunctionNode(parentScope);
+		Next();
+		takenTokens++;
+		if (token->Type==T_ID)
+		{
+			FTInsert(&functionTable, token->String);
+			tFTItemPtr fun = FTSearch(&functionTable, token->String);
+			fun->body = node;
+			node->funTableItem = fun;
+
+			Next();
+			takenTokens++;
+			if (token->Type==T_LEFTBRACKET)
+			{
+				ProcessParameter(fun);
+				Next();
+				takenTokens++;
+
+				if (token->Type==T_RIGHTBRACKET)
+				{
+					Next();
+					takenTokens++;
+					if (token->Type==T_AS)
+					{
+						Next();
+						takenTokens++;
+						if (IsTokenScalarType())
+						{
+							AddReturnValue(&fun,fun->data, TokenTypeToScalarType(token->Type));
+
+							tNode* statement = ProcessStatement(node->scope);
+							if (statement != NULL)
+							{
+								node->body = statement;
+
+								Next();
+								takenTokens++;
+
+								if (token->Type==T_END)
+								{
+									Next();
+									takenTokens++;
+
+									if (token->Type==T_FUNCTION)
+									{
+										
+										return node;
+									}									
+								}
+							}
+						}
+					}
+				}
+			}
+			FTRemove(&fun,fun->data);
+		}
+	}
+	BackMultipleTimes(takenTokens);
+	return NULL;
+}
+
 tNode* ProcessIdentifier(struct tSTScope* parentScope)
 {
 	if (token->Type==T_ID)
@@ -236,6 +343,12 @@ tNode* ProcessAtom(struct tSTScope* parentScope)
 	{
 		tNode* node= InitStringNode(token->String,token->Lenght);
 		return node;
+	}
+
+	tNode* functionCall = ProcessFunctionCall(parentScope);
+	if (functionCall !=NULL)
+	{
+		return functionCall;
 	}
 
 	tNode* id = ProcessIdentifier(parentScope);
@@ -471,7 +584,7 @@ tNode*  ProcessExpression(struct tSTScope* parentScope)
 		return NULL;
 	}
 	tNode* wrap = initExpressionNode();
-	wrap->tData.expression->tExpressionData.expression=exp;
+	wrap->tData.expression->expression=exp;
 	wrap->tData.expression->ResultType = ExtractType(exp);
 	return wrap;
 }
@@ -502,7 +615,7 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 					struct tSTItem* symPableItem = STScopeSearch(&parentScope, declaration->tData.variable_declaration->id);
 					if (symPableItem != NULL)
 						exitSecurely(SEMANT_ERR_DEF);
-					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
+					STScopeInsertTop(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
 
 					//todo check if item isnt allready defined
 					if (token->Type==T_ASSIGN)
@@ -998,6 +1111,63 @@ tNode* ProcessQuirkStatement(struct tSTScope* parentScope) {
 	return NULL;
 }
 
+tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
+{
+	int takenTokens = 0;
+	if (token->Type==T_ID)
+	{
+		Next();
+		takenTokens++;
+		char* name = token->String;
+		if (token->Type==T_LEFTBRACKET)
+		{
+			struct tFTItem* ftItem = FTSearch(&functionTable, name);
+			tNode* call = InitFunctionCallNode(ftItem);
+
+			for (int i = 0; i < call->tData.functionCall->argumentsCount; ++i)
+			{
+				if (i!=0)
+				{
+					if (token->Type!=T_COLON)
+					{
+						exitSecurely(SYNTAX_ERR);
+					}
+					else
+					{
+						Next();
+						takenTokens++;
+					}
+				}
+
+
+				tNode* exp = ProcessExpression(parent_scope);
+				if (exp==NULL)
+					exitSecurely(SEMANT_ERR_TYPE);
+				/*else if (GetResultType(exp->tData.expression->ResultType,))
+				{
+				TODO TYPE CHECK
+				}*/
+				call->tData.functionCall->Arguments[i] = exp->tData.expression;
+
+
+				if (i == call->tData.functionCall->argumentsCount-1)
+					if (token->Type == T_COLON)
+						exitSecurely(SEMANT_ERR_TYPE);
+			}
+
+			Next();
+			takenTokens++;
+
+			if (token->Type==T_RIGHTBRACKET)
+			{
+				return call;
+			}
+		}
+	}
+	BackMultipleTimes(takenTokens);
+	return NULL;
+}
+
 tNode* ProcessStatement(struct tSTScope* parentScope)
 {
 	int takenTokens = SkipStatementSeparators();
@@ -1066,9 +1236,17 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 				}
 				else
 				{
-					//NOT AN STATEMENT
-					Back();
-					return statement;
+					tNode* functionCallNode = ProcessFunctionCall(parentScope);
+					if (functionCall!=NULL)
+					{
+						statement->type = functionCall;
+						statement->tData.functionCall = functionCallNode->tData.functionCall;
+					}
+					else
+					{
+						Back();
+						return statement;
+					}
 				}
 			}
 
@@ -1096,14 +1274,25 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 
 }
 
-tNode* ProcessProgram(struct tSTScope* parentScope) {
+tProgram* ProcessProgram() {
+	
+	tProgram* program = InitProgramNode();
+	functionTable = program->functionTable;
 
-	//TODO ADD SUPPORT FOR FUNCTIONS
 	int takenTokens = SkipStatementSeparators();
-	tNode* scope = ProcessScope(parentScope);
+	tFunction* function = NULL;
+	do
+	{
+		function = ProcessFunctionDefinition(program->globalScope);
+		takenTokens+= SkipStatementSeparators();
+	}
+	while (function!=NULL);
+
+	tNode* scope = ProcessScope(program->globalScope);
 	if (scope!=NULL)
 	{
-		return scope;
+		program->Main=scope;
+		return program;
 	}
 
 	BackMultipleTimes(takenTokens);

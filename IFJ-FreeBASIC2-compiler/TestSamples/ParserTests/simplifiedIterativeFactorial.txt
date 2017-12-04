@@ -1,12 +1,22 @@
 scope
+
+END SCOPE
+
+Dim a As Integer
+input a
+if 1 < 0 then
+if 2 < 0 then
+end if
+end if
+if 3 < 0 then
+end if
 dim str as string = !"\"\n\t\\\238"
 dim str0 as string = !"\001\255\\\n"
-dim a as string = !"foo"
 dim b as integer = 4500
 dim c as integer = 0045
 dim d as double = 78.4
 dim e as double = 78e4
-Dim a As Integer
+
 DIM vysl AS INTEGER
 If a < 0 THEN
 ELSE
@@ -16,4 +26,3 @@ VYSL = vysl * a
 a = A - 1
 LooP
 end IF
-END SCOPE

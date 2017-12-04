@@ -23,6 +23,8 @@ typedef struct tSTScope
 
 void STInit(tSTItemPtr* tableptr);
 
+void STMakeFunciontScope(tSTScopePtr* tableptr, tSTScopePtr parentScope);
+
 tSTItemPtr STSearch (tSTItemPtr* tableptr, char* key);
 
 void STInsert (tSTItemPtr* tableptr, char* key, ScalarType type);
@@ -33,7 +35,7 @@ void STMakeScope(tSTScopePtr* scope, tSTScopePtr parentScope); // make scope wit
 
 tSTItemPtr STScopeSearch(tSTScopePtr* scope, char* key); // Search in all scopes
 
-void STScopeInsert(tSTScopePtr* scope, char* key, ScalarType type); // insert into top scope
+void STScopeInsertTop(tSTScopePtr* scope, char* key, ScalarType type); // insert into top scope
 
 void STDeleteTopScope(tSTScopePtr* scope); // Delete top scope
 

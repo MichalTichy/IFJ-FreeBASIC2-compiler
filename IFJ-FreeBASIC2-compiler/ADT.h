@@ -46,6 +46,7 @@ bool StackIsEmpty(TStack_t * stack);
 void* StackTopPop(TStack_t * stack);
 void StackPush(TStack_t * stack, void * ptr);
 void StackDestroy(TStack_t * stack);
+void* StackTop(TStack_t * stack);
 
 
 #endif // !ADT
