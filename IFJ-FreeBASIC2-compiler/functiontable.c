@@ -14,7 +14,7 @@ void ReplaceByRightmost(tFTItemPtr PtrReplaced, tFTItemPtr* RootPtr)
 		PtrReplaced->parametersMax = (*RootPtr)->parametersMax;
 		PtrReplaced->parametersCount = (*RootPtr)->parametersCount;
 		PtrReplaced->returnValue = (*RootPtr)->returnValue;
-		PtrReplaced->parameters = (*RootPtr)->parameters;
+		PtrReplaced->parametersArr = (*RootPtr)->parametersArr;
 		if ((*RootPtr)->lptr != NULL)	// Have left child
 		{
 			tFTItemPtr child = (*RootPtr)->lptr;
@@ -102,8 +102,8 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration)
 		(*itemPtr)->data = token;
 		(*itemPtr)->returnValue = TYPE_Void;
 		(*itemPtr)->declarationOnly = isDeclaration;
-		(*itemPtr)->parameters = mmalloc(sizeof(char*) * 5);
-		if ((*itemPtr)->parameters == NULL)
+		(*itemPtr)->parametersArr = mmalloc(sizeof(tParam) * 5);
+		if ((*itemPtr)->parametersArr == NULL)
 		{
 			exitSecurely(INTERNAL_ERR);
 		}
@@ -123,16 +123,17 @@ void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type)
 
 	if (item->parametersMax <= item->parametersCount)
 	{
-		(*funItem)->parameters = mrealloc((*funItem)->parameters, sizeof(char*) * ((*funItem)->parametersMax + 5));
-		if ((*funItem)->parameters == NULL)
+		(*funItem)->parametersArr = mrealloc((*funItem)->parametersArr, sizeof(tParam) * ((*funItem)->parametersMax + 5));
+		if ((*funItem)->parametersArr == NULL)
 		{
 			exitSecurely(INTERNAL_ERR);
 		}
 		item->parametersMax = item->parametersMax + 5;
 	}
 
-	item->parameters[item->parametersCount] = name;
+	(item->parametersArr[item->parametersCount]).name = name;
 	item->parametersCount = item->parametersCount + 1;
+	(item->parametersArr[item->parametersCount]).type = type;
 }
 
 void FTFree(tFTItemPtr* tableptr)
@@ -212,4 +213,17 @@ void AddReturnValue(tFTItemPtr* funItem, char* name, ScalarType type)
 	if (item == NULL)
 		exitSecurely(INTERNAL_ERR);
 	item->returnValue = type;
+}
+
+void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* name, ScalarType type)
+{
+	if (strcmp((item->parametersArr[position]).name, name) == 0)
+	{
+		if ((item->parametersArr[position]).type == type)
+		{
+			return;
+		}
+	}
+	exitSecurely(SEMANT_ERR_DEF);
+	return;
 }
