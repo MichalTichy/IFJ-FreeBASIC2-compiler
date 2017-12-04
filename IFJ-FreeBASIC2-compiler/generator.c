@@ -223,7 +223,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			}
 			else
 			{
-				fprintf(stdout, "MOVE LF@%s0\n", actualNode->tData.variable_declaration->id);
+				fprintf(stdout, "MOVE LF@%s 0\n", actualNode->tData.variable_declaration->id);
 			}
 		}
 		break;

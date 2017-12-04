@@ -1,7 +1,10 @@
 scope 
 dim a as integer
 print a;
+print 42 + 97 + 69;
 end scope
+
+
 dim str as string = !"\"\n\t\\\238"
 dim str0 as string = !"\001\255\\\n"
 dim b as integer = 4500
