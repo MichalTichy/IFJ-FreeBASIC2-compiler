@@ -335,7 +335,11 @@ tNode* ProcessIdentifier(struct tSTScope* parentScope)
 		node->tData.identifier->id = token->String;
 
 		struct tSTItem* symPableItem = STScopeSearch(&parentScope, node->tData.identifier->id);
-
+		if (symPableItem == NULL)
+		{
+			exitSecurely(SEMANT_ERR_DEF);
+			return NULL;
+		}
 		node->tData.identifier->type = symPableItem->type;
 		return node;
 	}
