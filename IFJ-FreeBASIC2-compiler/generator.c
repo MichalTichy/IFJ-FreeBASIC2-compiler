@@ -221,6 +221,10 @@ void Recognize(struct Node* root, struct meta* metadata)
 				Recognize(actualNode->tData.variable_declaration->Expression, met);
 				fprintf(stdout, "\n");
 			}
+			else
+			{
+				fprintf(stdout, "MOVE LF@%s0\n", actualNode->tData.variable_declaration->id);
+			}
 		}
 		break;
 		case varAssigment:
