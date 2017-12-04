@@ -273,7 +273,7 @@ void TestScopeSearch()
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsert(&scope3, "believer", TYPE_String);
+	STScopeInsertTop(&scope3, "believer", TYPE_String);
 
 	tSTItemPtr item = STScopeSearch(&scope3, "pain");
 
@@ -307,15 +307,15 @@ void TestSTDeleteTopScope()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsert(&scope, "hell", TYPE_String);
-	STScopeInsert(&scope, "pain", TYPE_String);
+	STScopeInsertTop(&scope, "hell", TYPE_String);
+	STScopeInsertTop(&scope, "pain", TYPE_String);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsert(&scope3, "no sleep", TYPE_String);
+	STScopeInsertTop(&scope3, "no sleep", TYPE_String);
 
 	STDeleteTopScope(&scope3);
 
