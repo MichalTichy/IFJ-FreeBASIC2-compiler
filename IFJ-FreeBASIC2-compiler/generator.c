@@ -211,11 +211,11 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 				switch (actualNode->tData.variable_declaration->varType)
 				{
-				case TYPE_Integer: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+				case TYPE_Integer: fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_declaration->id);
 					break;
-				case TYPE_Double: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+				case TYPE_Double: fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_declaration->id);
 					break;
-				case TYPE_String: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+				case TYPE_String: fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_declaration->id);
 				}
 
 				Recognize(actualNode->tData.variable_declaration->Expression, met);
