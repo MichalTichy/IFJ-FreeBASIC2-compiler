@@ -30,7 +30,7 @@ void RunTests() {
 	PrintWithoutSpace();
 	Summator();
 	TypeMissmatch();
-	FunctionDeclaration();
+	FunctionDeclarationAndCall();
 	printf("******* Stack tests *******\n\n");
 	StackAllTests();
 	printf("--------------\n");
@@ -75,7 +75,6 @@ void simplifiedIterativeFactorial()
 	currentTestName = "simplifiedIterativeFactorial";
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
 	tProgram* result = Parse();
-	Generate(result);
 
 	Pass();
 }
@@ -292,11 +291,11 @@ void VarDeclarationWithAllTypes()
 	Pass();
 }
 
-void FunctionDeclaration()
+void FunctionDeclarationAndCall()
 {
 	ResetScanner();
 	lastError = NULL;
-	currentTestName = "Function declaration";
+	currentTestName = "Function declaration and call";
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/BasicFunctions.txt");
 	tProgram* result = Parse();
 	if (lastError!=0)

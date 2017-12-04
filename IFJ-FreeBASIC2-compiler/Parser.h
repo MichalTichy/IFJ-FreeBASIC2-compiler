@@ -179,6 +179,7 @@ typedef struct Function
 	struct tFTItem* funTableItem;
 	struct tSTScope* scope;
 	struct Node* body;
+	struct NodeExpression* returnExp;
 }tFunction;
 
 typedef struct Program
@@ -237,6 +238,7 @@ tNode* InitDoubleNode(double value);
 tNode* InitStringNode(char* value, int lenght);
 
 tNode * InitVarDeclarationNode();
+int SkipStatementSeparators();
 
 tNode * ProcessVarDeclaration(struct tSTScope* parentScope);
 tNode * ProcessExpression(struct tSTScope* parentScope);
