@@ -1125,10 +1125,33 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 
 			for (int i = 0; i < call->tData.functionCall->argumentsCount; ++i)
 			{
+				if (i!=0)
+				{
+					if (token->Type!=T_COLON)
+					{
+						exitSecurely(SYNTAX_ERR);
+					}
+					else
+					{
+						Next();
+						takenTokens++;
+					}
+				}
+
+
 				tNode* exp = ProcessExpression(parent_scope);
 				if (exp==NULL)
 					exitSecurely(SEMANT_ERR_TYPE);
+				/*else if (GetResultType(exp->tData.expression->ResultType,))
+				{
+				TODO TYPE CHECK
+				}*/
 				call->tData.functionCall->Arguments[i] = exp->tData.expression;
+
+
+				if (i == call->tData.functionCall->argumentsCount-1)
+					if (token->Type == T_COLON)
+						exitSecurely(SEMANT_ERR_TYPE);
 			}
 
 			Next();
