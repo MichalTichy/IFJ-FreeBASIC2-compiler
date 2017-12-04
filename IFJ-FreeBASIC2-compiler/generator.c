@@ -277,10 +277,6 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 				Recognize(actualNode->tData.expression->expression, met);
 			}
-			else if (actualNode->tData.expression->ResultType == TYPE_String)
-			{
-				//Recognize(actualNode->tData.expression->string, met);
-			}
 		}
 		break;
 		case scope:
