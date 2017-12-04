@@ -50,10 +50,10 @@ tNode* ProcessString(struct tSTScope* parentScope) {
 	return NULL;
 }
 
-tFunction* InitFunctionNode()
+tFunction* InitFunctionNode(struct tSTScope* parentScope)
 {
 	tFunction* node = mmalloc(sizeof(struct Function));
-	STMakeFunciontScope(&node->scope);
+	STMakeFunciontScope(&node->scope, parentScope);
 	return node;
 }
 
@@ -242,17 +242,18 @@ void ProcessParameter(tFTItemPtr functionPtr)
 	BackMultipleTimes(takenTokens);
 }
 
-tFunction* ProcessFunctionDefinition()
+tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 {
 	int takenTokens = 0;
 	if (token->Type==T_FUNCTION)
 	{
-		tFunction* node = InitFunctionNode();
+		tFunction* node = InitFunctionNode(parentScope);
 		Next();
 		takenTokens++;
 		if (token->Type==T_ID)
 		{
-			tFTItemPtr fun = FTInsert(&functionTable, token->String);
+			FTInsert(&functionTable, token->String);
+			tFTItemPtr fun = FTSearch(&functionTable, token->String);
 			fun->body = node;
 			node->funTableItem = fun;
 
@@ -274,7 +275,7 @@ tFunction* ProcessFunctionDefinition()
 						takenTokens++;
 						if (IsTokenScalarType())
 						{
-							AddReturnValue(fun, TokenTypeToScalarType(token->Type));
+							AddReturnValue(&fun,fun->data, TokenTypeToScalarType(token->Type));
 
 							tNode* statement = ProcessStatement(node->scope);
 							if (statement != NULL)
@@ -300,7 +301,7 @@ tFunction* ProcessFunctionDefinition()
 					}
 				}
 			}
-			FTRemove(fun);
+			FTRemove(&fun,fun->data);
 		}
 	}
 	BackMultipleTimes(takenTokens);
@@ -614,7 +615,7 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 					struct tSTItem* symPableItem = STScopeSearch(&parentScope, declaration->tData.variable_declaration->id);
 					if (symPableItem != NULL)
 						exitSecurely(SEMANT_ERR_DEF);
-					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
+					STScopeInsertTop(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
 
 					//todo check if item isnt allready defined
 					if (token->Type==T_ASSIGN)
@@ -1125,10 +1126,33 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 
 			for (int i = 0; i < call->tData.functionCall->argumentsCount; ++i)
 			{
+				if (i!=0)
+				{
+					if (token->Type!=T_COLON)
+					{
+						exitSecurely(SYNTAX_ERR);
+					}
+					else
+					{
+						Next();
+						takenTokens++;
+					}
+				}
+
+
 				tNode* exp = ProcessExpression(parent_scope);
 				if (exp==NULL)
 					exitSecurely(SEMANT_ERR_TYPE);
+				/*else if (GetResultType(exp->tData.expression->ResultType,))
+				{
+				TODO TYPE CHECK
+				}*/
 				call->tData.functionCall->Arguments[i] = exp->tData.expression;
+
+
+				if (i == call->tData.functionCall->argumentsCount-1)
+					if (token->Type == T_COLON)
+						exitSecurely(SEMANT_ERR_TYPE);
 			}
 
 			Next();
@@ -1259,7 +1283,7 @@ tProgram* ProcessProgram() {
 	tFunction* function = NULL;
 	do
 	{
-		function = ProcessFunctionDefinition();
+		function = ProcessFunctionDefinition(program->globalScope);
 		takenTokens+= SkipStatementSeparators();
 	}
 	while (function!=NULL);
