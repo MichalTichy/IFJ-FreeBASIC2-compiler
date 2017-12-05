@@ -488,12 +488,25 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 			case TYPE_Integer:
 			{
-				metaInc(intVar, met);
-				//fprintf(stdout, "!\"? \"\n");
-				fprintf(stdout, "READ LF@_intVar%d int", met->intVarInUse);
-				metaDec(intVar, met);
+				fprintf(stdout, "READ int");
+				StatementRecognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				fprintf(stdout, "\n");
 			}
-			default:
+			break;
+			case TYPE_String:
+			{
+				fprintf(stdout, "READ string");
+				StatementRecognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				fprintf(stdout, "\n");
+			}
+			case TYPE_Double:
+			{
+				fprintf(stdout, "READ float");
+				StatementRecognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				fprintf(stdout, "\n");
+			}
+			break;
+			default: fprintf(stdout, "input case somethong else");
 				break;
 			}
 		}
