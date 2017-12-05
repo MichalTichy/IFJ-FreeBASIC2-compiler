@@ -265,15 +265,15 @@ void TestScopeSearch()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsertTop(&scope, "rain", TYPE_String);
-	STScopeInsertTop(&scope, "pain", TYPE_String);
+	STScopeInsert(&scope, "rain", TYPE_String);
+	STScopeInsert(&scope, "pain", TYPE_String);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsertTop(&scope3, "believer", TYPE_String);
+	STScopeInsert(&scope3, "believer", TYPE_String);
 
 	tSTItemPtr item = STScopeSearch(&scope3, "pain");
 
@@ -307,15 +307,15 @@ void TestSTDeleteTopScope()
 
 	STMakeScope(&scope, NULL);
 
-	STScopeInsertTop(&scope, "hell", TYPE_String);
-	STScopeInsertTop(&scope, "pain", TYPE_String);
+	STScopeInsert(&scope, "hell", TYPE_String);
+	STScopeInsert(&scope, "pain", TYPE_String);
 
 	tSTScopePtr scope2;
 	tSTScopePtr scope3;
 
 	STMakeScope(&scope2, scope);
 	STMakeScope(&scope3, scope2);
-	STScopeInsertTop(&scope3, "no sleep", TYPE_String);
+	STScopeInsert(&scope3, "no sleep", TYPE_String);
 
 	STDeleteTopScope(&scope3);
 
@@ -343,7 +343,21 @@ void TestSTDeleteTopScope()
 	return;
 
 }
+void NestedScope()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "Nested scope";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/NestedScope.txt");
+	tProgram* result = Parse();
+	if (lastError != 0)
+	{
+		Fail("Error detected");
+	}
 
+	Pass();
+
+}
 void AllSymTableTests()
 {
 	TestSTInit();
@@ -362,6 +376,9 @@ void AllSymTableTests()
 
 	TestSTDeleteTopScope();
 
+	NestedScope();
+
 	return;
 }
+
 

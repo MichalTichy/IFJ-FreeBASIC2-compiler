@@ -141,9 +141,30 @@ tSTItemPtr STScopeSearch(tSTScopePtr* scope, char* key)
 	return item;
 }
 
+void STScopeInsert(tSTScopePtr* scope, char* key, ScalarType type)
+{
+	STInsert(&((*scope)->symtable), key, type);
+}
+
 void STScopeInsertTop(tSTScopePtr* scope, char* key, ScalarType type)
 {
-	STInsert(&((*scope)->symtable), key,type);
+	if (scope == NULL)
+	{
+		exitSecurely(INTERNAL_ERR);
+	}
+	tSTScopePtr scopeptr = *scope;
+	if (scopeptr = NULL)
+	{
+		exitSecurely(INTERNAL_ERR);
+	}
+	tSTScopePtr previousScope;
+	while (scopeptr != NULL)
+	{
+		previousScope = scopeptr;
+		scopeptr = scopeptr->parentScope;
+	}
+
+	STInsert(&(previousScope->symtable), key, type);
 }
 
 void STDeleteTopScope(tSTScopePtr* scope)

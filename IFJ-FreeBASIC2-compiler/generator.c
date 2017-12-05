@@ -206,20 +206,31 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case varDeclaration:
 		{
-			fprintf(stdout, "DEFVAR LF@_%s\n", actualNode->tData.variable_declaration->id);
+			fprintf(stdout, "DEFVAR LF@%s\n", actualNode->tData.variable_declaration->id);
 			if (actualNode->tData.variable_declaration->Expression != NULL)
 			{
 				switch (actualNode->tData.variable_declaration->varType)
 				{
-				case TYPE_Integer: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+				case TYPE_Integer: fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_declaration->id);
 					break;
-				case TYPE_Double: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+				case TYPE_Double: fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_declaration->id);
 					break;
-				case TYPE_String: fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_declaration->id);
+				case TYPE_String: fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_declaration->id);
 				}
 
 				Recognize(actualNode->tData.variable_declaration->Expression, met);
 				fprintf(stdout, "\n");
+			}
+			else
+			{
+				switch (actualNode->tData.variable_declaration->varType)
+				{
+				case TYPE_Integer: fprintf(stdout, "MOVE LF@%s int@0\n", actualNode->tData.variable_declaration->id);
+					break;
+				case TYPE_Double: fprintf(stdout, "MOVE LF@%s float@0.0\n", actualNode->tData.variable_declaration->id);
+					break;
+				case TYPE_String: fprintf(stdout, "MOVE LF@%s string@\n", actualNode->tData.variable_declaration->id);
+				}
 			}
 		}
 		break;
@@ -236,14 +247,14 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 				if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == integerVal)
 				{
-					fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_assigment->id);
+					fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_assigment->id);
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "\n");
 				}
 				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == expression)
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
-					fprintf(stdout, "MOVE LF@_%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse);
+					fprintf(stdout, "MOVE LF@%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse);
 				}
 				else fprintf(stderr, "######### case var asig type Integer something elese ########");
 
@@ -253,14 +264,14 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 				if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == doubleVal)
 				{
-					fprintf(stdout, "MOVE LF@_%s ", actualNode->tData.variable_assigment->id);
+					fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_assigment->id);
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "\n");
 				}
 				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == expression)
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
-					fprintf(stdout, "MOVE LF@_%s LF@_doubleVar%d\n", actualNode->tData.variable_assigment->id, met->doubleVarInUse);
+					fprintf(stdout, "MOVE LF@%s LF@_doubleVar%d\n", actualNode->tData.variable_assigment->id, met->doubleVarInUse);
 				}
 				else fprintf(stderr, "######### case var asig type double something elese ########");
 			}
@@ -272,11 +283,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case expression:
 		{
-
-			if (actualNode->tData.expression->ResultType == TYPE_Integer || actualNode->tData.expression->ResultType == TYPE_Double)
-			{
-				Recognize(actualNode->tData.expression->expression, met);
-			}
+			Recognize(actualNode->tData.expression->expression, met);
 		}
 		break;
 		case scope:
@@ -481,21 +488,38 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 			case TYPE_Integer:
 			{
-				metaInc(intVar, met);
-				fprintf(stdout, "!\"? \"\n");
-				fprintf(stdout, "READ LF@_intVar%d int", met->intVarInUse);
-				metaDec(intVar, met);
+				fprintf(stdout, "READ int");
+				StatementRecognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				fprintf(stdout, "\n");
 			}
-			default:
+			break;
+			case TYPE_String:
+			{
+				fprintf(stdout, "READ string");
+				Recognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				fprintf(stdout, "\n");
+			}
+			case TYPE_Double:
+			{
+				fprintf(stdout, "READ float");
+				Recognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				fprintf(stdout, "\n");
+			}
+			break;
+			default: fprintf(stdout, "input case somethong else");
 				break;
 			}
 		}
 		break;
 		case print:
 		{
-			fprintf(stdout, "WRITE string@");
+			fprintf(stdout, "WRITE ");
 			Recognize(actualNode->tData.print->Expression, met);
-			if (actualNode->tData.print->nextPrint != NULL) StatementRecognize(wrapa(print, (union Data)actualNode->tData.print->nextPrint), met);
+			fprintf(stdout, "\n");
+			if (actualNode->tData.print->nextPrint != NULL)
+			{
+				StatementRecognize(wrapa(print, (union Data)actualNode->tData.print->nextPrint), met);
+			}
 		}
 		break;
 		}

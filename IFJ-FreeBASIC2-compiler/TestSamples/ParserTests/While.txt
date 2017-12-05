@@ -5,7 +5,7 @@
  		print a;
  		a = a - 1
  		if a > 11 then
- 			continue do
+ 			a=a+1
  		end if 
  		print a;
  	loop

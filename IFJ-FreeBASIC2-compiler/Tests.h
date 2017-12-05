@@ -20,5 +20,5 @@ void PrintWithoutSpace();
 void Summator();
 void TypeMissmatch();
 void WhileCycle();
-void FunctionDeclaration();
+void FunctionDeclarationAndCall();
 extern char* currentTestName;
