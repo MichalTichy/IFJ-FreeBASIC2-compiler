@@ -320,6 +320,11 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 						takenTokens++;
 						if (IsTokenScalarType())
 						{
+							if (wasPreviouslyDeclared && fun->returnValue!=TYPE_Void && fun->returnValue!=TokenTypeToScalarType(token->Type))
+							{
+								exitSecurely(SEMANT_ERR_DEF);
+								return NULL;
+							}
 							AddReturnValue(fun, TokenTypeToScalarType(token->Type));
 
 							if (isDeclaration)
@@ -351,10 +356,11 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 									GetResultType(fun->returnValue, expression->tData.expression->ResultType, T_ASSIGN);
 									fun->body->returnExp = expression->tData.expression;
 								}
+
+								Next();
+								takenTokens++;
 							}
 
-							Next();
-							takenTokens++;
 							
 							SkipStatementSeparators();
 							
@@ -1235,8 +1241,11 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 						exitSecurely(SEMANT_ERR_TYPE);
 			}
 
-			Next();
-			takenTokens++;
+			if (call->tData.functionCall->argumentsCount!=0)
+			{
+				Next();
+				takenTokens++;
+			}
 
 			if (token->Type==T_RIGHTBRACKET)
 			{
@@ -1383,7 +1392,12 @@ tProgram* ProcessProgram() {
 			exitSecurely(SEMANT_ERR_DEF);
 			return NULL;
 		}
-		return program;
+		Next();
+		SkipStatementSeparators();
+		if (token->Type==T_EOF)
+		{
+			return program;
+		}
 	}
 
 	BackMultipleTimes(takenTokens);

@@ -73,6 +73,7 @@
     <ClInclude Include="generator.h" />
     <ClInclude Include="functiontable.h" />
     <ClInclude Include="SymTable.h" />
+    <ClInclude Include="testfunctiontable.h" />
     <ClInclude Include="TestSymTable.h" />
     <ClInclude Include="errors.h" />
     <ClInclude Include="List.h" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Start.c" />
     <ClCompile Include="SymTable.c" />
     <ClCompile Include="TestExpectToken.c" />
+    <ClCompile Include="testfunctiontable.c" />
     <ClCompile Include="Tests.c" />
     <ClCompile Include="TestScanner.c" />
     <ClCompile Include="TestStack.c" />
