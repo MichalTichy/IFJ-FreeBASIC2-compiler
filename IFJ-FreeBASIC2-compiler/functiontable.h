@@ -5,10 +5,15 @@
 #include "Scanner.h"
 #include "Parser.h"
 
+typedef struct
+{
+	char* name;
+	ScalarType type;
+} tParam;
 
 typedef struct tFTItem
 {
-	char** parameters;
+	tParam* parametersArr;
 	char* data;
 	bool declarationOnly;
 	struct Function* body;
@@ -33,4 +38,7 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration);
 void FTRemove(tFTItemPtr* funItem, char* token);
 
 void FTFree(tFTItemPtr* tableptr);
+
+void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* name, ScalarType type);
+
 #endif
