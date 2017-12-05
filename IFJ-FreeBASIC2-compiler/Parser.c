@@ -320,7 +320,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 						takenTokens++;
 						if (IsTokenScalarType())
 						{
-							if (wasPreviouslyDeclared && fun->returnValue!=token->Type)
+							if (wasPreviouslyDeclared && fun->returnValue!=TYPE_Void && fun->returnValue!=TokenTypeToScalarType(token->Type))
 							{
 								exitSecurely(SEMANT_ERR_DEF);
 								return NULL;
