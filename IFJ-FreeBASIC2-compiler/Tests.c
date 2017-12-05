@@ -326,10 +326,7 @@ void WhileCycle()
 	if (lastError != 0)
 	{
 		Fail("Error detected");
-	}
-	if (result->Main->type != whileBlock)
-	{
-		Fail("Scope failed to parse");
+		return;
 	}
 
 	Pass();
