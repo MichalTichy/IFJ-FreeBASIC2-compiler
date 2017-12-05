@@ -343,7 +343,21 @@ void TestSTDeleteTopScope()
 	return;
 
 }
+void NestedScope()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "Nested scope";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/NestedScope.txt");
+	tProgram* result = Parse();
+	if (lastError != 0)
+	{
+		Fail("Error detected");
+	}
 
+	Pass();
+
+}
 void AllSymTableTests()
 {
 	TestSTInit();
@@ -362,6 +376,9 @@ void AllSymTableTests()
 
 	TestSTDeleteTopScope();
 
+	NestedScope();
+
 	return;
 }
+
 
