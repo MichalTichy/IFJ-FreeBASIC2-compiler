@@ -43,5 +43,6 @@ void ResetScanner();
 int CheckEOL(char c);
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token);
 int CheckIfMathSymbol(char c);
+int BlockCommentClear(tToken *Token);
 
 #endif

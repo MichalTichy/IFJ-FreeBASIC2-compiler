@@ -93,7 +93,7 @@ tToken* LoadToken()
 	//Malloc Token
 	if ((Token = (tToken *)mmalloc(sizeof(tToken))) == NULL)
 	{
-		Token = NULL;
+		exitSecurely(INTERNAL_ERR);
 	}
 
 	InitToken(Token);
@@ -125,7 +125,7 @@ tToken* LoadToken()
 			else if (c == '(')								state = S_LeftBracket;
 			else if (c == ')')								state = S_RightBracket;
 			else if (c == '\'')								state = S_Comment;
-			else if (CheckEOL(c))						state = S_EOL;
+			else if (CheckEOL(c))							state = S_EOL;
 			else if (c == EOF)								state = S_EOF;
 			else
 			{
@@ -384,40 +384,14 @@ tToken* LoadToken()
 
 			if (c == '\'')
 			{
-				while (1)
+				if (BlockCommentClear(Token))
 				{
-					c = (char) getchar();
-
-					if (c == '\'')
-					{
-						c = (char) getchar();
-
-						if (c == '/')
-						{
-							state = S_Start;
-							c = (char) tolower((char) getchar());
-							break;
-						}
-						if (c == EOF)
-						{
-							return ScannerError(Token);
-						}
-						
-					}
-					else if (c == '/')
-					{
-						c = (char) getchar();
-
-						if (c == '\'' || c == EOF)
-						{
-							return ScannerError(Token);
-						}
-
-					}
-					if (c == EOF)
-					{
-						return ScannerError(Token);
-					}
+					state = S_Start;
+					break;
+				}
+				else
+				{
+					return ScannerError(Token);
 				}
 			}
 			else
@@ -479,6 +453,44 @@ tToken *ReturnStateType(tToken *Token, TokenType mType)
 {
 	Token->Type = mType;
 	return Token;
+}
+
+int BlockCommentClear(tToken *Token)
+{
+	char c;
+
+	while (1)
+	{
+		c = (char)getchar();
+
+		if (c == '\'')
+		{
+			c = (char)getchar();
+
+			if (c == '/')
+			{
+				return 1;
+			}
+			if (c == EOF)
+			{
+				return 0;
+			}
+		}
+		else if (c == '/')
+		{
+			c = (char)getchar();
+
+			if (c == '\'' || c == EOF)
+			{
+				return 0;
+			}
+
+		}
+		if (c == EOF)
+		{
+			return 0;
+		}
+	}
 }
 
 TokenType CompareWithKeywords(char* string)
