@@ -153,7 +153,7 @@ void STScopeInsertTop(tSTScopePtr* scope, char* key, ScalarType type)
 		exitSecurely(INTERNAL_ERR);
 	}
 	tSTScopePtr scopeptr = *scope;
-	if (scopeptr = NULL)
+	if (scopeptr == NULL)
 	{
 		exitSecurely(INTERNAL_ERR);
 	}

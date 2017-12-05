@@ -6,6 +6,7 @@
 #include "Parser.h"
 #include "ManagedMalloc.h"
 #include "generator.h"
+#include "testfunctiontable.h"
 
 void RunTests() {
 	ExampleTests();
@@ -37,6 +38,9 @@ void RunTests() {
 	printf("--------------\n");
 	printf("******* Symbol Table tests *******\n");
 	AllSymTableTests();
+	printf("--------------\n");
+	printf("******* Function Table tests *******\n");
+	FTRunAllTests();
 	printf("--------------\n");
 
 	mfreeall();
