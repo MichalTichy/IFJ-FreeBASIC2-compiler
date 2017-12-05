@@ -82,5 +82,6 @@
     <Text Include="TestSamples\ParserTests\TypeMissmatch.txt" />
     <Text Include="TestSamples\ParserTests\BasicFunctions.txt" />
     <Text Include="TestSamples\ParserTests\While.txt" />
+    <Text Include="TestSamples\ParserTests\NestedScope.txt" />
   </ItemGroup>
 </Project>

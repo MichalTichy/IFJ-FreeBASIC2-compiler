@@ -1103,6 +1103,12 @@ tPrintStatement* processPrintExpression(struct tSTScope* parentScope)
 
 			tPrintStatement* nextExpression = processPrintExpression(parentScope);
 			printStatement->nextPrint = nextExpression;
+			if (nextExpression==NULL)
+			{
+				Back();
+				takenTokens--;
+			}
+
 			return printStatement;
 		}
 		else

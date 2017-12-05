@@ -1,0 +1,6 @@
+ scope
+ 	dim a as integer = 20
+ 	scope
+		print a;
+	end scope
+ end scope

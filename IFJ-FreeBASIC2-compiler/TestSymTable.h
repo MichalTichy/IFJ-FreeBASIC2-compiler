@@ -17,3 +17,4 @@ void TestScopeSearch();
 void TestSTDeleteTopScope();
 
 void AllSymTableTests();
+void NestedScope();
