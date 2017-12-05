@@ -42,6 +42,6 @@ void FTFree(tFTItemPtr* tableptr);
 
 void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* name, ScalarType type);
 
-bool FTIsDeclarationOnly(tFTItemPtr* tablePtr);
+bool FTIsDefinitionOnly(tFTItemPtr* tablePtr);
 
 #endif

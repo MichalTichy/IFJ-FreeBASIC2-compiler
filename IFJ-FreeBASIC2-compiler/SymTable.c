@@ -30,15 +30,7 @@ tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
 			itemPtr = itemPtr->lptr;
 		}
 	}
-	if (itemPtr == NULL)
-	{
-		exitSecurely(SEMANT_ERR_DEF);
-		return NULL;
-	}
-	else
-	{
-		return itemPtr;
-	}
+	return itemPtr;
 }
 
 void STInsert(tSTItemPtr* tableptr, char* token, ScalarType type)
@@ -134,11 +126,13 @@ tSTItemPtr STScopeSearch(tSTScopePtr* scope, char* key)
 		item = STSearch(&(currScopePtr->symtable), key);
 
 		if (item != NULL)
-			break;
+			return item;
 
 		currScopePtr = currScopePtr->parentScope;
 	}
-	return item;
+
+	exitSecurely(SEMANT_ERR_DEF);
+	return NULL;
 }
 
 void STScopeInsert(tSTScopePtr* scope, char* key, ScalarType type)
@@ -153,7 +147,7 @@ void STScopeInsertTop(tSTScopePtr* scope, char* key, ScalarType type)
 		exitSecurely(INTERNAL_ERR);
 	}
 	tSTScopePtr scopeptr = *scope;
-	if (scopeptr = NULL)
+	if (scopeptr == NULL)
 	{
 		exitSecurely(INTERNAL_ERR);
 	}

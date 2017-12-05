@@ -102,7 +102,7 @@ tNode* InitFunctionCallNode(tFTItemPtr funTableItem) {
 	node->type = functionCall;
 	node->tData.functionCall = mmalloc(sizeof(struct FunctionCall));
 	node->tData.functionCall->funTableItem = funTableItem;
-	node->tData.functionCall->funTableItem->parametersCount;
+	node->tData.functionCall->argumentsCount=funTableItem->parametersCount;
 	node->tData.functionCall->Arguments= malloc(sizeof(struct NodeExpression *) * node->tData.functionCall->argumentsCount);
 	return node;
 }
@@ -219,7 +219,7 @@ tNode* initExpressionNode()
 	return node;
 }
 
-void ProcessParameter(tFTItemPtr functionPtr,int parameterIndex)
+void ProcessParameter(tFTItemPtr functionPtr,int parameterIndex,bool wasPreviouslyDeclared, struct tSTScope* parentScope)
 {
 	int takenTokens = 0;
 	if (token->Type==T_ID)
@@ -233,14 +233,15 @@ void ProcessParameter(tFTItemPtr functionPtr,int parameterIndex)
 			takenTokens++;
 			if (IsTokenScalarType())
 			{
-				if (functionPtr->declarationOnly)
+				ScalarType type = TokenTypeToScalarType(token->Type);
+				if (!wasPreviouslyDeclared)
 				{
-					//add dec check
+					AddParemeter(functionPtr, name, type);
+					STScopeInsert(&parentScope, name, type);
 				}
+					
 				else
-				{
-					AddParemeter(functionPtr, name, TokenTypeToScalarType(token->Type));
-				}
+					CompareParameterSignature(functionPtr, parameterIndex, name, type);
 
 				Next();
 				takenTokens++;
@@ -248,7 +249,13 @@ void ProcessParameter(tFTItemPtr functionPtr,int parameterIndex)
 				{
 					Next();
 					takenTokens++;
-					ProcessParameter(functionPtr,parameterIndex++);
+					ProcessParameter(functionPtr,parameterIndex++,wasPreviouslyDeclared,parentScope);
+				}
+				else
+				{
+					Back();
+					takenTokens--;
+					return;
 				}
 			}
 		}
@@ -273,14 +280,20 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 
 	if (token->Type==T_FUNCTION)
 	{
-		tFunction* node = InitFunctionNode(parentScope);
 		Next();
 		takenTokens++;
 		if (token->Type==T_ID)
 		{
 			tFTItemPtr fun = FTInsert(functionTable, token->String, isDeclaration);
-			fun->body = node;
-			node->funTableItem = fun;
+			bool wasPreviouslyDeclared = fun->declarationOnly && !isDeclaration;
+
+			if (!wasPreviouslyDeclared)
+			{
+
+				tFunction* node = InitFunctionNode(parentScope);
+				fun->body = node;
+				node->funTableItem = fun;
+			}
 
 			Next();
 			takenTokens++;
@@ -289,7 +302,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 				Next();
 				takenTokens++;
 
-				ProcessParameter(fun,0);
+				ProcessParameter(fun,0,wasPreviouslyDeclared,fun->body->scope);
 
 				if (fun->parametersCount!=0)
 				{
@@ -311,17 +324,17 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 
 							if (isDeclaration)
 							{
-								return node;
+								return fun->body;
 							}
 
 							Next();
 							takenTokens++;
 
 
-							tNode* statement = ProcessStatement(node->scope);
+							tNode* statement = ProcessStatement(fun->body->scope);
 							if (statement != NULL)
 							{
-								node->body = statement;
+								fun->body->body = statement;
 
 								Next();
 								takenTokens++;
@@ -332,11 +345,11 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 								Next();
 								takenTokens++;
 
-								tNode* expression = ProcessExpression(node->scope);
+								tNode* expression = ProcessExpression(fun->body->scope);
 								if (expression!=NULL)
 								{
 									GetResultType(fun->returnValue, expression->tData.expression->ResultType, T_ASSIGN);
-									node->returnExp = expression->tData.expression;
+									fun->body->returnExp = expression->tData.expression;
 								}
 							}
 
@@ -354,7 +367,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 								if (token->Type == T_FUNCTION)
 								{
 									fun->declarationOnly = false;
-									return node;
+									return fun->body;
 								}
 							}
 						}
@@ -481,6 +494,7 @@ ScalarType ExtractType(tNode* node)
 		case prefixExpression: return node->tData.prefixExpression->resultType;
 		case negationExpression: return node->tData.negationExpression->resultType;
 		case identifier: return node->tData.identifier->type;
+		case functionCall: return node->tData.functionCall->result;
 		default:return NULL;
 	}
 }
@@ -1188,7 +1202,8 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 		{
 			struct tFTItem* ftItem = FTSearch(functionTable, name);
 			tNode* call = InitFunctionCallNode(ftItem);
-
+			Next();
+			takenTokens++;
 			for (int i = 0; i < call->tData.functionCall->argumentsCount; ++i)
 			{
 				if (i!=0)
@@ -1196,6 +1211,7 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 					if (token->Type!=T_COLON)
 					{
 						exitSecurely(SYNTAX_ERR);
+						return NULL;
 					}
 					else
 					{
@@ -1209,11 +1225,8 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 				if (exp==NULL)
 					exitSecurely(SEMANT_ERR_TYPE);
 				
-				//TODO TYPE CHECK
+				GetResultType(ftItem->parametersArr[i].type, ExtractType(exp), T_ASSIGN);
 
-				/*else if (GetResultType(exp->tData.expression->ResultType,))
-				{
-				}*/
 				call->tData.functionCall->Arguments[i] = exp->tData.expression;
 
 
@@ -1364,6 +1377,12 @@ tProgram* ProcessProgram() {
 	if (scope!=NULL)
 	{
 		program->Main=scope;
+
+		if (!FTIsDefinitionOnly(functionTable))
+		{
+			exitSecurely(SEMANT_ERR_DEF);
+			return NULL;
+		}
 		return program;
 	}
 
