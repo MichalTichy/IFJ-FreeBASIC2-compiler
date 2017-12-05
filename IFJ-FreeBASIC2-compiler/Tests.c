@@ -315,6 +315,7 @@ void WhileCycle()
 	if (lastError != 0)
 	{
 		Fail("Error detected");
+		return;
 	}
 
 	Pass();

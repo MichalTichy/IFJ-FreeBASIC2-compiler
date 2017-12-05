@@ -97,122 +97,42 @@ tToken* LoadToken()
 	}
 
 	InitToken(Token);
-
-	c = (char) tolower((char) getchar());
+	Token = InitString(Token);
 
 	while (1)
 	{
-
 		switch (state)
 		{
+
 		case S_Start:
 		{
-			if (isblank(c))
-			{
-				state = S_Start;
-				c = (char) tolower((char) getchar());
-				break;
-			}
-			else if (c >= '0' && c <= '9')
-			{
-				Token = InitString(Token);
-				AddToString(c, Token, Token->Lenght);
-				state = S_Number;
-				break;
-			}
-			else if ((c >= 'a' && c <= 'z') || c == '_')
-			{
-				Token = InitString(Token);
-				AddToString(c, Token, Token->Lenght);
-				state = S_ID;
-				break;
-			}
-			else if (c == '=')
-			{
-				Token->Type = T_ASSIGN;
-				return Token;
-			}
-			else if (c == '<')
-			{
-				state = S_Less;
-				break;
-			}
-			else if (c == '>')
-			{
-				state = S_Greater;
-				break;
-			}
-			else if (c == ';')
-			{
-				Token->Type = T_SEMICOLON;
-				return Token;
-			}
-			else if (c == ',')
-			{
-				Token->Type = T_COLON;
-				return Token;
-			}
-			else if (c == '+')
-			{
-				Token->Type = T_ADD;
-				return Token;
-			}
-			else if (c == '-')
-			{
-				Token->Type = T_SUB;
-				return Token;
-			}
-			else if (c == '*')
-			{
-				Token->Type = T_MULTIPLY;
-				return Token;
-			}
-			else if (c == '/')
-			{
-				state = S_BlockcommentOrDivide;
-				break;
-			}
-			else if (c == '\\')
-			{
-				Token->Type = T_INTDIVIDE;
-				return Token;
-			}
-			else if (c == '!')
-			{
-				Token = InitString(Token);
-				c = (char) tolower((char) getchar());
-				state = S_ExcString;
-				break;
-			}
-			else if (c == '(')
-			{
-				Token->Type = T_LEFTBRACKET;
-				return Token;
-			}
-			else if (c == ')')
-			{
-				Token->Type = T_RIGHTBRACKET;
-				return Token;
-			}
-			else if (c == '\'')
-			{
-				state = S_Comment;
-				break;
-			}
-			else if (CheckEOL(c) == 1)
-			{
-				Token->Type = T_EOL;
-				return Token;
-			}
-			else if (c == EOF)
-			{
-				Token->Type = T_EOF;
-				return Token;
-			}
+			c = (char)tolower((char)getchar());
+
+			if (isblank(c))									state = S_Start;
+			else if (c >= '0' && c <= '9')					state = S_Number;
+			else if ((c >= 'a' && c <= 'z') || c == '_')	state = S_ID;
+			else if (c == '=')								state = S_Assign;
+			else if (c == '<')								state = S_Less;
+			else if (c == '>')								state = S_Greater;
+			else if (c == ';')								state = S_Semicolon;
+			else if (c == ',')								state = S_Colon;
+			else if (c == '+')								state = S_Add;
+			else if (c == '-')								state = S_Sub;
+			else if (c == '*')								state = S_Multiply;
+			else if (c == '/')								state = S_BlockcommentOrDivide;
+			else if (c == '\\')								state = S_Intdivide;
+			else if (c == '!')								state = S_ExcString;
+			else if (c == '(')								state = S_LeftBracket;
+			else if (c == ')')								state = S_RightBracket;
+			else if (c == '\'')								state = S_Comment;
+			else if (CheckEOL(c) == 1)						state = S_EOL;
+			else if (c == EOF)								state = S_EOF;
 			else
 			{
 				return ScannerError(Token);
 			}
+
+			break;
 		}
 
 		case S_Less:
@@ -256,8 +176,6 @@ tToken* LoadToken()
 
 		case S_Number:
 		{
-			c = (char) tolower((char) getchar());
-
 			if (c == '.')
 			{
 				AddToString(c, Token, Token->Lenght);
@@ -269,6 +187,7 @@ tToken* LoadToken()
 			{
 				AddToString(c, Token, Token->Lenght);
 				state = S_Number;
+				c = (char)tolower((char)getchar());
 				break;
 			}
 			else if (c == 'e')
@@ -288,12 +207,11 @@ tToken* LoadToken()
 
 		case S_ID:
 		{
-			c = (char) tolower(getchar());
-
-			if (c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '_')
+			if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '_')
 			{
 				state = S_ID;
 				AddToString(c, Token, Token->Lenght);
+				c = (char)tolower(getchar());
 				break;
 			}
 			else
@@ -306,9 +224,10 @@ tToken* LoadToken()
 
 		case S_ExcString:
 		{
+			c = (char)tolower((char)getchar());
+
 			if (c == '"')
 			{
-				
 				while (c != EOF)
 				{
 					c = (char) getchar();
@@ -510,6 +429,19 @@ tToken* LoadToken()
 
 			break;
 		}
+
+
+		case S_Assign:			return ReturnStateType(Token, T_ASSIGN);
+		case S_Semicolon:		return ReturnStateType(Token, T_SEMICOLON);
+		case S_Colon:			return ReturnStateType(Token, T_COLON);
+		case S_Add:				return ReturnStateType(Token, T_ADD);
+		case S_Sub:				return ReturnStateType(Token, T_SUB);
+		case S_Multiply:		return ReturnStateType(Token, T_MULTIPLY);
+		case S_Intdivide:		return ReturnStateType(Token, T_INTDIVIDE);
+		case S_LeftBracket:		return ReturnStateType(Token, T_LEFTBRACKET);
+		case S_RightBracket:	return ReturnStateType(Token, T_RIGHTBRACKET);
+		case S_EOL:				return ReturnStateType(Token, T_EOL);
+		case S_EOF:				return ReturnStateType(Token, T_EOF);
 		}
 	}
 
@@ -541,6 +473,12 @@ tToken* SyntaxError(tToken *Token)
 		exitSecurely(SYNTAX_ERR);
 	}
 
+}
+
+tToken *ReturnStateType(tToken *Token, TokenType mType)
+{
+	Token->Type = mType;
+	return Token;
 }
 
 TokenType CompareWithKeywords(char* string)
@@ -724,3 +662,5 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 		return 0;
 	}
 }
+
+
