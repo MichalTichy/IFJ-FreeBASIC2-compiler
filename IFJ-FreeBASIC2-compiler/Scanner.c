@@ -236,6 +236,11 @@ tToken* LoadToken()
 					{
 						return ScannerError(Token);
 					}
+					else if (c == '\'')
+					{
+						AddToString('\\', Token, Token->Lenght);
+						AddToString('\'', Token, Token->Lenght);
+					}
 					else if (c == '\\')
 					{
 						if (CheckIfEscapeSeuquenceIsValid(c, Token))
