@@ -239,7 +239,7 @@ void ProcessParameter(tFTItemPtr functionPtr,int parameterIndex)
 				}
 				else
 				{
-					AddParemeter(&functionPtr, name, TokenTypeToScalarType(token->Type));
+					AddParemeter(functionPtr, name, TokenTypeToScalarType(token->Type));
 				}
 
 				Next();
@@ -307,7 +307,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 						takenTokens++;
 						if (IsTokenScalarType())
 						{
-							AddReturnValue(&fun,fun->data, TokenTypeToScalarType(token->Type));
+							AddReturnValue(fun, TokenTypeToScalarType(token->Type));
 
 							if (isDeclaration)
 							{
@@ -673,7 +673,7 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 					Next();
 					takenTokens++;
 
-					STScopeInsertTop(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
+					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
 
 					//todo check if item isnt allready defined
 					if (token->Type==T_ASSIGN)

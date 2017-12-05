@@ -35,9 +35,11 @@ void STMakeScope(tSTScopePtr* scope, tSTScopePtr parentScope); // make scope wit
 
 tSTItemPtr STScopeSearch(tSTScopePtr* scope, char* key); // Search in all scopes
 
-void STScopeInsertTop(tSTScopePtr* scope, char* key, ScalarType type); // insert into top scope
+void STScopeInsert(tSTScopePtr* scope, char* key, ScalarType type); // insert into top scope
 
 void STDeleteTopScope(tSTScopePtr* scope); // Delete top scope
+
+void STScopeInsertTop(tSTScopePtr* scope, char* key, ScalarType type);
 
 
 #endif // ifndef SYMTABLE

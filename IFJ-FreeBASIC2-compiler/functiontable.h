@@ -4,6 +4,7 @@
 
 #include "Scanner.h"
 #include "Parser.h"
+#include <stdbool.h>
 
 typedef struct
 {
@@ -29,9 +30,9 @@ void FTInit(tFTItemPtr* tableptr);
 
 tFTItemPtr FTSearch(tFTItemPtr* tableptr, char* token);
 
-void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type);
+void AddParemeter(tFTItemPtr itemptr, char* paramName, ScalarType type);
 
-void AddReturnValue(tFTItemPtr* funItem, char* name, ScalarType type);
+void AddReturnValue(tFTItemPtr itemptr, ScalarType type);
 
 tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration);
 
@@ -40,5 +41,7 @@ void FTRemove(tFTItemPtr* funItem, char* token);
 void FTFree(tFTItemPtr* tableptr);
 
 void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* name, ScalarType type);
+
+bool FTIsDeclarationOnly(tFTItemPtr* tablePtr);
 
 #endif

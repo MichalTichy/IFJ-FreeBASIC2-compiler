@@ -36,6 +36,25 @@ void ReplaceByRightmost(tFTItemPtr PtrReplaced, tFTItemPtr* RootPtr)
 void FTInit(tFTItemPtr* tableptr)
 {
 	*tableptr = NULL;
+
+	tFTItemPtr item = FTInsert(tableptr, "Length", true);
+	AddParemeter(item, "s", TYPE_String);
+	AddReturnValue(item, TYPE_Integer);
+
+	item = FTInsert(tableptr, "SubStr", true);
+	AddParemeter(item, "s", TYPE_String);
+	AddParemeter(item, "i", TYPE_Integer);
+	AddParemeter(item, "n", TYPE_Integer);
+	AddReturnValue(item, TYPE_String);
+
+	item = FTInsert(tableptr, "Chr", true);
+	AddParemeter(item, "i", TYPE_Integer);
+	AddReturnValue(item, TYPE_String);
+
+	item = FTInsert(tableptr, "Asc", true);
+	AddParemeter(item, "s", TYPE_String);
+	AddParemeter(item, "i", TYPE_Integer);
+	AddReturnValue(item, TYPE_Integer);
 }
 
 tFTItemPtr FTSearch(tFTItemPtr* tableptr, char* token)
@@ -115,25 +134,24 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration)
 	return *itemPtr;
 }
 
-void AddParemeter(tFTItemPtr* funItem, char* name, ScalarType type)
+void AddParemeter(tFTItemPtr itemptr, char* paramName, ScalarType type)
 {
-	tFTItemPtr item = FTSearch(funItem, name);
-	if (item == NULL)
+	if (itemptr == NULL)
 		exitSecurely(SEMANT_ERR_DEF);
 
-	if (item->parametersMax <= item->parametersCount)
+	if (itemptr->parametersMax <= itemptr->parametersCount)
 	{
-		(*funItem)->parametersArr = mrealloc((*funItem)->parametersArr, sizeof(tParam) * ((*funItem)->parametersMax + 5));
-		if ((*funItem)->parametersArr == NULL)
+		itemptr->parametersArr = mrealloc(itemptr->parametersArr, sizeof(tParam) * ((itemptr->parametersMax) + 5));
+		if (itemptr->parametersArr == NULL)
 		{
 			exitSecurely(INTERNAL_ERR);
 		}
-		item->parametersMax = item->parametersMax + 5;
+		itemptr->parametersMax = itemptr->parametersMax + 5;
 	}
 
-	(item->parametersArr[item->parametersCount]).name = name;
-	item->parametersCount = item->parametersCount + 1;
-	(item->parametersArr[item->parametersCount]).type = type;
+	(itemptr->parametersArr[itemptr->parametersCount]).name = paramName;
+	itemptr->parametersCount = itemptr->parametersCount + 1;
+	(itemptr->parametersArr[itemptr->parametersCount]).type = type;
 }
 
 void FTFree(tFTItemPtr* tableptr)
@@ -207,12 +225,13 @@ void FTRemove (tFTItemPtr* tableptr, char* token)
 	return;
 }
 
-void AddReturnValue(tFTItemPtr* funItem, char* name, ScalarType type)
+void AddReturnValue(tFTItemPtr itemptr, ScalarType type)
 {
-	tFTItemPtr item = FTSearch(funItem, name);
-	if (item == NULL)
+	if (itemptr == NULL)
+	{
 		exitSecurely(INTERNAL_ERR);
-	item->returnValue = type;
+	}
+	itemptr->returnValue = type;
 }
 
 void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* name, ScalarType type)
@@ -226,4 +245,36 @@ void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* nam
 	}
 	exitSecurely(SEMANT_ERR_DEF);
 	return;
+}
+
+bool FTIsDeclarationOnly(tFTItemPtr* tablePtr)
+{
+	TStack_t s;
+	StackInit(&s);
+
+	do
+	{
+		if ((*tablePtr) == NULL)			// take node from stack
+		{
+			if (!StackIsEmpty(&s))
+			{
+				*tablePtr = StackTopPop(&s);
+			}
+		}
+		else							// move right to stack
+		{
+			if ((*tablePtr)->rptr != NULL)
+			{
+				StackPush(&s, (*tablePtr)->rptr);
+			}
+			if ((*tablePtr)->declarationOnly)
+			{
+				return true;
+			}
+			*tablePtr = (*tablePtr)->lptr;		// go left
+		}
+
+	} while (*tablePtr != NULL || (!StackIsEmpty(&s)));
+
+	return false;
 }
