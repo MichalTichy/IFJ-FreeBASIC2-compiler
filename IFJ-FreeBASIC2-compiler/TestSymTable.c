@@ -358,6 +358,22 @@ void NestedScope()
 	Pass();
 
 }
+
+void NestedScope2()
+{
+	ResetScanner();
+	lastError = NULL;
+	currentTestName = "Nested scope2";
+	LoadFileToSTDIN("../../../TestSamples/ParserTests/NestedScope2.txt");
+	tProgram* result = Parse();
+	if (lastError != 4)
+	{
+		Fail("Wrong Error detected");
+	}
+
+	Pass();
+
+}
 void AllSymTableTests()
 {
 	TestSTInit();
@@ -377,6 +393,7 @@ void AllSymTableTests()
 	TestSTDeleteTopScope();
 
 	NestedScope();
+	NestedScope2();
 
 	return;
 }

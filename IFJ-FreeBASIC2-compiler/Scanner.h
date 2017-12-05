@@ -18,10 +18,22 @@ typedef enum {
 	S_Exp,
 	S_ExpSign,
 	S_Comment,
-	S_BlockcommentOrDivide
+	S_BlockcommentOrDivide,
+	S_Assign,
+	S_Semicolon,
+	S_Colon,
+	S_Add,
+	S_Sub,
+	S_Multiply,
+	S_Intdivide,
+	S_LeftBracket,
+	S_RightBracket,
+	S_EOL,
+	S_EOF
 
 }tState;
 
+tToken *ReturnStateType(tToken *Token, TokenType mType);
 TokenType CompareWithKeywords(char* string);
 tToken* ScannerError(tToken* Token);
 tToken* GetNextToken();
