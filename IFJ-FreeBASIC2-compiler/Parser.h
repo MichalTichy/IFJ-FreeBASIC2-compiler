@@ -169,6 +169,7 @@ typedef struct InputStatement
 
 typedef struct FunctionCall
 {
+	ScalarType result;
 	struct tFTItem* funTableItem;
 	struct NodeExpression** Arguments;
 	int argumentsCount;

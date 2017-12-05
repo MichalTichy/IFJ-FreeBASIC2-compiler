@@ -37,21 +37,21 @@ void FTInit(tFTItemPtr* tableptr)
 {
 	*tableptr = NULL;
 
-	tFTItemPtr item = FTInsert(tableptr, "Length", true);
+	tFTItemPtr item = FTInsert(tableptr, "Length",false);
 	AddParemeter(item, "s", TYPE_String);
 	AddReturnValue(item, TYPE_Integer);
 
-	item = FTInsert(tableptr, "SubStr", true);
+	item = FTInsert(tableptr, "SubStr", false);
 	AddParemeter(item, "s", TYPE_String);
 	AddParemeter(item, "i", TYPE_Integer);
 	AddParemeter(item, "n", TYPE_Integer);
 	AddReturnValue(item, TYPE_String);
 
-	item = FTInsert(tableptr, "Chr", true);
+	item = FTInsert(tableptr, "Chr", false);
 	AddParemeter(item, "i", TYPE_Integer);
 	AddReturnValue(item, TYPE_String);
 
-	item = FTInsert(tableptr, "Asc", true);
+	item = FTInsert(tableptr, "Asc", false);
 	AddParemeter(item, "s", TYPE_String);
 	AddParemeter(item, "i", TYPE_Integer);
 	AddReturnValue(item, TYPE_Integer);
@@ -92,7 +92,6 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration)
 		{
 			if ((*itemPtr)->declarationOnly && !isDeclaration)
 			{
-				(*itemPtr)->declarationOnly = false;
 				return *itemPtr;
 			}
 			else
@@ -236,6 +235,12 @@ void AddReturnValue(tFTItemPtr itemptr, ScalarType type)
 
 void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* name, ScalarType type)
 {
+	if (position>=item->parametersCount)
+	{
+		exitSecurely(SEMANT_ERR_TYPE);
+		return;
+	}
+
 	if (strcmp((item->parametersArr[position]).name, name) == 0)
 	{
 		if ((item->parametersArr[position]).type == type)
@@ -243,11 +248,11 @@ void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* nam
 			return;
 		}
 	}
-	exitSecurely(SEMANT_ERR_DEF);
+	exitSecurely(SEMANT_ERR_TYPE);
 	return;
 }
 
-bool FTIsDeclarationOnly(tFTItemPtr* tablePtr)
+bool FTIsDefinitionOnly(tFTItemPtr* tablePtr)
 {
 	TStack_t s;
 	StackInit(&s);
@@ -269,12 +274,12 @@ bool FTIsDeclarationOnly(tFTItemPtr* tablePtr)
 			}
 			if ((*tablePtr)->declarationOnly)
 			{
-				return true;
+				return false;
 			}
 			*tablePtr = (*tablePtr)->lptr;		// go left
 		}
 
 	} while (*tablePtr != NULL || (!StackIsEmpty(&s)));
 
-	return false;
+	return true;
 }

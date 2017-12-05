@@ -1,12 +1,13 @@
 ' fun dec
+declare function foo(c as integer) as integer
 
-function foo() as integer
-	return 42
+function foo(c as integer) as integer
+	return c
 end function
 
 ' fun call
 scope
 	dim a as integer
-	a = foo()
+	a = foo(42)
 	print a;
 end scope
