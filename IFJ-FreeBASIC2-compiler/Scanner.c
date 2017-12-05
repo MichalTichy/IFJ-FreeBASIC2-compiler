@@ -125,7 +125,7 @@ tToken* LoadToken()
 			else if (c == '(')								state = S_LeftBracket;
 			else if (c == ')')								state = S_RightBracket;
 			else if (c == '\'')								state = S_Comment;
-			else if (CheckEOL(c) == 1)						state = S_EOL;
+			else if (CheckEOL(c))						state = S_EOL;
 			else if (c == EOF)								state = S_EOF;
 			else
 			{
@@ -238,7 +238,7 @@ tToken* LoadToken()
 					}
 					else if (c == '\\')
 					{
-						if (CheckIfEscapeSeuquenceIsValid(c, Token) == 1)
+						if (CheckIfEscapeSeuquenceIsValid(c, Token))
 						{
 							return ScannerError(Token);
 						}
