@@ -496,13 +496,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 			case TYPE_String:
 			{
 				fprintf(stdout, "READ string");
-				StatementRecognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				Recognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
 				fprintf(stdout, "\n");
 			}
 			case TYPE_Double:
 			{
 				fprintf(stdout, "READ float");
-				StatementRecognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
+				Recognize(wrapa(identifier, (union Data)actualNode->tData.input->identifier), met);
 				fprintf(stdout, "\n");
 			}
 			break;
