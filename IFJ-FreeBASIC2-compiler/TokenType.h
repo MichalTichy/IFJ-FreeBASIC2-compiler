@@ -1,3 +1,19 @@
+/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: tokentype.h
+*
+*	File author:
+*	  Michal Martinu, xmarti78
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmast02
+*	  Ondra Deingruber, xdeing00
+*
+**/
+
 #ifndef TOKENTYPE
 #define TOKENTYPE
 typedef enum {
@@ -25,25 +41,21 @@ typedef enum {
 	T_LESSEROREQUAL,	// ** <=
 
 	T_AS,			// ** KeyWords
-	T_ASC,
 	T_DECLARE,
 	T_DIM,
 	T_DO,
 	T_DOUBLE,
 	T_ELSE,
 	T_END,
-	T_CHR,
 	T_FUNCTION,
 	T_IF,
 	T_INPUT,
 	T_INTEGER,
-	T_LENGHT,
 	T_LOOP,
 	T_PRINT,
 	T_RETURN,
 	T_SCOPE,
 	T_STRING,
-	T_SUBSTRING,
 	T_THEN,
 	T_WHILE,
 	T_ELSEIF, //bonus

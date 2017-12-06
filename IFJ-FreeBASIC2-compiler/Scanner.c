@@ -1,6 +1,26 @@
+/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: scanner.c
+*		
+*	File author:
+*	  Michal Martinu, xmarti78
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmast02
+*	  Ondra Deingruber, xdeing00
+*   
+**/
+
 #include "Scanner.h"
 #include "List.h"
 #include "ManagedMalloc.h"
+
+/**
+*  Used when debuggind mode is turned on for automatic testing
+**/
 
 #if DEBUG
 #define LEXERROR 1
@@ -11,19 +31,23 @@
 #endif
 
 //Language IFJ17 contain 35 keywords
-#define LenghtOfKeyWords 26
+#define LenghtOfKeyWords 22
 #define LenghtOfReservedWords 9
 
 /**
-* Reserved words of IFJ17 language
+*  Key words of IFJ17 language
 */
 
 char *KeyWords[LenghtOfKeyWords] = 
 {
-	"as", "asc", "declare", "dim", "do", "double", "else", "end", "chr",
-	"function", "if", "input", "integer", "lenght", "loop", "print", "return",
-	"scope", "string", "substr", "then", "while", "elseif", "and", "or", "not"
+	"as", "declare", "dim", "do", "double", "else", "end", 
+	"function", "if", "input", "integer", "loop", "print", "return",
+	"scope", "string", "then", "while", "elseif", "and", "or", "not"
 };
+
+/**
+*  Reserved words of IFJ17 language
+*/
 
 char *ReservedWords[LenghtOfReservedWords] =
 {
@@ -80,13 +104,14 @@ tToken* GetNextToken() {
 }
 
 /**
-* Function to get next token from source file.
+*  Function to load next token from source file.
 */
+
 tToken* LoadToken()
 {
 	tToken *Token;
 	tState state = S_Start;	//States of finite-state automaton
-	char c;					//Input char from stdion
+	char c;					//Input char from stdin
 	int AfterDot = 0;		//Help variable when state is after dot
 	int AfterExp = 0;		//Help variable when state is after exponent
 
@@ -219,6 +244,12 @@ tToken* LoadToken()
 			{
 				ungetc(c, stdin);
 				Token->Type = CompareWithKeywords(Token->String);
+				
+				if (Token->Type == T_SyntaxERROR)
+				{
+					return SyntaxError(Token);
+				}
+				
 				return Token;
 			}
 		}
@@ -494,44 +525,62 @@ tToken* LoadToken()
 		case S_RightBracket:	return ReturnStateType(Token, T_RIGHTBRACKET);
 		case S_EOL:				return ReturnStateType(Token, T_EOL);
 		case S_EOF:				return ReturnStateType(Token, T_EOF);
-		}
-	}
+		
+		} //End Switch
+	} //End while
 
 }
+
+/**
+*  Function used when there is lexical error in scanner.
+*/
 
 tToken* ScannerError(tToken *Token)
 {
 	if (LEXERROR == 1)
-	{
+	{   //When debugging mode is turned on, don´t exit
 		Token->Type = T_LexERROR;
 		return Token;
 	}
 	else
-	{
+	{   //Exit securely when error in scanner is occured
 		exitSecurely(LEX_ERR);
 	}
 	
 }
 
+/**
+*  Function throw syntax error when identificator is reserved word.
+*/
+
 tToken* SyntaxError(tToken *Token)
 {
 	if (LEXERROR == 1)
-	{
+	{   //When debugging mode is turned on, don´t exit
 		Token->Type = T_SyntaxERROR;
 		return Token;
 	}
 	else
-	{
+	{   //Exit securely when error in scanner is occured
 		exitSecurely(SYNTAX_ERR);
 	}
 
 }
+
+/**
+*  Function for changing type of token.
+*/
 
 tToken *ReturnStateType(tToken *Token, TokenType mType)
 {
 	Token->Type = mType;
 	return Token;
 }
+
+/**
+*  Function used when block comment needs to be cleared.
+*  When some error will occur return 0, else return 1.
+*/
 
 int BlockCommentClear(tToken *Token)
 {
@@ -571,6 +620,12 @@ int BlockCommentClear(tToken *Token)
 	}
 }
 
+
+/**
+*  Function for commparing indetificator with key words or reserved words.
+*  When input is reserved word return syntax error.
+*/
+
 TokenType CompareWithKeywords(char* string)
 {
 	TokenType Type;
@@ -584,8 +639,7 @@ TokenType CompareWithKeywords(char* string)
 			return Type;
 		}
 	}
-
-
+	
 	for (int i = 0; i < LenghtOfReservedWords; i++)
 	{
 		if (!strcmp(string, ReservedWords[i]))
@@ -597,18 +651,10 @@ TokenType CompareWithKeywords(char* string)
 	return Type;
 }
 
-int CheckIfMathSymbol(char c)
-{
-	if (c == '+' || c == '-' || c == '*' || c == '/' ||
-		c == '\\' || c == '=')
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+/**
+*  Function check if there is EOL, it is compatibile with windows new line.
+*  When EOL is found return 1, else return 0.
+*/
 
 int CheckEOL(char c)
 {
@@ -631,6 +677,12 @@ int CheckEOL(char c)
 		return 0;
 	}
 }
+
+
+/**
+*  Function to check valid escape sequence in string.
+*  When escape sequence is valid return 0, else return 1.
+*/
 
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 {
@@ -694,8 +746,12 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 		}
 
 		return 0;
-	}
-}
+	} 
+} 
+
+/**
+*  Function for adding numbers of escape sequence into string, individually.
+*/
 
 void AddEscapeSequenceToString(char val_1, char val_2, char val_3, tToken* Token, int Lenght)
 {

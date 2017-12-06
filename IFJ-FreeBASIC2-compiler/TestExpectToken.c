@@ -285,7 +285,7 @@ int Exp_AS()
 	
 	return 0;
 }
-
+/*
 int Exp_ASC()
 {
 	tToken *token;
@@ -296,7 +296,7 @@ int Exp_ASC()
 	}
 	
 	return 0;
-}
+}*/
 
 int Exp_DECLARE()
 {
@@ -369,7 +369,7 @@ int Exp_END()
 	
 	return 0;
 }
-
+/*
 int Exp_CHR()
 {
 	tToken *token;
@@ -380,7 +380,7 @@ int Exp_CHR()
 	}
 	
 	return 0;
-}
+}*/
 
 int Exp_FUNCTION()
 {
@@ -429,7 +429,7 @@ int Exp_INTEGER()
 	
 	return 0;
 }
-
+/*
 int Exp_LENGHT()
 {
 	tToken *token;
@@ -440,7 +440,7 @@ int Exp_LENGHT()
 	}
 	
 	return 0;
-}
+}*/
 
 int Exp_LOOP()
 {
@@ -501,7 +501,7 @@ int Exp_STRING()
 	
 	return 0;
 }
-
+/*
 int Exp_SUBSTRING()
 {
 	tToken *token;
@@ -512,7 +512,7 @@ int Exp_SUBSTRING()
 	}
 	
 	return 0;
-}
+}*/
 
 int Exp_THEN()
 {
