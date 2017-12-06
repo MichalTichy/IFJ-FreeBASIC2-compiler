@@ -29,9 +29,13 @@ typedef enum {
 	S_LeftBracket,
 	S_RightBracket,
 	S_EOL,
-	S_EOF
+	S_EOF,
+	S_Base,
+	S_BINARY,
+	S_OCTANE,
+	S_HEXA
 
-}tState;
+} tState;
 
 tToken *ReturnStateType(tToken *Token, TokenType mType);
 TokenType CompareWithKeywords(char* string);
@@ -44,5 +48,7 @@ int CheckEOL(char c);
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token);
 int CheckIfMathSymbol(char c);
 int BlockCommentClear(tToken *Token);
+void AddEscapeSequenceToString(char val_1, char val_2, char val_3, tToken* Token, int Lenght);
+
 
 #endif
