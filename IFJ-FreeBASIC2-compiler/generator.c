@@ -1,3 +1,18 @@
+/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: generator.c
+*
+*	File author:
+*	  Gabriel Mastny, xmastn02
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmastn02
+*	  Ondra Deingruber, xdeing00
+*
+**/
 #include "Parser.h"
 #include "generator.h"
 #include "List.h"
@@ -383,21 +398,21 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case TYPE_Double:
 			{
-				if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == doubleVal)
+				if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == doubleVal) //simple var assigment
 				{
 					fprintf(stdout, "MOVE LF@%s ", actualNode->tData.variable_assigment->id);
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "\n");
 				}
-				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == expression)
+				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == expression) //var assig with expression, first need resolve expression then assigment
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					fprintf(stdout, "MOVE LF@%s LF@_floatVar%d\n", actualNode->tData.variable_assigment->id, met->doubleVarInUse);
 				}
-				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == binaryExpression)
+				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == binaryExpression)//var assig with bin expression, first need resolve expression then assigment
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
-					if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->tData.expression->expression->tData.binaryExpression->left->type == binaryExpression)
+					if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->tData.expression->expression->tData.binaryExpression->left->type == binaryExpression) // there will be nesting
 					{
 						fprintf(stdout, "MOVE LF@%s LF@_floatVar%d\n", actualNode->tData.variable_assigment->id, met->doubleVarInUse - 1);
 					}
@@ -407,7 +422,6 @@ void Recognize(struct Node* root, struct meta* metadata)
 					}
 					
 				}
-				else fprintf(stderr, "######### case var asig type double something elese ########");
 			}
 			break;
 			}
@@ -495,13 +509,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 		break;
 		case binaryExpression:
 		{
-			if (IsAnotherExp(actualNode, true))
+			if (IsAnotherExp(actualNode, true)) // left nesting
 			{
 				met->submerge++;
 				Recognize(actualNode->tData.binaryExpression->left, met);
 				met->submerge--;
 			}
-			if (IsAnotherExp(actualNode, false))
+			if (IsAnotherExp(actualNode, false)) //right nesting
 			{
 				met->submerge++;
 				Recognize(actualNode->tData.binaryExpression->right, met);
@@ -565,9 +579,9 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 				metaInc(boolVar, met);
 				fprintf(stdout, "EQ ");
-				BinaryPrintOperands(actualNode, met);
+				BinaryPrintOperands(actualNode, met); // check if equal
 				
-
+				//creating fake negation node
 				struct Node* nd = mmalloc(sizeof(struct Node));
 				struct Node* nd2 = mmalloc(sizeof(struct Node));
 				struct Node* wrapNd = mmalloc(sizeof(struct Node));
@@ -626,7 +640,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			{
 				metaInc(boolVar, met);
 				
-				if (actualNode->tData.binaryExpression->right->type == expression)
+				if (actualNode->tData.binaryExpression->right->type == expression) //nesting
 				{
 					fprintf(stdout, "GT LF@_boolVar%d ", met->boolVarInUse);
 					Recognize(actualNode->tData.binaryExpression->left, met);
@@ -653,7 +667,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 					fprintf(stdout, "OR LF@_boolVar%d LF@_boolVar%d LF@_boolVar%d\n", met->boolVarInUse, met->boolVarInUse-1, met->boolVarInUse);
 					metaDec(boolVar, met);
 				}
-				else
+				else //simple or totaty submerged expression
 				{
 					fprintf(stdout, "GT ");
 				BinaryPrintOperands(actualNode, met);
@@ -684,7 +698,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			case T_LESSEROREQUAL:
 			{
 				metaInc(boolVar, met);
-				if (actualNode->tData.binaryExpression->right->type == expression)
+				if (actualNode->tData.binaryExpression->right->type == expression)// nesting
 				{
 					fprintf(stdout, "LT LF@_boolVar%d ", met->boolVarInUse);
 					Recognize(actualNode->tData.binaryExpression->left, met);
@@ -711,7 +725,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 					fprintf(stdout, "OR LF@_boolVar%d LF@_boolVar%d LF@_boolVar%d\n", met->boolVarInUse, met->boolVarInUse - 1, met->boolVarInUse);
 					metaDec(boolVar, met);
 				}
-				else
+				else  //simple or totaty submerged expression
 				{
 					fprintf(stdout, "LT ");
 					BinaryPrintOperands(actualNode, met);
@@ -753,8 +767,6 @@ void Recognize(struct Node* root, struct meta* metadata)
 				BinaryPrintOperands(actualNode, met);
 			}
 			break;
-			default: fprintf(stderr, "#### case binary expression op #####");
-				break;
 				
 			}
 			
@@ -807,15 +819,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 				fprintf(stdout, " float\n");
 			}
 			break;
-			default: fprintf(stdout, "input case somethong else");
-				break;
 			}
 			fprintf(stdout, "WRITE string@?\\032\n");
 		}
 		break;
 		case print:
 		{
-			if (actualNode->tData.print->Expression->tData.expression->expression->type == expression ||
+			if (actualNode->tData.print->Expression->tData.expression->expression->type == expression ||   //nesting
 				actualNode->tData.print->Expression->tData.expression->expression->type == binaryExpression ||
 				actualNode->tData.print->Expression->tData.expression->expression->type == negationExpression)
 			{
@@ -843,8 +853,6 @@ void Recognize(struct Node* root, struct meta* metadata)
 					//actualNode->tData.functionCall.
 				}
 				break;
-				default: fprintf(stdout, "###### print type something else");
-					break;
 					
 				}
 			}
