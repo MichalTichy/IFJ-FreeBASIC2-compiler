@@ -28,6 +28,7 @@ void RunTests() {
 	MultipleVarDeclaration();
 	VarDeclarationWithAllTypes();
 	PrintWithoutSpace();
+	simplifiedIterativeFactorial();
 	Summator();
 	WhileCycle();
 	TypeMissmatch();
@@ -41,7 +42,7 @@ void RunTests() {
 	printf("******* Function Table tests *******\n");
 	FTRunAllTests();
 	printf("--------------\n");
-
+	
 	mfreeall();
 
 	ClearSTDIN();
@@ -77,6 +78,7 @@ void simplifiedIterativeFactorial()
 {
 	ResetScanner();
 	currentTestName = "simplifiedIterativeFactorial";
+	lastError = OK_ERR;
 	LoadFileToSTDIN("../../../TestSamples/ParserTests/simplifiedIterativeFactorial.txt");
 	tProgram* result = Parse();
 	Generate(result);
