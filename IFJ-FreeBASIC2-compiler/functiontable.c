@@ -92,7 +92,6 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration)
 		{
 			if ((*itemPtr)->declarationOnly && !isDeclaration)
 			{
-				(*itemPtr)->declarationOnly = false;
 				return *itemPtr;
 			}
 			else
@@ -239,7 +238,7 @@ void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* nam
 {
 	if (position>=item->parametersCount)
 	{
-		exitSecurely(SEMANT_ERR_TYPE);
+		exitSecurely(SEMANT_ERR_DEF);
 		return;
 	}
 
@@ -250,7 +249,7 @@ void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* nam
 			return;
 		}
 	}
-	exitSecurely(SEMANT_ERR_TYPE);
+	exitSecurely(SEMANT_ERR_DEF);
 	return;
 }
 

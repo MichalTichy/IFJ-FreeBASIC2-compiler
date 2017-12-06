@@ -2,7 +2,7 @@
 #include "TestExpectToken.h"
 tToken* token;
 struct tFTItem** functionTable;
-
+bool* currentlyProcessingMain;
 tProgram* Parse()
 {
 	Next();
