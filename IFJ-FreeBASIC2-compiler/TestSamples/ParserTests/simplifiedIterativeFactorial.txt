@@ -1,4 +1,8 @@
 scope
+end scope
+
+
+scope
 dim a as integer
 dim b as integer
 dim c as integer
@@ -110,12 +114,3 @@ dim e as double = 78e4
 END SCOPE
 
 
-DIM vysl AS INTEGER
-If a < 0 THEN
-ELSE
-Vysl = 1
-Do WHile A > 0
-VYSL = vysl * a
-a = A - 1
-LooP
-end IF
