@@ -3,51 +3,15 @@
 tToken* token;
 struct tFTItem** functionTable;
 
-tProgram* Parse() {
+tProgram* Parse()
+{
 	Next();
 	tProgram* program = ProcessProgram();
-	if (program==NULL || program->Main==NULL)
+	if (program == NULL || program->Main == NULL)
 	{
 		exitSecurely(SYNTAX_ERR);
 	}
 	return program;
-}
-
-void Next() {
-	token = GetNextToken();
-}
-void Back() {
-	token = ReturnToken();
-}
-
-void BackMultipleTimes(int steps) {
-	for (int i = 0; i < steps; ++i)
-	{
-		Back();
-	}
-}
-
-tNode* ProcessInteger(struct tSTScope* parentScope) {
-	if (token->Type == T_INTVALUE)
-	{
-		return InitIntegerNode(token->IntVal);
-	}
-	return NULL;
-}
-
-tNode* ProcessDouble(struct tSTScope* parentScope) {
-	if (token->Type == T_DOUBLEVALUE)
-	{
-		return InitDoubleNode(token->DoubleVal);
-	}
-	return NULL;
-}
-tNode* ProcessString(struct tSTScope* parentScope) {
-	if (token->Type == T_STRINGVALUE)
-	{
-		return InitStringNode(token->String,token->Lenght);
-	}
-	return NULL;
 }
 
 tFunction* InitFunctionNode(struct tSTScope* parentScope)
@@ -65,7 +29,8 @@ tProgram* InitProgramNode()
 	return node;
 }
 
-tNode* InitIntegerNode(long int value) {
+tNode* InitIntegerNode(long int value)
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = integerVal;
 	node->tData.intValue = mmalloc(sizeof(struct NodeInteger));
@@ -73,103 +38,117 @@ tNode* InitIntegerNode(long int value) {
 	return node;
 }
 
-tNode* InitDoubleNode(double value) {
+tNode* InitDoubleNode(double value)
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = doubleVal;
-	node->tData.doubleValue= mmalloc(sizeof(struct NodeDouble));
+	node->tData.doubleValue = mmalloc(sizeof(struct NodeDouble));
 	node->tData.doubleValue->value = value;
 	return node;
 }
 
-tNode* InitStringNode(char* value, int lenght) {
+tNode* InitStringNode(char* value, int lenght)
+{
 	tNode* node = mmalloc(sizeof(struct Node));
-	node->type =stringVal;
+	node->type = stringVal;
 	node->tData.stringValue = mmalloc(sizeof(struct NodeString));
 	node->tData.stringValue->value = value;
 	node->tData.stringValue->lenght = lenght;
 	return node;
 }
 
-tNode* InitVarDeclarationNode() {
+tNode* InitVarDeclarationNode()
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = varDeclaration;
 	node->tData.variable_declaration = mmalloc(sizeof(struct NodeVariableDeclaration));
 	return node;
 }
 
-tNode* InitFunctionCallNode(tFTItemPtr funTableItem) {
+tNode* InitFunctionCallNode(tFTItemPtr funTableItem)
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->type = functionCall;
 	node->tData.functionCall = mmalloc(sizeof(struct FunctionCall));
 	node->tData.functionCall->funTableItem = funTableItem;
-	node->tData.functionCall->argumentsCount=funTableItem->parametersCount;
-	node->tData.functionCall->Arguments= malloc(sizeof(struct NodeExpression *) * node->tData.functionCall->argumentsCount);
+	node->tData.functionCall->argumentsCount = funTableItem->parametersCount;
+	node->tData.functionCall->Arguments = malloc(
+		sizeof(struct NodeExpression *) * node->tData.functionCall->argumentsCount);
 	return node;
 }
 
-
-tNode* InitVarAssigmentNode() {
+tNode* InitVarAssigmentNode()
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.variable_assigment = mmalloc(sizeof(struct NodeVariableAssigment));
 	node->type = varAssigment;
 	return node;
 }
 
-tNode* InitScopeNode(struct tSTScope* parentScope) {
+tNode* InitScopeNode(struct tSTScope* parentScope)
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.scope = mmalloc(sizeof(struct NodeScope));
 	STMakeScope(&node->tData.scope->scope, parentScope);
 	node->type = scope;
 	return node;
 }
-tNode* InitPrefixExpressionNode() {
+
+tNode* InitPrefixExpressionNode()
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.prefixExpression = mmalloc(sizeof(struct NodePrefixExpression));
 	node->type = prefixExpression;
 	return node;
 }
-tNode* InitNegationExpressionNode() {
+
+tNode* InitNegationExpressionNode()
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.negationExpression = mmalloc(sizeof(struct NodeNegationExpression));
 	node->type = negationExpression;
 	return node;
 }
 
-tNode* InitInputNode() {
+tNode* InitInputNode()
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.input = mmalloc(sizeof(struct InputStatement));
 	node->type = input;
 	return node;
 }
 
-tNode* InitPrintNode() {
+tNode* InitPrintNode()
+{
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.print = mmalloc(sizeof(struct PrintStatement));
 	node->type = print;
 	return node;
 }
 
-tPrintStatement* InitPrintStatement() {
+tPrintStatement* InitPrintStatement()
+{
 	tPrintStatement* node = mmalloc(sizeof(struct PrintStatement));
 	return node;
 }
 
-tNode* InitStatementNode() {
+tNode* InitStatementNode()
+{
 	tNode* node = mmalloc(sizeof(struct Node));
-	node->tData.statement= mmalloc(sizeof(struct NodeStatement));
+	node->tData.statement = mmalloc(sizeof(struct NodeStatement));
 	node->type = statement;
 	return node;
 }
 
-tNode* InitIfStatementNode(struct tSTScope* parentScope) {
+tNode* InitIfStatementNode(struct tSTScope* parentScope)
+{
 	tNode* node = mmalloc(sizeof(struct Node));
-	node->tData.ifStatement= mmalloc(sizeof(struct NodeIfStatement));
+	node->tData.ifStatement = mmalloc(sizeof(struct NodeIfStatement));
 	STMakeScope(&node->tData.ifStatement->passScope, parentScope);
 	STMakeScope(&node->tData.ifStatement->failScope, parentScope);
 	node->type = ifCondition;
 	return node;
 }
-
 
 tNode* InitWhileNode(struct tSTScope* parentScope)
 {
@@ -188,46 +167,39 @@ tNode* InitBinaryExpressionNode()
 	return node;
 }
 
-tNodeElseIfStatement* InitElseIfStatementNode(tNodeIfStatement* parent, struct tSTScope* parentScope) {
+tNodeElseIfStatement* InitElseIfStatementNode(tNodeIfStatement* parent, struct tSTScope* parentScope)
+{
 	tNodeElseIfStatement* node = mmalloc(sizeof(struct NodeElseIfStatement));
 	STMakeScope(&node->scope, parentScope);
-	node->parent= parent;
+	node->parent = parent;
 	return node;
-}
-
-
-bool IsTokenScalarType()
-{
-	return token->Type == T_INTEGER || token->Type == T_DOUBLE || token->Type == T_STRING;
 }
 
 tNode* initIdentifierNode()
 {
-
 	tNode* node = mmalloc(sizeof(struct Node));
-	node->tData.identifier= mmalloc(sizeof(struct NodeIdentifier));
+	node->tData.identifier = mmalloc(sizeof(struct NodeIdentifier));
 	node->type = identifier;
 	return node;
 }
 
 tNode* initExpressionNode()
 {
-
 	tNode* node = mmalloc(sizeof(struct Node));
 	node->tData.expression = mmalloc(sizeof(struct NodeExpression));
 	node->type = expression;
 	return node;
 }
 
-void ProcessParameter(tFTItemPtr functionPtr,int parameterIndex,bool wasPreviouslyDeclared, struct tSTScope* parentScope)
+void ProcessParameter(tFTItemPtr functionPtr, int parameterIndex, bool wasPreviouslyDeclared, struct tSTScope* parentScope)
 {
 	int takenTokens = 0;
-	if (token->Type==T_ID)
+	if (token->Type == T_ID)
 	{
 		char* name = token->String;
 		Next();
 		takenTokens++;
-		if (token->Type==T_AS)
+		if (token->Type == T_AS)
 		{
 			Next();
 			takenTokens++;
@@ -239,17 +211,17 @@ void ProcessParameter(tFTItemPtr functionPtr,int parameterIndex,bool wasPrevious
 					AddParemeter(functionPtr, name, type);
 					STScopeInsert(&parentScope, name, type);
 				}
-					
+
 				else
 					CompareParameterSignature(functionPtr, parameterIndex, name, type);
 
 				Next();
 				takenTokens++;
-				if (token->Type==T_COLON)
+				if (token->Type == T_COLON)
 				{
 					Next();
 					takenTokens++;
-					ProcessParameter(functionPtr,parameterIndex++,wasPreviouslyDeclared,parentScope);
+					ProcessParameter(functionPtr, parameterIndex++, wasPreviouslyDeclared, parentScope);
 				}
 				else
 				{
@@ -268,8 +240,8 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 {
 	int takenTokens = 0;
 	bool isDeclaration = false;
-	
-	if (token->Type==T_DECLARE)
+
+	if (token->Type == T_DECLARE)
 	{
 		isDeclaration = true;
 
@@ -277,19 +249,17 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 		takenTokens++;
 	}
 
-
-	if (token->Type==T_FUNCTION)
+	if (token->Type == T_FUNCTION)
 	{
 		Next();
 		takenTokens++;
-		if (token->Type==T_ID)
+		if (token->Type == T_ID)
 		{
 			tFTItemPtr fun = FTInsert(functionTable, token->String, isDeclaration);
 			bool wasPreviouslyDeclared = fun->declarationOnly && !isDeclaration;
 
 			if (!wasPreviouslyDeclared)
 			{
-
 				tFunction* node = InitFunctionNode(parentScope);
 				fun->body = node;
 				node->funTableItem = fun;
@@ -297,30 +267,31 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 
 			Next();
 			takenTokens++;
-			if (token->Type==T_LEFTBRACKET)
+			if (token->Type == T_LEFTBRACKET)
 			{
 				Next();
 				takenTokens++;
 
-				ProcessParameter(fun,0,wasPreviouslyDeclared,fun->body->scope);
+				ProcessParameter(fun, 0, wasPreviouslyDeclared, fun->body->scope);
 
-				if (fun->parametersCount!=0)
+				if (fun->parametersCount != 0)
 				{
 					Next();
 					takenTokens++;
 				}
 
-				if (token->Type==T_RIGHTBRACKET)
+				if (token->Type == T_RIGHTBRACKET)
 				{
 					Next();
 					takenTokens++;
-					if (token->Type==T_AS)
+					if (token->Type == T_AS)
 					{
 						Next();
 						takenTokens++;
 						if (IsTokenScalarType())
 						{
-							if (wasPreviouslyDeclared && fun->returnValue!=TYPE_Void && fun->returnValue!=TokenTypeToScalarType(token->Type))
+							if (wasPreviouslyDeclared && fun->returnValue != TYPE_Void && fun->returnValue !=
+								TokenTypeToScalarType(token->Type))
 							{
 								exitSecurely(SEMANT_ERR_DEF);
 								return NULL;
@@ -335,7 +306,6 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 							Next();
 							takenTokens++;
 
-
 							tNode* statement = ProcessStatement(fun->body->scope);
 							if (statement != NULL)
 							{
@@ -345,13 +315,13 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 								takenTokens++;
 							}
 
-							if (token->Type==T_RETURN)
+							if (token->Type == T_RETURN)
 							{
 								Next();
 								takenTokens++;
 
 								tNode* expression = ProcessExpression(fun->body->scope);
-								if (expression!=NULL)
+								if (expression != NULL)
 								{
 									GetResultType(fun->returnValue, expression->tData.expression->ResultType, T_ASSIGN);
 									fun->body->returnExp = expression->tData.expression;
@@ -361,9 +331,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 								takenTokens++;
 							}
 
-							
 							SkipStatementSeparators();
-							
 
 							if (token->Type == T_END)
 							{
@@ -380,7 +348,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 					}
 				}
 			}
-			FTRemove(&fun,fun->data);
+			FTRemove(&fun, fun->data);
 		}
 	}
 	BackMultipleTimes(takenTokens);
@@ -389,7 +357,7 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 
 tNode* ProcessIdentifier(struct tSTScope* parentScope)
 {
-	if (token->Type==T_ID)
+	if (token->Type == T_ID)
 	{
 		tNode* node = initIdentifierNode();
 		node->tData.identifier->id = token->String;
@@ -410,29 +378,29 @@ tNode* ProcessAtom(struct tSTScope* parentScope)
 {
 	if (token->Type == T_INTVALUE)
 	{
-		tNode* node= InitIntegerNode(token->IntVal);
+		tNode* node = InitIntegerNode(token->IntVal);
 		return node;
 	}
 	if (token->Type == T_DOUBLEVALUE)
 	{
-		tNode* node= InitDoubleNode(token->DoubleVal);
+		tNode* node = InitDoubleNode(token->DoubleVal);
 		return node;
 	}
 
 	if (token->Type == T_STRINGVALUE)
 	{
-		tNode* node= InitStringNode(token->String,token->Lenght);
+		tNode* node = InitStringNode(token->String, token->Lenght);
 		return node;
 	}
 
 	tNode* functionCall = ProcessFunctionCall(parentScope);
-	if (functionCall !=NULL)
+	if (functionCall != NULL)
 	{
 		return functionCall;
 	}
 
 	tNode* id = ProcessIdentifier(parentScope);
-	if (id!=NULL)
+	if (id != NULL)
 	{
 		return id;
 	}
@@ -444,25 +412,25 @@ tNode* ProcessHighestPrecedenceExpression(struct tSTScope* parentScope)
 {
 	int takenTokens = 0;
 	tNode* atom = ProcessAtom(parentScope);
-	if (atom!=NULL)
+	if (atom != NULL)
 	{
 		return atom;
 	}
 
-	if (token->Type==T_LEFTBRACKET)
+	if (token->Type == T_LEFTBRACKET)
 	{
 		Next();
 		takenTokens++;
 		tNode* exp = ProcessExpression(parentScope);
-		if (exp!=NULL)
+		if (exp != NULL)
 		{
 			Next();
 			takenTokens++;
-			if (token->Type==T_RIGHTBRACKET)
+			if (token->Type == T_RIGHTBRACKET)
 			{
 				return exp;
 			}
-		}		
+		}
 	}
 
 	BackMultipleTimes(takenTokens);
@@ -472,16 +440,16 @@ tNode* ProcessHighestPrecedenceExpression(struct tSTScope* parentScope)
 tNode* ProcessNegationExpression(struct tSTScope* parentScope)
 {
 	int takenTokens = 0;
-	if (token->Type==T_NOT)
+	if (token->Type == T_NOT)
 	{
 		Next();
 		takenTokens++;
 		tNode* relationalExpression = ProcessRelationalExpression(parentScope);
 		if (relationalExpression)
-		{			
+		{
 			tNode* exp = InitNegationExpressionNode();
 			exp->tData.negationExpression->expression = relationalExpression;
-			exp->tData.negationExpression->resultType = GetResultType(ExtractType(relationalExpression),NULL,T_NOT);
+			exp->tData.negationExpression->resultType = GetResultType(ExtractType(relationalExpression), NULL, T_NOT);
 			return exp;
 		}
 	}
@@ -489,49 +457,30 @@ tNode* ProcessNegationExpression(struct tSTScope* parentScope)
 	return NULL;
 }
 
-ScalarType ExtractType(tNode* node)
-{
-	switch (node->type) {
-		case integerVal: return TYPE_Integer;
-		case doubleVal: return TYPE_Double;
-		case stringVal: return TYPE_String;
-		case expression: return node->tData.expression->ResultType;
-		case binaryExpression: return node->tData.binaryExpression->resultType;
-		case prefixExpression: return node->tData.prefixExpression->resultType;
-		case negationExpression: return node->tData.negationExpression->resultType;
-		case identifier: return node->tData.identifier->type;
-		case functionCall: return node->tData.functionCall->result;
-		default:return NULL;
-	}
-}
 tNode* ProcessPrefixExpression(struct tSTScope* parentScope)
 {
 	int takenTokents = 0;
-	if (token->Type==T_SUB||token->Type==T_ADD)
+	if (token->Type == T_SUB || token->Type == T_ADD)
 	{
 		Next();
 		takenTokents++;
 		tNode* prefExpression = ProcessPrefixExpression(parentScope);
-		if (prefExpression!=NULL)
+		if (prefExpression != NULL)
 		{
 			tNode* exp = InitPrefixExpressionNode();
 			ScalarType expType = ExtractType(exp);
 			ScalarType prefExpType = ExtractType(prefExpression);
-			exp->type=GetResultType(expType, prefExpType,token->Type);
+			exp->type = GetResultType(expType, prefExpType, token->Type);
 			exp->tData.prefixExpression->OP = token->Type;
 			exp->tData.prefixExpression->expression = prefExpression;
 			return exp;
 		}
-		else
-		{
-			Back();
-			takenTokents--;
-		}
+		Back();
+		takenTokents--;
 	}
 
-
 	tNode* negation = ProcessNegationExpression(parentScope);
-	if (negation!=NULL)
+	if (negation != NULL)
 	{
 		return negation;
 	}
@@ -541,28 +490,27 @@ tNode* ProcessPrefixExpression(struct tSTScope* parentScope)
 
 tNode* ProcessMultiplicationExpression(struct tSTScope* parentScope)
 {
-
 	tNode* exp = ProcessPrefixExpression(parentScope);
 	Next();
-	while (token->Type == T_MULTIPLY || token->Type==T_DIVIDE)
+	while (token->Type == T_MULTIPLY || token->Type == T_DIVIDE)
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessPrefixExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp),
+		                                                           ExtractType(newExp->tData.binaryExpression->right),
+		                                                           newExp->tData.binaryExpression->OP);
 		exp = newExp;
 		Next();
 	}
 	Back();
 	return exp;
-	
 }
 
 tNode* ProcessIntDivisionExpression(struct tSTScope* parentScope)
 {
-
 	tNode* exp = ProcessMultiplicationExpression(parentScope);
 	Next();
 	while (token->Type == T_INTDIVIDE)
@@ -572,11 +520,13 @@ tNode* ProcessIntDivisionExpression(struct tSTScope* parentScope)
 		Next();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->right = ProcessMultiplicationExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp),
+		                                                           ExtractType(newExp->tData.binaryExpression->right),
+		                                                           newExp->tData.binaryExpression->OP);
 		exp = newExp;
 		Next();
 	}
-		Back();
+	Back();
 	return exp;
 }
 
@@ -584,18 +534,20 @@ tNode* ProcessAddExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessIntDivisionExpression(parentScope);
 	Next();
-	while (token->Type == T_ADD || token->Type == T_SUB )
+	while (token->Type == T_ADD || token->Type == T_SUB)
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessIntDivisionExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp),
+		                                                           ExtractType(newExp->tData.binaryExpression->right),
+		                                                           newExp->tData.binaryExpression->OP);
 		exp = newExp;
 		Next();
 	}
-		Back();
+	Back();
 	return exp;
 }
 
@@ -603,18 +555,21 @@ tNode* ProcessRelationalExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessAddExpression(parentScope);
 	Next();
-	while (token->Type == T_ASSIGN || token->Type == T_GREATER || token->Type == T_LESS|| token->Type == T_NOTEQUAL|| token->Type == T_GREATEROREQUAL|| token->Type == T_LESSEROREQUAL)
+	while (token->Type == T_ASSIGN || token->Type == T_GREATER || token->Type == T_LESS || token->Type == T_NOTEQUAL ||
+		token->Type == T_GREATEROREQUAL || token->Type == T_LESSEROREQUAL)
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->OP = token->Type;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessAddExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp),
+		                                                           ExtractType(newExp->tData.binaryExpression->right),
+		                                                           newExp->tData.binaryExpression->OP);
 		exp = newExp;
 		Next();
 	}
-		Back();
+	Back();
 	return exp;
 }
 
@@ -629,12 +584,14 @@ tNode* ProcessLogicalAndExpression(struct tSTScope* parentScope)
 		newExp->tData.binaryExpression->OP = T_AND;
 		Next();
 		newExp->tData.binaryExpression->right = ProcessRelationalExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp),
+		                                                           ExtractType(newExp->tData.binaryExpression->right),
+		                                                           newExp->tData.binaryExpression->OP);
 		exp = newExp;
 		Next();
 	}
 
-		Back();
+	Back();
 	return exp;
 }
 
@@ -642,35 +599,38 @@ tNode* ProcessLogicalOrExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessLogicalAndExpression(parentScope);
 	Next();
-	while (token->Type==T_OR)
+	while (token->Type == T_OR)
 	{
 		tNode* newExp = InitBinaryExpressionNode();
 		newExp->tData.binaryExpression->left = exp;
 		newExp->tData.binaryExpression->OP = T_OR;
 		Next();
-		newExp->tData.binaryExpression->right= ProcessLogicalAndExpression(parentScope);
-		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp), ExtractType(newExp->tData.binaryExpression->right), newExp->tData.binaryExpression->OP);
+		newExp->tData.binaryExpression->right = ProcessLogicalAndExpression(parentScope);
+		newExp->tData.binaryExpression->resultType = GetResultType(ExtractType(exp),
+		                                                           ExtractType(newExp->tData.binaryExpression->right),
+		                                                           newExp->tData.binaryExpression->OP);
 		exp = newExp;
 		Next();
 	}
-		Back();
+	Back();
 	return exp;
 }
 
-tNode*  ProcessExpression(struct tSTScope* parentScope)
+tNode* ProcessExpression(struct tSTScope* parentScope)
 {
 	tNode* exp = ProcessLogicalAndExpression(parentScope);
-	if (exp==NULL)
+	if (exp == NULL)
 	{
 		return NULL;
 	}
 	tNode* wrap = initExpressionNode();
-	wrap->tData.expression->expression=exp;
+	wrap->tData.expression->expression = exp;
 	wrap->tData.expression->ResultType = ExtractType(exp);
 	return wrap;
 }
 
-tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
+tNode* ProcessVarDeclaration(struct tSTScope* parentScope)
+{
 	int takenTokens = 0;
 	tNode* declaration = NULL;
 	if (token->Type == T_DIM)
@@ -683,7 +643,7 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 			declaration->tData.variable_declaration->id = token->String;
 			Next();
 			takenTokens++;
-			if (token->Type==T_AS)
+			if (token->Type == T_AS)
 			{
 				Next();
 				takenTokens++;
@@ -693,18 +653,19 @@ tNode* ProcessVarDeclaration(struct tSTScope* parentScope) {
 					Next();
 					takenTokens++;
 
-					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id,declaration->tData.variable_declaration->varType);
+					STScopeInsert(&parentScope, declaration->tData.variable_declaration->id,
+					              declaration->tData.variable_declaration->varType);
 
 					//todo check if item isnt allready defined
-					if (token->Type==T_ASSIGN)
+					if (token->Type == T_ASSIGN)
 					{
 						Next();
 						takenTokens++;
 						tNode* expression = ProcessExpression(parentScope);
-						if (expression!=NULL)
+						if (expression != NULL)
 						{
-
-							declaration->tData.variable_declaration->varType = GetResultType(declaration->tData.variable_declaration->varType, ExtractType(expression), T_ASSIGN);
+							declaration->tData.variable_declaration->varType = GetResultType(
+								declaration->tData.variable_declaration->varType, ExtractType(expression), T_ASSIGN);
 							declaration->tData.variable_declaration->Expression = expression;
 							return declaration;
 						}
@@ -759,8 +720,7 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 		{
 			if (operation == T_DIVIDE)
 				return TYPE_Double;
-			else
-				return TYPE_Integer;
+			return TYPE_Integer;
 		}
 		if (type2 == NULL && operation == T_NOT)
 		{
@@ -833,11 +793,8 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 		{
 			if (operation == T_ADD || operation == T_ASSIGN)
 				return TYPE_String;
-			else
-			{
-				exitSecurely(SEMANT_ERR_TYPE);
-				return;
-			}
+			exitSecurely(SEMANT_ERR_TYPE);
+			return;
 		}
 		if (type2 == NULL && operation == T_NOT)
 		{
@@ -852,7 +809,8 @@ ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation
 	return;
 }
 
-tNode* ProcessAssigment(struct tSTScope* parentScope) {
+tNode* ProcessAssigment(struct tSTScope* parentScope)
+{
 	int takenTokens = 0;
 	tNode* assigment = NULL;
 	if (token->Type == T_ID)
@@ -860,18 +818,18 @@ tNode* ProcessAssigment(struct tSTScope* parentScope) {
 		assigment = InitVarAssigmentNode();
 		assigment->tData.variable_assigment->id = token->String;
 		struct tSTItem* symPableItem = STScopeSearch(&parentScope, assigment->tData.variable_assigment->id);
-		if (symPableItem==NULL)
+		if (symPableItem == NULL)
 			exitSecurely(SEMANT_ERR_DEF);
 		Next();
 		takenTokens++;
-		if (token->Type==T_ASSIGN)
+		if (token->Type == T_ASSIGN)
 		{
 			Next();
 			takenTokens++;
 			tNode* expression = ProcessExpression(parentScope);
-			if (expression!=NULL)
+			if (expression != NULL)
 			{
-				assigment->tData.variable_assigment->varType = GetResultType(symPableItem->type,ExtractType(expression),T_ASSIGN);
+				assigment->tData.variable_assigment->varType = GetResultType(symPableItem->type, ExtractType(expression), T_ASSIGN);
 				assigment->tData.variable_assigment->Expression = expression;
 				return assigment;
 			}
@@ -883,24 +841,10 @@ tNode* ProcessAssigment(struct tSTScope* parentScope) {
 	return NULL;
 }
 
-bool IsStatementSeparator(TokenType tokenType)
+tNode* ProcessScope(struct tSTScope* parentScope)
 {
-	return tokenType == T_EOL;
-}
-
-int SkipStatementSeparators() {
-	int countOfFoundSeparators = 0;
-	while (IsStatementSeparator(token->Type))
-	{
-		Next();
-		countOfFoundSeparators++;		
-	}
-	return countOfFoundSeparators;
-}
-
-tNode* ProcessScope(struct tSTScope* parentScope) {
 	int takenTokens = 0;
-	if (token->Type==T_SCOPE)
+	if (token->Type == T_SCOPE)
 	{
 		Next();
 		takenTokens++;
@@ -935,7 +879,7 @@ tNodeElseIfStatement* ProcessElseIfStatements(tNodeIfStatement* parent, struct t
 	tNodeElseIfStatement* firstElseIf = NULL;
 	while (token->Type == T_ELSEIF)
 	{
-		tNodeElseIfStatement* elseIf = InitElseIfStatementNode(parent,parentScope);
+		tNodeElseIfStatement* elseIf = InitElseIfStatementNode(parent, parentScope);
 
 		Next();
 		takenTokens++;
@@ -981,7 +925,8 @@ tNodeElseIfStatement* ProcessElseIfStatements(tNodeIfStatement* parent, struct t
 	return firstElseIf;
 }
 
-tNode* ProcessIfStatement(struct tSTScope* parentScope) {
+tNode* ProcessIfStatement(struct tSTScope* parentScope)
+{
 	int takenTokens = 0;
 	if (token->Type == T_IF)
 	{
@@ -1003,7 +948,7 @@ tNode* ProcessIfStatement(struct tSTScope* parentScope) {
 				{
 					ifNode->tData.ifStatement->Pass = passStatements->tData.statement;
 					Next();
-					ifNode->tData.ifStatement->elseIf = ProcessElseIfStatements(ifNode->tData.ifStatement,parentScope);
+					ifNode->tData.ifStatement->elseIf = ProcessElseIfStatements(ifNode->tData.ifStatement, parentScope);
 
 					if (token->Type == T_ELSE)
 					{
@@ -1019,15 +964,14 @@ tNode* ProcessIfStatement(struct tSTScope* parentScope) {
 						Next();
 						takenTokens++;
 					}
-					if (token->Type==T_END)
+					if (token->Type == T_END)
 					{
 						Next();
 						takenTokens++;
-						if (token->Type==T_IF)
+						if (token->Type == T_IF)
 						{
 							return ifNode;
 						}
-						
 					}
 				}
 			}
@@ -1036,14 +980,14 @@ tNode* ProcessIfStatement(struct tSTScope* parentScope) {
 		return NULL;
 	}
 
-
 	BackMultipleTimes(takenTokens);
 	return NULL;
 }
 
-tNode* ProcessWhileStatement(struct tSTScope* parentScope) {
+tNode* ProcessWhileStatement(struct tSTScope* parentScope)
+{
 	int takenTokens = 0;
-	if (token->Type==T_DO)
+	if (token->Type == T_DO)
 	{
 		Next();
 		takenTokens++;
@@ -1054,52 +998,48 @@ tNode* ProcessWhileStatement(struct tSTScope* parentScope) {
 			takenTokens++;
 
 			tNode* expression = ProcessExpression(parentScope);
-			if (expression!=NULL)
+			if (expression != NULL)
 			{
 				whileNode->tData.whileBlock->Condition = expression;
 				Next();
 				takenTokens++;
 
 				tNode* Statement = ProcessStatement(whileNode->tData.whileBlock->scope);
-				if (Statement!=NULL)
+				if (Statement != NULL)
 				{
 					whileNode->tData.whileBlock->Statement = Statement->tData.statement;
-					
+
 					Next();
 					takenTokens++;
-					if (token->Type==T_LOOP)
+					if (token->Type == T_LOOP)
 					{
 						return whileNode;
 					}
 				}
 			}
 		}
-		
 	}
-
 
 	BackMultipleTimes(takenTokens);
 	return NULL;
 }
 
-tNode* ProcessCompoundStatement(struct tSTScope* parentScope) {
-
+tNode* ProcessCompoundStatement(struct tSTScope* parentScope)
+{
 	//TODO ADD SUPPORT FOR FUNCTIONS
 	int takenTokens = 0;
 
 	tNode* scope = ProcessScope(parentScope);
-	if (scope!=NULL)
+	if (scope != NULL)
 		return scope;
 
 	tNode* ifStatement = ProcessIfStatement(parentScope);
-	if (ifStatement !=NULL)
+	if (ifStatement != NULL)
 		return ifStatement;
 
 	tNode* whileStatement = ProcessWhileStatement(parentScope);
-	if (whileStatement !=NULL)
+	if (whileStatement != NULL)
 		return whileStatement;
-
-
 
 	BackMultipleTimes(takenTokens);
 	return NULL;
@@ -1123,7 +1063,7 @@ tPrintStatement* processPrintExpression(struct tSTScope* parentScope)
 
 			tPrintStatement* nextExpression = processPrintExpression(parentScope);
 			printStatement->nextPrint = nextExpression;
-			if (nextExpression==NULL)
+			if (nextExpression == NULL)
 			{
 				Back();
 				takenTokens--;
@@ -1131,26 +1071,25 @@ tPrintStatement* processPrintExpression(struct tSTScope* parentScope)
 
 			return printStatement;
 		}
-		else
-		{
-			exitSecurely(SYNTAX_ERR);
-		}
+		exitSecurely(SYNTAX_ERR);
 	}
 
 	BackMultipleTimes(takenTokens);
 	return NULL;
 }
-tNode* ProcessPrintNode(struct tSTScope* parentScope) {
+
+tNode* ProcessPrintNode(struct tSTScope* parentScope)
+{
 	int takenTokens = 0;
 
-	if (token->Type==T_PRINT)
+	if (token->Type == T_PRINT)
 	{
 		Next();
 		takenTokens++;
 		tNode* printNode = InitPrintNode();
 
 		tPrintStatement* pStatement = processPrintExpression(parentScope);
-		if (pStatement!=NULL)
+		if (pStatement != NULL)
 		{
 			printNode->tData.print = pStatement;
 			return printNode;
@@ -1160,16 +1099,17 @@ tNode* ProcessPrintNode(struct tSTScope* parentScope) {
 	return NULL;
 }
 
-tNode* ProcessInputNode(struct tSTScope* parentScope) {
+tNode* ProcessInputNode(struct tSTScope* parentScope)
+{
 	int takenTokents = 0;
-	if (token->Type==T_INPUT)
+	if (token->Type == T_INPUT)
 	{
 		tNode* input = InitInputNode();
 
 		Next();
 		takenTokents++;
 		tNode* id = ProcessIdentifier(parentScope);
-		if (id!= NULL)
+		if (id != NULL)
 		{
 			input->tData.input->identifier = id->tData.identifier;
 			return input;
@@ -1180,17 +1120,18 @@ tNode* ProcessInputNode(struct tSTScope* parentScope) {
 	return NULL;
 }
 
-tNode* ProcessQuirkStatement(struct tSTScope* parentScope) {
+tNode* ProcessQuirkStatement(struct tSTScope* parentScope)
+{
 	int takenTokens = 0;
 
 	tNode* print = ProcessPrintNode(parentScope);
-	if (print !=NULL)
+	if (print != NULL)
 		return print;
 
 	tNode* input = ProcessInputNode(parentScope);
-	if (input !=NULL)
+	if (input != NULL)
 		return input;
-	
+
 	BackMultipleTimes(takenTokens);
 	return NULL;
 }
@@ -1198,13 +1139,13 @@ tNode* ProcessQuirkStatement(struct tSTScope* parentScope) {
 tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 {
 	int takenTokens = 0;
-	if (token->Type==T_ID)
+	if (token->Type == T_ID)
 	{
 		char* name = token->String;
 
 		Next();
 		takenTokens++;
-		if (token->Type==T_LEFTBRACKET)
+		if (token->Type == T_LEFTBRACKET)
 		{
 			struct tFTItem* ftItem = FTSearch(functionTable, name);
 			tNode* call = InitFunctionCallNode(ftItem);
@@ -1212,42 +1153,37 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 			takenTokens++;
 			for (int i = 0; i < call->tData.functionCall->argumentsCount; ++i)
 			{
-				if (i!=0)
+				if (i != 0)
 				{
-					if (token->Type!=T_COLON)
+					if (token->Type != T_COLON)
 					{
 						exitSecurely(SYNTAX_ERR);
 						return NULL;
 					}
-					else
-					{
-						Next();
-						takenTokens++;
-					}
+					Next();
+					takenTokens++;
 				}
 
-
 				tNode* exp = ProcessExpression(parent_scope);
-				if (exp==NULL)
+				if (exp == NULL)
 					exitSecurely(SEMANT_ERR_TYPE);
-				
+
 				GetResultType(ftItem->parametersArr[i].type, ExtractType(exp), T_ASSIGN);
 
 				call->tData.functionCall->Arguments[i] = exp->tData.expression;
 
-
-				if (i == call->tData.functionCall->argumentsCount-1)
+				if (i == call->tData.functionCall->argumentsCount - 1)
 					if (token->Type == T_COLON)
 						exitSecurely(SEMANT_ERR_TYPE);
 			}
 
-			if (call->tData.functionCall->argumentsCount!=0)
+			if (call->tData.functionCall->argumentsCount != 0)
 			{
 				Next();
 				takenTokens++;
 			}
 
-			if (token->Type==T_RIGHTBRACKET)
+			if (token->Type == T_RIGHTBRACKET)
 			{
 				return call;
 			}
@@ -1260,7 +1196,7 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 tNode* ProcessStatement(struct tSTScope* parentScope)
 {
 	int takenTokens = SkipStatementSeparators();
-	if (takenTokens==0)
+	if (takenTokens == 0)
 	{
 		//missing statement separator
 		return NULL;
@@ -1277,11 +1213,11 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 	}
 	else
 	{
-
 		tNode* compoundStatement = ProcessCompoundStatement(parentScope);
 		if (compoundStatement != NULL)
 		{
-			switch (compoundStatement->type) {
+			switch (compoundStatement->type)
+			{
 			case scope:
 				statement->tData.statement->type = scope;
 				statement->tData.statement->tStatementNode.scope = compoundStatement->tData.scope;
@@ -1296,7 +1232,7 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 				statement->tData.statement->tStatementNode.whileBlock = compoundStatement->tData.whileBlock;
 				break;
 
-			default:;  //todo ERROR
+			default: ; //todo ERROR
 			}
 		}
 		else
@@ -1304,12 +1240,12 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 			tNode* quirkStatement = ProcessQuirkStatement(parentScope);
 			if (quirkStatement != NULL)
 			{
-				if (quirkStatement->type==print)
+				if (quirkStatement->type == print)
 				{
 					statement->tData.statement->type = print;
 					statement->tData.statement->tStatementNode.printStatement = quirkStatement->tData.print;
 				}
-				else if (quirkStatement->type==input)
+				else if (quirkStatement->type == input)
 				{
 					statement->tData.statement->type = input;
 					statement->tData.statement->tStatementNode.inputStatement = quirkStatement->tData.input;
@@ -1326,7 +1262,7 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 				else
 				{
 					tNode* functionCallNode = ProcessFunctionCall(parentScope);
-					if (functionCallNode !=NULL)
+					if (functionCallNode != NULL)
 					{
 						statement->type = functionCall;
 						statement->tData.functionCall = functionCallNode->tData.functionCall;
@@ -1338,11 +1274,10 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 					}
 				}
 			}
-
 		}
 	}
 
-	if (statement->tData.statement->type!=empty)
+	if (statement->tData.statement->type != empty)
 	{
 		Next();
 
@@ -1351,20 +1286,18 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 		if (nextStatement != NULL && nextStatement->tData.statement->type != empty)
 		{
 			statement->tData.statement->Next = nextStatement->tData.statement;
-
 		}
-		else if (nextStatement==NULL)
+		else if (nextStatement == NULL)
 		{
 			Back();
 		}
 	}
-	
-	return statement;
 
+	return statement;
 }
 
-tProgram* ProcessProgram() {
-	
+tProgram* ProcessProgram()
+{
 	tProgram* program = InitProgramNode();
 	functionTable = &program->functionTable;
 
@@ -1373,19 +1306,19 @@ tProgram* ProcessProgram() {
 	do
 	{
 		function = ProcessFunctionDefinition(program->globalScope);
-		if (function!=NULL)
+		if (function != NULL)
 		{
 			Next();
 			takenTokens++;
 		}
-		takenTokens+= SkipStatementSeparators();
+		takenTokens += SkipStatementSeparators();
 	}
-	while (function!=NULL);
+	while (function != NULL);
 
 	tNode* scope = ProcessScope(program->globalScope);
-	if (scope!=NULL)
+	if (scope != NULL)
 	{
-		program->Main=scope;
+		program->Main = scope;
 
 		if (!FTIsDefinitionOnly(functionTable))
 		{
@@ -1394,7 +1327,7 @@ tProgram* ProcessProgram() {
 		}
 		Next();
 		SkipStatementSeparators();
-		if (token->Type==T_EOF)
+		if (token->Type == T_EOF)
 		{
 			return program;
 		}
@@ -1404,15 +1337,98 @@ tProgram* ProcessProgram() {
 	return NULL;
 }
 
+tNode* ProcessInteger(struct tSTScope* parentScope)
+{
+	if (token->Type == T_INTVALUE)
+	{
+		return InitIntegerNode(token->IntVal);
+	}
+	return NULL;
+}
 
+tNode* ProcessDouble(struct tSTScope* parentScope)
+{
+	if (token->Type == T_DOUBLEVALUE)
+	{
+		return InitDoubleNode(token->DoubleVal);
+	}
+	return NULL;
+}
+
+tNode* ProcessString(struct tSTScope* parentScope)
+{
+	if (token->Type == T_STRINGVALUE)
+	{
+		return InitStringNode(token->String, token->Lenght);
+	}
+	return NULL;
+}
+
+void Next()
+{
+	token = GetNextToken();
+}
+
+int SkipStatementSeparators()
+{
+	int countOfFoundSeparators = 0;
+	while (IsStatementSeparator(token->Type))
+	{
+		Next();
+		countOfFoundSeparators++;
+	}
+	return countOfFoundSeparators;
+}
+
+void Back()
+{
+	token = ReturnToken();
+}
+
+void BackMultipleTimes(int steps)
+{
+	for (int i = 0; i < steps; ++i)
+	{
+		Back();
+	}
+}
+
+
+bool IsStatementSeparator(TokenType tokenType)
+{
+	return tokenType == T_EOL;
+}
+
+ScalarType ExtractType(tNode* node)
+{
+	switch (node->type)
+	{
+	case integerVal: return TYPE_Integer;
+	case doubleVal: return TYPE_Double;
+	case stringVal: return TYPE_String;
+	case expression: return node->tData.expression->ResultType;
+	case binaryExpression: return node->tData.binaryExpression->resultType;
+	case prefixExpression: return node->tData.prefixExpression->resultType;
+	case negationExpression: return node->tData.negationExpression->resultType;
+	case identifier: return node->tData.identifier->type;
+	case functionCall: return node->tData.functionCall->result;
+	default: return NULL;
+	}
+}
+
+
+bool IsTokenScalarType()
+{
+	return token->Type == T_INTEGER || token->Type == T_DOUBLE || token->Type == T_STRING;
+}
 
 ScalarType TokenTypeToScalarType(TokenType tokenType)
 {
 	switch (tokenType)
 	{
-		case T_INTEGER:return TYPE_Integer;
-		case T_DOUBLE:return TYPE_Double;
-		case T_STRING:return TYPE_String;
-		default: return NULL; //TODO ERROR
-	} 
+	case T_INTEGER: return TYPE_Integer;
+	case T_DOUBLE: return TYPE_Double;
+	case T_STRING: return TYPE_String;
+	default: return NULL; //TODO ERROR
+	}
 }
