@@ -37,21 +37,21 @@ void FTInit(tFTItemPtr* tableptr)
 {
 	*tableptr = NULL;
 
-	tFTItemPtr item = FTInsert(tableptr, "Length",false);
+	tFTItemPtr item = FTInsert(tableptr, "length",false);
 	AddParemeter(item, "s", TYPE_String);
 	AddReturnValue(item, TYPE_Integer);
 
-	item = FTInsert(tableptr, "SubStr", false);
+	item = FTInsert(tableptr, "substr", false);
 	AddParemeter(item, "s", TYPE_String);
 	AddParemeter(item, "i", TYPE_Integer);
 	AddParemeter(item, "n", TYPE_Integer);
 	AddReturnValue(item, TYPE_String);
 
-	item = FTInsert(tableptr, "Chr", false);
+	item = FTInsert(tableptr, "chr", false);
 	AddParemeter(item, "i", TYPE_Integer);
 	AddReturnValue(item, TYPE_String);
 
-	item = FTInsert(tableptr, "Asc", false);
+	item = FTInsert(tableptr, "asc", false);
 	AddParemeter(item, "s", TYPE_String);
 	AddParemeter(item, "i", TYPE_Integer);
 	AddReturnValue(item, TYPE_Integer);
@@ -92,6 +92,7 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration)
 		{
 			if ((*itemPtr)->declarationOnly && !isDeclaration)
 			{
+				(*itemPtr)->declarationOnly = false;
 				return *itemPtr;
 			}
 			else
@@ -140,7 +141,7 @@ void AddParemeter(tFTItemPtr itemptr, char* paramName, ScalarType type)
 
 	if (itemptr->parametersMax <= itemptr->parametersCount)
 	{
-		itemptr->parametersArr = mrealloc(itemptr->parametersArr, sizeof(tParam) * ((itemptr->parametersMax) + 5));
+		itemptr->parametersArr = mrealloc((itemptr->parametersArr), (size_t)(sizeof(struct tParamStruct) * ((itemptr->parametersMax) + 5)));
 		if (itemptr->parametersArr == NULL)
 		{
 			exitSecurely(INTERNAL_ERR);

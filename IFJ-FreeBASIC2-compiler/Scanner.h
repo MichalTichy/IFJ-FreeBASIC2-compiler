@@ -4,6 +4,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: scanner.h
+*
+*	File author:
+*	  Michal Martinu, xmarti78
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmast02
+*	  Ondra Deingruber, xdeing00
+*
+**/
+
 #include "List.h"
 
 typedef enum {
@@ -38,17 +54,27 @@ typedef enum {
 } tState;
 
 tToken *ReturnStateType(tToken *Token, TokenType mType);
-TokenType CompareWithKeywords(char* string);
-tToken* ScannerError(tToken* Token);
-tToken* GetNextToken();
-tToken* LoadToken();
-tToken* ReturnToken();
-void ResetScanner();
-int CheckEOL(char c);
-int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token);
-int CheckIfMathSymbol(char c);
-int BlockCommentClear(tToken *Token);
-void AddEscapeSequenceToString(char val_1, char val_2, char val_3, tToken* Token, int Lenght);
 
+TokenType CompareWithKeywords(char* string);
+
+tToken* ScannerError(tToken* Token);
+
+tToken* SyntaxError(tToken *Token);
+
+tToken* GetNextToken();
+
+tToken* LoadToken();
+
+tToken* ReturnToken();
+
+void ResetScanner();
+
+int CheckEOL(char c);
+
+int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token);
+
+int BlockCommentClear(tToken *Token);
+
+void AddEscapeSequenceToString(char val_1, char val_2, char val_3, tToken* Token, int Lenght);
 
 #endif
