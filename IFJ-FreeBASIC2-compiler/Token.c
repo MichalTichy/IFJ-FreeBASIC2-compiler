@@ -9,7 +9,7 @@
 *	Project authors:
 *	  Michal Tichy, xtichy26
 *	  Michal Martinu, xmarti78
-*	  Gabriel Mastny, xmast02
+*	  Gabriel Mastny, xmastn02
 *	  Ondra Deingruber, xdeing00
 *
 **/
@@ -82,12 +82,20 @@ void ReallocString(tToken *Token, int LenghtOfString)
 	}
 }
 
+/**
+*  Function that convert string into integer number.
+*  Variable numberType specifies which numeral system is used.
+*/
 
 void ConvertStringToInteger(tToken *Token, int numberType)
 {
 	Token->IntVal = strtol(Token->String, NULL, numberType);
 	Token->Type = T_INTVALUE;
 }
+
+/**
+*  Function that convert string into double number.
+*/
 
 void ConvertStringToDouble(tToken *Token)
 {

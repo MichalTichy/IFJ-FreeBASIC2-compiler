@@ -9,7 +9,7 @@
 *	Project authors:
 *	  Michal Tichy, xtichy26
 *	  Michal Martinu, xmarti78
-*	  Gabriel Mastny, xmast02
+*	  Gabriel Mastny, xmastn02
 *	  Ondra Deingruber, xdeing00
 *
 **/
