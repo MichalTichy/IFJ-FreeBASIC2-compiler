@@ -6,7 +6,7 @@
 #include "Parser.h"
 #include <stdbool.h>
 
-typedef struct
+typedef struct tParamStruct
 {
 	char* name;
 	ScalarType type;
