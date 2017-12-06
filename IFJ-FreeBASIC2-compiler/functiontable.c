@@ -153,8 +153,9 @@ void AddParemeter(tFTItemPtr itemptr, char* paramName, ScalarType type)
 	}
 
 	(itemptr->parametersArr[itemptr->parametersCount]).name = paramName;
-	itemptr->parametersCount = itemptr->parametersCount + 1;
 	(itemptr->parametersArr[itemptr->parametersCount]).type = type;
+
+	itemptr->parametersCount = itemptr->parametersCount + 1;
 }
 
 void FTFree(tFTItemPtr* tableptr)
@@ -241,7 +242,7 @@ void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* nam
 {
 	if (position>=item->parametersCount)
 	{
-		exitSecurely(SEMANT_ERR_TYPE);
+		exitSecurely(SEMANT_ERR_DEF);
 		return;
 	}
 
@@ -252,7 +253,7 @@ void CompareParameterSignature(tFTItemPtr item, unsigned int position, char* nam
 			return;
 		}
 	}
-	exitSecurely(SEMANT_ERR_TYPE);
+	exitSecurely(SEMANT_ERR_DEF);
 	return;
 }
 

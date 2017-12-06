@@ -1,17 +1,7 @@
- ' if recursion
- scope
- 	if 8 >= (0 - 1) then
- 		if 75 > 8 then
- 			print 42;
- 		else
- 
- 		end if
- 	else
- 		if 8 > (5 - 12) then
- 			print 58;
- 		else
- 
- 		end if
- 	end if
+' simple adding two vars to another variable
+scope
+     dim a as integer = 0 - 58
+     dim b as integer = 116
+     a = a + b
+     print a;
  end scope
-

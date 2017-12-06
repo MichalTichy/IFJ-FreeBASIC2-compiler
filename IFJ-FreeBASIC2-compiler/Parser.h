@@ -7,7 +7,7 @@
 #include "SymTable.h"
 #include "functiontable.h"
 
-typedef enum  {
+typedef enum {
 	integerVal,
 	doubleVal,
 	stringVal,
@@ -51,35 +51,30 @@ typedef struct NodeIdentifier
 	ScalarType type;
 } tNodeIdentifier;
 
-typedef struct NodeBinaryExpression{
+typedef struct NodeBinaryExpression {
 	ScalarType resultType;
 	struct Node* left;
 	struct Node* right;
 	TokenType OP;
-
 }tNodeBinaryExpression;
-
 
 typedef struct NodePrefixExpression
 {
 	ScalarType resultType;
 	struct Node* expression;
 	TokenType OP;
-
 } tNodePrefixExpression;
 
 typedef struct NodeNegationExpression
 {
 	ScalarType resultType;
 	struct Node* expression;
-
 } tNodeNegationExpression;
 
 typedef struct NodeExpression
 {
 	ScalarType ResultType;
 	struct Node* expression;
-
 } tNodeExpression;
 
 typedef struct NodeVariableDeclaration
@@ -87,7 +82,6 @@ typedef struct NodeVariableDeclaration
 	char* id;
 	ScalarType varType;
 	struct Node* Expression;
-
 } tNodeVariableDeclaration;
 
 typedef struct NodeVariableAssigment
@@ -95,11 +89,7 @@ typedef struct NodeVariableAssigment
 	char* id;
 	ScalarType varType;
 	struct Node* Expression;
-
 } tNodeVariableAssigment;
-
-
-
 
 typedef struct NodeIfStatement
 {
@@ -109,8 +99,6 @@ typedef struct NodeIfStatement
 	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* elseIf;
 	struct NodeStatement* Fail;
-
-
 } tNodeIfStatement;
 
 typedef struct NodeElseIfStatement
@@ -120,14 +108,12 @@ typedef struct NodeElseIfStatement
 	struct NodeStatement* Pass;
 	struct NodeElseIfStatement* Next;
 	tNodeIfStatement* parent;
-
 } tNodeElseIfStatement;
 
 typedef struct NodeScope
 {
 	struct tSTScope* scope;
 	struct NodeStatement* Statement;
-
 } tNodeScope;
 
 typedef struct NodeWhileBlock
@@ -135,7 +121,6 @@ typedef struct NodeWhileBlock
 	struct tSTScope* scope;
 	struct Node*  Condition;
 	struct NodeStatement* Statement;
-
 } tNodeBlock;
 
 typedef struct NodeStatement
@@ -153,7 +138,6 @@ typedef struct NodeStatement
 		struct FunctionCall* functionCall;
 	} tStatementNode;
 	struct NodeStatement* Next;
-
 } tNodeStatement;
 
 typedef struct PrintStatement
@@ -188,7 +172,6 @@ typedef struct Program
 	struct tSTScope* globalScope;
 	struct tFTItem* functionTable;
 	struct Node* Main;
-
 }tProgram;
 
 typedef struct Node
@@ -217,37 +200,65 @@ typedef struct Node
 	} tData;
 }tNode;
 
-tProgram* Parse();
-
-void Next();
-
-void Back();
-
 void BackMultipleTimes(int steps);
-tProgram* InitProgramNode();
-
-ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation);
-tPrintStatement* ProcessPrintExpression(struct tSTScope* parentScope);
-tNode* ProcessDouble(struct tSTScope* parentScope);
-
-tNode * ProcessInteger(struct tSTScope* parentScope);
-
-tNode * InitIntegerNode(long int value);
-
-tNode* InitDoubleNode(double value);
-
-tNode* InitStringNode(char* value, int lenght);
-
-tNode * InitVarDeclarationNode();
-int SkipStatementSeparators();
-
-tNode * ProcessVarDeclaration(struct tSTScope* parentScope);
-tNode * ProcessExpression(struct tSTScope* parentScope);
-tNode* ProcessRelationalExpression(struct tSTScope* parentScope);
+void Back();
 ScalarType ExtractType(tNode* node);
-ScalarType TokenTypeToScalarType(TokenType tokenType);
-tNode* ProcessStatement(struct tSTScope* parentScope);
+ScalarType GetResultType(ScalarType type1, ScalarType type2, TokenType operation);
+tNode* InitBinaryExpressionNode();
+tNode* InitDoubleNode(double value);
+tNodeElseIfStatement* InitElseIfStatementNode(tNodeIfStatement* parent, struct tSTScope* parentScope);
+tNode* initExpressionNode();
+tFunction* InitFunctionNode(struct tSTScope* parentScope);
+tNode* initIdentifierNode();
+tNode* InitIfStatementNode(struct tSTScope* parentScope);
+tNode* InitInputNode();
+tNode* InitIntegerNode(long int value);
+tNode* InitNegationExpressionNode();
+tNode* InitPrefixExpressionNode();
+tNode* InitPrintNode();
+tPrintStatement* InitPrintStatement();
+tProgram* InitProgramNode();
+tNode* InitScopeNode(struct tSTScope* parentScope);
+tNode* InitStatementNode();
+tNode* InitStringNode(char* value, int lenght);
+tNode* InitVarAssigmentNode();
+tNode* InitVarDeclarationNode();
+tNode* InitWhileNode(struct tSTScope* parentScope);
+bool IsStatementSeparator(TokenType tokenType);
+bool IsTokenScalarType();
+void Next();
+tProgram* Parse();
+tNode* ProcessAddExpression(struct tSTScope* parentScope);
+tNode* ProcessAssigment(struct tSTScope* parentScope);
+tNode* ProcessAtom(struct tSTScope* parentScope);
+tNode* ProcessCompoundStatement(struct tSTScope* parentScope);
+tNode* ProcessDouble(struct tSTScope* parentScope);
+tNodeElseIfStatement* ProcessElseIfStatements(tNodeIfStatement* parent, struct tSTScope* parentScope);
+tNode* ProcessExpression(struct tSTScope* parentScope);
 tNode* ProcessFunctionCall(struct tSTScope* parent_scope);
+tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope);
+tNode* ProcessHighestPrecedenceExpression(struct tSTScope* parentScope);
+tNode* ProcessIdentifier(struct tSTScope* parentScope);
+tNode* ProcessIfStatement(struct tSTScope* parentScope);
+tNode* ProcessInputNode(struct tSTScope* parentScope);
+tNode* ProcessIntDivisionExpression(struct tSTScope* parentScope);
+tNode* ProcessInteger(struct tSTScope* parentScope);
+tNode* ProcessLogicalAndExpression(struct tSTScope* parentScope);
+tNode* ProcessLogicalOrExpression(struct tSTScope* parentScope);
+tNode* ProcessMultiplicationExpression(struct tSTScope* parentScope);
+tNode* ProcessNegationExpression(struct tSTScope* parentScope);
+tNode* ProcessPrefixExpression(struct tSTScope* parentScope);
+tPrintStatement* processPrintExpression(struct tSTScope* parentScope);
+tNode* ProcessPrintNode(struct tSTScope* parentScope);
 tProgram* ProcessProgram();
+tNode* ProcessQuirkStatement(struct tSTScope* parentScope);
+tNode* ProcessRelationalExpression(struct tSTScope* parentScope);
+tNode* ProcessScope(struct tSTScope* parentScope);
+tNode* ProcessStatement(struct tSTScope* parentScope);
+tNode* ProcessString(struct tSTScope* parentScope);
+tNode* ProcessVarDeclaration(struct tSTScope* parentScope);
+tNode* ProcessWhileStatement(struct tSTScope* parentScope);
+int SkipStatementSeparators();
+ScalarType TokenTypeToScalarType(TokenType tokenType);
 
 #endif
