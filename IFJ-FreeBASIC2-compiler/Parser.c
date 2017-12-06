@@ -222,6 +222,7 @@ void ProcessParameter(tFTItemPtr functionPtr, int parameterIndex, bool wasPrevio
 					Next();
 					takenTokens++;
 					ProcessParameter(functionPtr, parameterIndex++, wasPreviouslyDeclared, parentScope);
+					return;
 				}
 				else
 				{
@@ -1172,16 +1173,14 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 
 				call->tData.functionCall->Arguments[i] = exp->tData.expression;
 
+				Next();
+				takenTokens++;
+
 				if (i == call->tData.functionCall->argumentsCount - 1)
 					if (token->Type == T_COLON)
 						exitSecurely(SEMANT_ERR_TYPE);
 			}
 
-			if (call->tData.functionCall->argumentsCount != 0)
-			{
-				Next();
-				takenTokens++;
-			}
 
 			if (token->Type == T_RIGHTBRACKET)
 			{
