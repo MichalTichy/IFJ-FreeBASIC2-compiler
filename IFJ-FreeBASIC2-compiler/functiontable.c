@@ -150,8 +150,9 @@ void AddParemeter(tFTItemPtr itemptr, char* paramName, ScalarType type)
 	}
 
 	(itemptr->parametersArr[itemptr->parametersCount]).name = paramName;
-	itemptr->parametersCount = itemptr->parametersCount + 1;
 	(itemptr->parametersArr[itemptr->parametersCount]).type = type;
+
+	itemptr->parametersCount = itemptr->parametersCount + 1;
 }
 
 void FTFree(tFTItemPtr* tableptr)
