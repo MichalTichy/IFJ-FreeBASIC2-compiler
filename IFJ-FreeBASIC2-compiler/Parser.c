@@ -1,3 +1,19 @@
+/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: parser.c
+*
+*	File author:
+*	  Michal Tichý, xtichy26
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmastn02
+*	  Ondra Deingruber, xdeing00
+*
+**/
+
 #include "Parser.h"
 #include "TestExpectToken.h"
 tToken* token;
