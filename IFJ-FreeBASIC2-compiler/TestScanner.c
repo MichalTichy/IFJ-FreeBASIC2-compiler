@@ -916,12 +916,12 @@ void KeyWordsTest()
 	{
 		Fail("Expected token ASC : 2");
 		return;
-	}*/
+	}
 	if (Exp_EOL())
 	{
 		Fail("Expected token EOL : x");
 		return;
-	}
+	}*/
 	if (Exp_DECLARE())
 	{
 		Fail("Expected token DECLARE : 3");
@@ -986,12 +986,12 @@ void KeyWordsTest()
 	{
 		Fail("Expected token CHR : 9");
 		return;
-	}*/
+	}
 	if (Exp_EOL())
 	{
 		Fail("Expected token EOL : x");
 		return;
-	}
+	}*/
 	if (Exp_FUNCTION())
 	{
 		Fail("Expected token FUNCTION : 10");
@@ -1036,12 +1036,12 @@ void KeyWordsTest()
 	{
 		Fail("Expected token LENGHT : 14");
 		return;
-	}*/
+	}
 	if (Exp_EOL())
 	{
 		Fail("Expected token EOL : x");
 		return;
-	}
+	}*/
 	if (Exp_LOOP())
 	{
 		Fail("Expected token LOOP : 15");
@@ -1096,12 +1096,12 @@ void KeyWordsTest()
 	{
 		Fail("Expected token SUBSTRING : 20");
 		return;
-	}*/
+	}
 	if (Exp_EOL())
 	{
 		Fail("Expected token EOL : x");
 		return;
-	}
+	}*/
 	if (Exp_THEN())
 	{
 		Fail("Expected token THEN : 21");
