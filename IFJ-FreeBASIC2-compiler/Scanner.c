@@ -419,6 +419,7 @@ tToken* LoadToken()
 			else if (c == 'o')
 			{
 				state = S_OCTANE;
+				break;
 			}
 			else if (c == 'h')
 			{
@@ -438,6 +439,7 @@ tToken* LoadToken()
 			if (c == '0' || c == '1')
 			{
 				AddToString(c, Token, Token->Lenght);
+				break;
 			}
 			else
 			{
@@ -453,6 +455,7 @@ tToken* LoadToken()
 			if (c >= '0' && c <= '7')
 			{
 				AddToString(c, Token, Token->Lenght);
+				break;
 			}
 			else
 			{
@@ -468,6 +471,7 @@ tToken* LoadToken()
 			if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
 			{
 				AddToString(c, Token, Token->Lenght);
+				break;
 			}
 			else
 			{
