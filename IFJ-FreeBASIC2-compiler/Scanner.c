@@ -119,7 +119,7 @@ tToken* LoadToken()
 			else if (c == '+')								state = S_Add;
 			else if (c == '-')								state = S_Sub;
 			else if (c == '*')								state = S_Multiply;
-			else if (c == '/')								state = S_BlockcommentOrDivide;
+			else if (c == '/')								state = S_BlockcommentOrDivide;	
 			else if (c == '\\')								state = S_Intdivide;
 			else if (c == '!')								state = S_ExcString;
 			else if (c == '(')								state = S_LeftBracket;
@@ -127,6 +127,7 @@ tToken* LoadToken()
 			else if (c == '\'')								state = S_Comment;
 			else if (CheckEOL(c))							state = S_EOL;
 			else if (c == EOF)								state = S_EOF;
+			else if (c == '&')								state = S_Base;
 			else
 			{
 				return ScannerError(Token);
@@ -200,7 +201,7 @@ tToken* LoadToken()
 			else
 			{
 				ungetc(c, stdin);
-				ConvertStringToInteger(Token);
+				ConvertStringToInteger(Token, 10);
 				return Token;
 			}
 		}
@@ -406,6 +407,74 @@ tToken* LoadToken()
 			break;
 		}
 
+		case S_Base:
+		{
+			c = (char)tolower(getchar());
+
+			if (c == 'b')
+			{
+				state = S_BINARY;
+				break;
+			}
+			else if (c == 'o')
+			{
+				state = S_OCTANE;
+			}
+			else if (c == 'h')
+			{
+				state = S_HEXA;
+				break;
+			}
+			else
+			{
+				return ScannerError(Token);
+			}
+		}
+
+		case S_BINARY:
+		{
+			c = (char)getchar();
+
+			if (c == '0' || c == '1')
+			{
+				AddToString(c, Token, Token->Lenght);
+			}
+			else
+			{
+				ConvertStringToInteger(Token, 2);
+				return ReturnStateType(Token, T_INTVALUE);
+			}
+		}
+
+		case S_OCTANE:
+		{
+			c = (char)getchar();
+
+			if (c >= '0' && c <= '7')
+			{
+				AddToString(c, Token, Token->Lenght);
+			}
+			else
+			{
+				ConvertStringToInteger(Token, 8);
+				return ReturnStateType(Token, T_INTVALUE);
+			}
+		}
+
+		case S_HEXA:
+		{
+			c = (char)tolower(getchar());
+
+			if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
+			{
+				AddToString(c, Token, Token->Lenght);
+			}
+			else
+			{
+				ConvertStringToInteger(Token, 16);
+				return ReturnStateType(Token, T_INTVALUE);
+			}
+		}
 
 		case S_Assign:			return ReturnStateType(Token, T_ASSIGN);
 		case S_Semicolon:		return ReturnStateType(Token, T_SEMICOLON);

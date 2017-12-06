@@ -29,9 +29,13 @@ typedef enum {
 	S_LeftBracket,
 	S_RightBracket,
 	S_EOL,
-	S_EOF
+	S_EOF,
+	S_Base,
+	S_BINARY,
+	S_OCTANE,
+	S_HEXA
 
-}tState;
+} tState;
 
 tToken *ReturnStateType(tToken *Token, TokenType mType);
 TokenType CompareWithKeywords(char* string);

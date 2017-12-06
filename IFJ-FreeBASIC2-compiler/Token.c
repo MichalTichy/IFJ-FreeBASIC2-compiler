@@ -45,9 +45,9 @@ void ReallocString(tToken *Token, int LenghtOfString)
 	}
 }
 
-void ConvertStringToInteger(tToken *Token)
+void ConvertStringToInteger(tToken *Token, int numberType)
 {
-	Token->IntVal = strtol(Token->String, NULL, 10);
+	Token->IntVal = strtol(Token->String, NULL, numberType);
 	Token->Type = T_INTVALUE;
 }
 
