@@ -7,9 +7,9 @@
 #include "errors.h"
 
 
-void STInit(tSTItemPtr* tableptr)
+void STInit(tSTItemPtr* tableptr)		// should be called only once
 {
-	*tableptr = NULL;
+	*tableptr = NULL;					// set pointer to null
 }
 
 tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
@@ -17,7 +17,7 @@ tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
 	tSTItemPtr itemPtr = *tableptr;
 	while (itemPtr != NULL)
 	{
-		if (strcmp(itemPtr->data, token) == 0)
+		if (strcmp(itemPtr->data, token) == 0)			// if its token you are looking for
 		{
 			break;
 		}
@@ -25,7 +25,7 @@ tSTItemPtr STSearch(tSTItemPtr* tableptr, char* token)
 		{
 			itemPtr = itemPtr->rptr;
 		}
-		else		// Token is smaller
+		else											// Token is smaller
 		{
 			itemPtr = itemPtr->lptr;
 		}

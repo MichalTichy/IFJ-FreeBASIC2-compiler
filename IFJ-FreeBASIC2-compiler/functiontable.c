@@ -1,5 +1,6 @@
 #include "functiontable.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include "errors.h"
 #include <string.h>
 #include "ManagedMalloc.h"
@@ -120,7 +121,7 @@ tFTItemPtr FTInsert(tFTItemPtr* tableptr, char* token, bool isDeclaration)
 		(*itemPtr)->data = token;
 		(*itemPtr)->returnValue = TYPE_Void;
 		(*itemPtr)->declarationOnly = isDeclaration;
-		(*itemPtr)->parametersArr = mmalloc(sizeof(tParam) * 5);
+		(*itemPtr)->parametersArr = mmalloc(sizeof(tParam) * 30);
 		if ((*itemPtr)->parametersArr == NULL)
 		{
 			exitSecurely(INTERNAL_ERR);
@@ -140,11 +141,14 @@ void AddParemeter(tFTItemPtr itemptr, char* paramName, ScalarType type)
 
 	if (itemptr->parametersMax <= itemptr->parametersCount)
 	{
-		itemptr->parametersArr = mrealloc((itemptr->parametersArr), (size_t)(sizeof(struct tParamStruct) * ((itemptr->parametersMax) + 5)));
-		if (itemptr->parametersArr == NULL)
+		unsigned int size = itemptr->parametersMax;
+		tParam* Array = itemptr->parametersArr;
+		tParam* newArr = (tParam*)realloc(Array, sizeof(struct tParamStruct) * (size + 5));
+		if (newArr == NULL)
 		{
 			exitSecurely(INTERNAL_ERR);
 		}
+		itemptr->parametersArr = newArr;
 		itemptr->parametersMax = itemptr->parametersMax + 5;
 	}
 
