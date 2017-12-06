@@ -146,7 +146,7 @@ void StringValue()
 	currentTestName = "String value";
 	LoadFileToSTDIN("../../../TestSamples/ScannerTests/StringValue.txt");
 
-	if (Exp_STRINGVALUE("AhOj"))
+	if (Exp_STRINGVALUE("/'Komen'//032'\\056koment"))
 	{
 		Fail("Expected token STRINGVALUE : 1");
 		return;
