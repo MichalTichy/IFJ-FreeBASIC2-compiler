@@ -250,13 +250,15 @@ tToken* LoadToken()
 					else if (c == ' ')
 					{
 						AddToString('\\', Token, Token->Lenght);
-						AddToString('0', Token, Token->Lenght);
-						AddToString('3', Token, Token->Lenght);
-						AddToString('2', Token, Token->Lenght);
+						AddEscapeSequenceToString('0', '3', '2', Token, Token->Lenght);
+					}
+					else if (c > (char) 31)
+					{
+						AddToString(c, Token, Token->Lenght);
 					}
 					else
 					{
-						AddToString(c, Token, Token->Lenght);
+						return ScannerError(Token);
 					}
 					
 				}
@@ -556,85 +558,38 @@ int CheckEOL(char c)
 
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 {
+	char escapeSequenceValue[3];
+	int tmp;
+	
 	AddToString('\\', Token, Token->Lenght);
 	c = (char)getchar();
 
-	if (c == '0') // 0
+
+	if (c >= '0' && c <= '2')
 	{
 		AddToString(c, Token, Token->Lenght);
-		c = (char)getchar();
+		escapeSequenceValue[0] = c;
 
-		if (c == '0') // 0 0
+		for (int i = 1; i <= 2; i++)
 		{
-			AddToString(c, Token, Token->Lenght);
 			c = (char)getchar();
 
-			if (c >= '1' && c <= '9') // 0 0 (1-9)
+			if (c >= '0' && c <= '9')
 			{
 				AddToString(c, Token, Token->Lenght);
-				return 0;
+				escapeSequenceValue[i] = c;
 			}
-		}
-		else if ((c >= '1' && c <= '9')) // 0 (1-9) 
-		{
-			AddToString(c, Token, Token->Lenght);
-			c = (char)getchar();
-
-			if (c >= '0' && c <= '9') // 0 (1-9) (0-9)
+			else
 			{
-				AddToString(c, Token, Token->Lenght);
-				return 0;
+				return 1;
 			}
 		}
 
-		return 1;
-	}
-	if (c == '1') // 1
-	{
-		AddToString(c, Token, Token->Lenght);
-		c = (char)getchar();
+		tmp = strtol(escapeSequenceValue, NULL, 10);
 
-		if (c >= '0' && c <= '9') // 1 (0-9)
+		if (tmp >= 1 && tmp <= 255)
 		{
-			AddToString(c, Token, Token->Lenght);
-			c = (char)getchar();
-
-			if (c >= '0' && c <= '9') // 1 (0-9) (0-9)
-			{
-				AddToString(c, Token, Token->Lenght);
-				return 0;
-			}
-
-		}
-
-		return 1;
-	}
-	else if (c == '2') // 2
-	{
-		AddToString(c, Token, Token->Lenght);
-		c = (char)getchar();
-
-		if (c >= '0' && c <= '4') // 2 (0-4)
-		{
-			AddToString(c, Token, Token->Lenght);
-			c = (char)getchar();
-
-			if (c >= '0' && c <= '9') // 2 (0-4) (0-9) 
-			{
-				AddToString(c, Token, Token->Lenght);
-				return 0;
-			}
-		}
-		else if (c == '5') // 2 5
-		{
-			AddToString(c, Token, Token->Lenght);
-			c = (char)getchar();
-
-			if (c >= '0' && c <= '5') // 2 5 (0-5)
-			{
-				AddToString(c, Token, Token->Lenght);
-				return 0;
-			}
+			return 0;
 		}
 
 		return 1;
@@ -643,36 +598,32 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 	{
 		return 1;
 	}
-
 	else
 	{
 		if (c == '\"')
 		{
-			AddToString('0', Token, Token->Lenght);
-			AddToString('3', Token, Token->Lenght);
-			AddToString('4', Token, Token->Lenght);
+			
 		}
 		else if (c == 'n')
 		{
-			AddToString('0', Token, Token->Lenght);
-			AddToString('1', Token, Token->Lenght);
-			AddToString('0', Token, Token->Lenght);
+			AddEscapeSequenceToString('0', '1', '0', Token, Token->Lenght);
 		}
 		else if (c == '\\')
 		{
-			AddToString('0', Token, Token->Lenght);
-			AddToString('9', Token, Token->Lenght);
-			AddToString('2', Token, Token->Lenght);
+			AddEscapeSequenceToString('0', '9', '2', Token, Token->Lenght);
 		}
 		else if (c == 't')
 		{
-			AddToString('0', Token, Token->Lenght);
-			AddToString('0', Token, Token->Lenght);
-			AddToString('9', Token, Token->Lenght);
+			AddEscapeSequenceToString('0', '0', '9', Token, Token->Lenght);
 		}
 
 		return 0;
 	}
 }
 
-
+void AddEscapeSequenceToString(char val_1, char val_2, char val_3, tToken* Token, int Lenght)
+{
+	AddToString(val_1, Token, Lenght);
+	AddToString(val_2, Token, Lenght);
+	AddToString(val_3, Token, Lenght);
+}

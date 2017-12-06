@@ -44,5 +44,7 @@ int CheckEOL(char c);
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token);
 int CheckIfMathSymbol(char c);
 int BlockCommentClear(tToken *Token);
+void AddEscapeSequenceToString(char val_1, char val_2, char val_3, tToken* Token, int Lenght);
+
 
 #endif
