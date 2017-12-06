@@ -678,7 +678,7 @@ int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 	{
 		if (c == '\"')
 		{
-			
+			AddEscapeSequenceToString('0', '3', '4', Token, Token->Lenght);
 		}
 		else if (c == 'n')
 		{
