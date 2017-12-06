@@ -4,8 +4,7 @@
 #include "Basics.h"
 #include "Scanner.h"
 #include "ManagedMalloc.h"
-#include "SymTable.h"
-#include "functiontable.h"
+#include "ADT.h"
 
 typedef enum {
 	integerVal,

@@ -1,35 +1,27 @@
+/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: symtable.c
+*
+*	File author:
+*	  Ondrej Deingruber, xdeing00
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmastn02
+*	  Ondrej Deingruber, xdeing00
+*
+**/
+
 #pragma once
 #ifndef SYMTABLE
 #define SYMTABLE
 
-#include "Parser.h"
+#include "Scanner.h"
 #include "Basics.h"
+#include "ADT.h"
 
-typedef struct tSTItem
-{
-	ScalarType type;
-	char* data;
-	unsigned int len;
-	struct tSTItem* lptr;
-	struct tSTItem* rptr;
-} *tSTItemPtr;
-
-typedef struct tSTScope
-{
-	tSTItemPtr symtable;
-	struct tSTScope* parentScope;
-} *tSTScopePtr;
-
-
-void STInit(tSTItemPtr* tableptr);
-
-void STMakeFunciontScope(tSTScopePtr* tableptr, tSTScopePtr parentScope);
-
-tSTItemPtr STSearch (tSTItemPtr* tableptr, char* key);
-
-void STInsert (tSTItemPtr* tableptr, char* key, ScalarType type);
-
-void STFree (tSTItemPtr* tableptr);
 
 void STMakeScope(tSTScopePtr* scope, tSTScopePtr parentScope); // make scope with link to parent scope
 
