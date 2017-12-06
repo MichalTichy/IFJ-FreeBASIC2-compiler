@@ -2,7 +2,8 @@
 #include "TestExpectToken.h"
 tToken* token;
 struct tFTItem** functionTable;
-bool* currentlyProcessingMain;
+bool currentlyProcessingMain = false;
+tNodeReturnStatement* lastReturn = NULL;
 tProgram* Parse()
 {
 	Next();
@@ -183,6 +184,14 @@ tNode* initIdentifierNode()
 	return node;
 }
 
+tNodeReturnStatement* initReturnNode(tNodeExpression* exp)
+{
+	tNodeReturnStatement* node = mmalloc(sizeof(struct NodeReturnStatement));
+	node->expression = exp;
+	node->result = exp->ResultType;
+	return node;
+}
+
 tNode* initExpressionNode()
 {
 	tNode* node = mmalloc(sizeof(struct Node));
@@ -307,25 +316,16 @@ tFunction* ProcessFunctionDefinition(struct tSTScope* parentScope)
 							Next();
 							takenTokens++;
 
+							lastReturn = NULL;
 							tNode* statement = ProcessStatement(fun->body->scope);
 							if (statement != NULL)
 							{
 								fun->body->body = statement;
 
-								Next();
-								takenTokens++;
-							}
-
-							if (token->Type == T_RETURN)
-							{
-								Next();
-								takenTokens++;
-
-								tNode* expression = ProcessExpression(fun->body->scope);
-								if (expression != NULL)
+								if (lastReturn!=NULL)
 								{
-									GetResultType(fun->returnValue, expression->tData.expression->ResultType, T_ASSIGN);
-									fun->body->returnExp = expression->tData.expression;
+									GetResultType(fun->returnValue, lastReturn->result, T_ASSIGN);
+									fun->body->returnExp = lastReturn->expression;
 								}
 
 								Next();
@@ -1192,6 +1192,7 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 	return NULL;
 }
 
+
 tNode* ProcessStatement(struct tSTScope* parentScope)
 {
 	int takenTokens = SkipStatementSeparators();
@@ -1268,15 +1269,32 @@ tNode* ProcessStatement(struct tSTScope* parentScope)
 					}
 					else
 					{
-						Back();
-						return statement;
+
+						if (token->Type == T_RETURN && !currentlyProcessingMain)
+						{
+							Next();
+							takenTokens++;
+
+							tNode* expression = ProcessExpression(parentScope);
+							if (expression != NULL)
+							{
+								statement->tData.statement->type = varDeclaration;
+								statement->tData.returnStatement = initReturnNode(expression->tData.expression);
+								lastReturn = statement->tData.returnStatement;
+							}
+						}
+						else
+						{
+							Back();
+							return statement;
+						}
 					}
 				}
 			}
 		}
 	}
 
-	if (statement->tData.statement->type != empty)
+	if (statement->tData.statement->type != empty && statement->tData.statement->type!=returnStatement)
 	{
 		Next();
 
@@ -1304,6 +1322,7 @@ tProgram* ProcessProgram()
 	tFunction* function = NULL;
 	do
 	{
+		currentlyProcessingMain = false;
 		function = ProcessFunctionDefinition(program->globalScope);
 		if (function != NULL)
 		{
@@ -1314,6 +1333,7 @@ tProgram* ProcessProgram()
 	}
 	while (function != NULL);
 
+	currentlyProcessingMain = true;
 	tNode* scope = ProcessScope(program->globalScope);
 	if (scope != NULL)
 	{

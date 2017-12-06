@@ -26,6 +26,7 @@ typedef enum {
 	input,
 	print,
 	functionCall,
+	returnStatement,
 	empty
 }NodeType;
 
@@ -123,6 +124,12 @@ typedef struct NodeWhileBlock
 	struct NodeStatement* Statement;
 } tNodeBlock;
 
+typedef struct NodeReturnStatement
+{
+	ScalarType result;
+	struct NodeExpression* expression;
+} tNodeReturnStatement;
+
 typedef struct NodeStatement
 {
 	NodeType type;
@@ -136,6 +143,7 @@ typedef struct NodeStatement
 		struct PrintStatement* printStatement;
 		struct InputStatement* inputStatement;
 		struct FunctionCall* functionCall;
+		struct NodeReturnStatement* returnStatement;
 	} tStatementNode;
 	struct NodeStatement* Next;
 } tNodeStatement;
@@ -197,6 +205,7 @@ typedef struct Node
 		struct InputStatement* input;
 		struct PrintStatement* print;
 		struct FunctionCall* functionCall;
+		struct NodeReturnStatement* returnStatement;
 	} tData;
 }tNode;
 
@@ -224,6 +233,7 @@ tNode* InitStringNode(char* value, int lenght);
 tNode* InitVarAssigmentNode();
 tNode* InitVarDeclarationNode();
 tNode* InitWhileNode(struct tSTScope* parentScope);
+tNodeReturnStatement* initReturnNode(tNodeExpression* exp);
 bool IsStatementSeparator(TokenType tokenType);
 bool IsTokenScalarType();
 void Next();
