@@ -1200,6 +1200,7 @@ tNode* ProcessFunctionCall(struct tSTScope* parent_scope)
 
 			if (token->Type == T_RIGHTBRACKET)
 			{
+				call->tData.functionCall->result = ftItem->returnValue;
 				return call;
 			}
 		}
