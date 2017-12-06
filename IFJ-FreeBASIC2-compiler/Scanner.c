@@ -443,6 +443,7 @@ tToken* LoadToken()
 			}
 			else
 			{
+				ungetc(c, stdin);
 				ConvertStringToInteger(Token, 2);
 				return ReturnStateType(Token, T_INTVALUE);
 			}
@@ -459,6 +460,7 @@ tToken* LoadToken()
 			}
 			else
 			{
+				ungetc(c, stdin);
 				ConvertStringToInteger(Token, 8);
 				return ReturnStateType(Token, T_INTVALUE);
 			}
@@ -475,6 +477,7 @@ tToken* LoadToken()
 			}
 			else
 			{
+				ungetc(c, stdin);
 				ConvertStringToInteger(Token, 16);
 				return ReturnStateType(Token, T_INTVALUE);
 			}
