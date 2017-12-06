@@ -558,7 +558,7 @@ int CheckEOL(char c)
 
 int CheckIfEscapeSeuquenceIsValid(char c, tToken *Token)
 {
-	char escapeSequenceValue[3];
+	char escapeSequenceValue[4];
 	int tmp;
 	
 	AddToString('\\', Token, Token->Lenght);
