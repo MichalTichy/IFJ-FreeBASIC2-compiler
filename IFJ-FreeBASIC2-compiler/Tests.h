@@ -1,3 +1,22 @@
+/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: tests.h
+*
+*	File author:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmastn02
+*	  Ondra Deingruber, xdeing00
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmastn02
+*	  Ondra Deingruber, xdeing00
+*
+**/
+
 #include <stdio.h>
 #include "Basics.h"
 

@@ -1,4 +1,22 @@
-﻿
+﻿/**
+*	Project: IFJ17 Compiler
+*
+*	FILE: tests.c
+*
+*	File author:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmastn02
+*	  Ondra Deingruber, xdeing00
+*
+*	Project authors:
+*	  Michal Tichy, xtichy26
+*	  Michal Martinu, xmarti78
+*	  Gabriel Mastny, xmastn02
+*	  Ondra Deingruber, xdeing00
+*
+**/
+
 #include "Tests.h"
 #include "TestScanner.h"
 #include "TestStack.h"
