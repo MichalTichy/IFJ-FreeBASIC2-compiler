@@ -67,7 +67,7 @@ void metaDec(enum metaMember memb, tMetaData* meta)
 		StackTopPop(&meta->labelStackWhile);
 	}
 		break;
-	case intVar: meta->doubleVarInUse--;
+	case intVar: meta->intVarInUse--;
 		break;
 	case doubleVar: meta->doubleVarInUse--;
 		break;
@@ -126,7 +126,7 @@ void metaInc(enum metaMember memb, tMetaData* meta)
 		{
 			meta->boolVarDeclared++;
 			fprintf(stdout, "DEFVAR LF@_boolVar%d\n", meta->boolVarInUse+1);
-			fprintf(stdout, "MOVE LF@_boolVar%d string@\n", meta->boolVarInUse + 1);
+			fprintf(stdout, "MOVE LF@_boolVar%d bool@false\n", meta->boolVarInUse + 1);
 		}
 		meta->boolVarInUse++;
 	}
@@ -231,28 +231,10 @@ void BinaryPrintOperands(struct Node* actualNode, struct meta* met)
 
 void PrintOperands(ScalarType type, struct Node* lop, struct Node* rop, struct meta* met)
 {
-	if (lop != NULL )
-	{
-		if (met->submerge > 1)
-		{
-			if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse-1);
-			else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse-1);
-			else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse-1); // todo replace for bool
-		}
-		else
-		{
-			if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse);
-			else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse);
-			else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse); // todo replace for bool
-		}
-		
-	}
-	else
-	{
-		if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse-1);
-		else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse-1);
-		else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse-1); // todo replace for bool
-	}
+		if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse);
+		else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse);
+		else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse); // todo replace for bool
+	
 	
 
 	if (lop != NULL)
@@ -261,9 +243,9 @@ void PrintOperands(ScalarType type, struct Node* lop, struct Node* rop, struct m
 	}
 	else
 	{
-		if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse-1);
-		else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse-1);
-		else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse-1);
+		if (type == TYPE_Integer) fprintf(stdout, "LF@_intVar%d ", met->intVarInUse);
+		else if (type == TYPE_Double) fprintf(stdout, "LF@_floatVar%d ", met->doubleVarInUse);
+		else if (type == TYPE_String) fprintf(stdout, "LF@_boolVar%d ", met->boolVarInUse);
 	}
 	fprintf(stdout, " ");
 
@@ -356,20 +338,36 @@ void Recognize(struct Node* root, struct meta* metadata)
 				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == expression)
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
-					fprintf(stdout, "MOVE LF@%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse);
+					fprintf(stdout, "MOVE LF@%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse+1);
 				}
 				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == binaryExpression)
 				{
 					Recognize(actualNode->tData.variable_assigment->Expression, met);
 					if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->tData.binaryExpression->left->type == binaryExpression)
 					{
-						fprintf(stdout, "MOVE LF@%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse-1);
+						fprintf(stdout, "MOVE LF@%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse+1);
 					}
 					else
 					{
-						fprintf(stdout, "MOVE LF@%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse);
+						fprintf(stdout, "MOVE LF@%s LF@_intVar%d\n", actualNode->tData.variable_assigment->id, met->intVarInUse+1);
 					}
 					
+				}
+				else if (actualNode->tData.variable_assigment->Expression->tData.expression->expression->type == functionCall)
+				{
+					Recognize(actualNode->tData.functionCall, met);
+					
+					switch (actualNode->tData.functionCall->result)
+					{
+					case TYPE_Integer:
+						break;
+					case TYPE_Double:
+						break;
+					case TYPE_String:
+						break;
+					default:
+						break;
+					}
 				}
 				else fprintf(stdout, "######### case var asig type Integer something elese ########");
 
@@ -517,9 +515,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case T_SUB:
 			{
-
-
-				metaInc(actualNode->tData.binaryExpression->OP, met);
+				metaInc(actualNode->tData.binaryExpression->resultType, met);
 				fprintf(stdout, "SUB ");
 				BinaryPrintOperands(actualNode, met);
 				metaDec(actualNode->tData.binaryExpression->resultType, met);
@@ -527,7 +523,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 			break;
 			case T_MULTIPLY:
 			{
-				metaInc(actualNode->tData.binaryExpression->OP, met);
+				metaInc(actualNode->tData.binaryExpression->resultType, met);
 				fprintf(stdout, "MUL ");
 				BinaryPrintOperands(actualNode, met);
 				metaDec(actualNode->tData.binaryExpression->resultType, met);
@@ -739,7 +735,7 @@ void Recognize(struct Node* root, struct meta* metadata)
 				{
 					metaInc(intVar, met);
 					Recognize(actualNode->tData.print->Expression, met);
-					fprintf(stdout, "WRITE LF@_intVar%d\n",met->intVarInUse);
+					fprintf(stdout, "WRITE LF@_intVar%d\n",met->intVarInUse+1);
 					metaDec(intVar, met);
 				}
 
@@ -748,8 +744,13 @@ void Recognize(struct Node* root, struct meta* metadata)
 				{
 					metaInc(doubleVar, met);
 					Recognize(actualNode->tData.print->Expression, met);
-					fprintf(stdout, "WRITE LF@_floatVar%d\n", met->doubleVarInUse);
+					fprintf(stdout, "WRITE LF@_floatVar%d\n", met->doubleVarInUse+1);
 					metaDec(intVar, met);
+				}
+				break;
+				case functionCall:
+				{
+					//actualNode->tData.functionCall.
 				}
 				break;
 				default: fprintf(stdout, "###### print type something else");
