@@ -80,7 +80,7 @@ void DLInsertLast(tDLList *L, void* val) {
 	newElement->lptr = L->Last;
 	newElement->rptr = NULL;
 
-	if (L->Last == NULL) 
+	if (L->Last == NULL)
 		L->First = newElement;
 	else
 		L->Last->rptr = newElement;
@@ -219,7 +219,7 @@ void DLPostInsert(tDLList *L, void* val) {
 	if (newElement == NULL)
 		//TODO ERROR HANDLING;
 
-	newElement->data = val;
+		newElement->data = val;
 	newElement->lptr = L->Act;
 	newElement->rptr = L->Act->rptr;
 	L->Act->rptr = newElement;
@@ -247,7 +247,7 @@ void DLPreInsert(tDLList *L, void* val) {
 	if (newElement == NULL)
 		//TODO ERROR HANDLING;
 
-	newElement->data = val;
+		newElement->data = val;
 	newElement->rptr = L->Act;
 	newElement->lptr = L->Act->lptr;
 	L->Act->rptr = newElement;

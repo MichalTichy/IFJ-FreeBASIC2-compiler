@@ -3,12 +3,10 @@
 #include "ManagedMalloc.h"
 #include "Parser.h"
 #include "generator.h"
+#include "Scanner.h"
+
 #if DEBUG 
 #include "Tests.h"
-#endif
-
-#if !DEBUG
-#include "Scanner.h"
 #endif
 
 int main(int argc, char* argv[])

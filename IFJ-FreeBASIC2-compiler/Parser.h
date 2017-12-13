@@ -20,7 +20,8 @@
 #include "Basics.h"
 #include "Scanner.h"
 #include "ManagedMalloc.h"
-#include "ADT.h"
+#include "SymTable.h"
+#include "functiontable.h"
 
 /**
  * Enum definujici typy Nodu
