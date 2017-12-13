@@ -25,7 +25,7 @@ typedef struct {
 	long int IntVal;
 	double DoubleVal;
 	char *String;
-	int Lenght;
+	int Lenght;		//Lenght of used string
 } tToken;
 
 void InitToken(tToken *Token);

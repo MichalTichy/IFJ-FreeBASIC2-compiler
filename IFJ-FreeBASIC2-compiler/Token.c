@@ -42,7 +42,7 @@ void InitToken(tToken *Token)
 tToken* InitString(tToken *Token)
 {
 	if ((Token->String = mmalloc(sizeof(char) * BasicLenghtOfString + 1)) == NULL)
-	{
+	{  //When mmalloc fails
 		exitSecurely(INTERNAL_ERR);
 	}
 
@@ -77,7 +77,7 @@ void AddToString(char c, tToken *Token, int LenghtOfString)
 void ReallocString(tToken *Token, int LenghtOfString)
 {
 	if ((Token->String = mrealloc(Token->String, sizeof(char) * (size_t)LenghtOfString)) == NULL)
-	{
+	{  //When mmalloc fails
 		exitSecurely(INTERNAL_ERR);
 	}
 }

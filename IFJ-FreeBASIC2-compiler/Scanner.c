@@ -62,6 +62,10 @@ void ResetScanner() {
 	TokenList = NULL;
 }
 
+/**
+*  Function that return token loaded before actual.
+*/
+
 tToken* ReturnToken() {
 	if (TokenList == NULL)
 	{
@@ -75,6 +79,11 @@ tToken* ReturnToken() {
 	}
 	return NULL;
 }
+
+/**
+*  Function that saves next token from source file into list as actual.
+*/
+
 tToken* GetNextToken() {
 	if (TokenList == NULL)
 	{
@@ -117,7 +126,7 @@ tToken* LoadToken()
 
 	//Malloc Token
 	if ((Token = (tToken *)mmalloc(sizeof(tToken))) == NULL)
-	{
+	{  //When mmalloc fails
 		exitSecurely(INTERNAL_ERR);
 	}
 
@@ -292,7 +301,6 @@ tToken* LoadToken()
 					{
 						return ScannerError(Token);
 					}
-					
 				}
 
 				if (c == '"')

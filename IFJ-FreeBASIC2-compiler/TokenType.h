@@ -24,23 +24,23 @@ typedef enum {
 	T_INTVALUE,
 	T_DOUBLEVALUE,
 	T_STRINGVALUE,
-	T_ADD,			// ** +
-	T_SUB,			// ** -
-	T_MULTIPLY,		// ** *
-	T_DIVIDE,		// ** /
-	T_INTDIVIDE,	// ** \ result as integer
-	T_SEMICOLON,	// ** ;
-	T_COLON,		// ** ,
-	T_LEFTBRACKET,	// ** (
-	T_RIGHTBRACKET,	// ** )
-	T_ASSIGN,		// ** =
-	T_NOTEQUAL,		// ** <>
-	T_LESS,			// ** <
-	T_GREATER,		// ** >
+	T_ADD,				// ** +
+	T_SUB,				// ** -
+	T_MULTIPLY,			// ** *
+	T_DIVIDE,			// ** /
+	T_INTDIVIDE,		// ** \ result as integer
+	T_SEMICOLON,		// ** ;
+	T_COLON,			// ** ,
+	T_LEFTBRACKET,		// ** (
+	T_RIGHTBRACKET,		// ** )
+	T_ASSIGN,			// ** =
+	T_NOTEQUAL,			// ** <>
+	T_LESS,				// ** <
+	T_GREATER,			// ** >
 	T_GREATEROREQUAL,	// ** >=
 	T_LESSEROREQUAL,	// ** <=
 
-	T_AS,			// ** KeyWords
+	T_AS,				// ** KeyWords
 	T_DECLARE,
 	T_DIM,
 	T_DO,
@@ -58,26 +58,13 @@ typedef enum {
 	T_STRING,
 	T_THEN,
 	T_WHILE,
-	T_ELSEIF, //bonus
+	T_ELSEIF,			
 	T_AND,
 	T_OR,
 	T_NOT,
 
-	 //vvvvv ReservedWords Bonus tasks
-	/*
-	T_BOOLEAN,
-	T_CONTINUE,
-	
-	T_EXIT,
-	T_FALSE,
-	T_FOR,
-	T_NEXT,
-	T_SHARED,
-	T_STATIC,
-	T_TRUE*/
-
-	T_LexERROR,		//return 1 USED WHEN DEBUG
-	T_SyntaxERROR,	//return 2 USED WHEN DEBUG
+	T_LexERROR,			//return 1 USED WHEN DEBUG
+	T_SyntaxERROR,		//return 2 USED WHEN DEBUG
 
 } TokenType;
 
